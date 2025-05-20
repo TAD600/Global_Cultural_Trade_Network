@@ -29,6 +29,6 @@ Due to huge size of the datasets, I am not pushing those to github. The Preparin
 `total2000_2023.csv`: This is the cleaned dataset for total amount of trade produced from five csv files containing data on total amount of trade between countries from 2000 to 2023. The datasets were extracted from the bulk file 'CPA_1995_To_2023' downloaded from [OECD BIMTS database](https://data-explorer.oecd.org/vis?lc=en&fs[0]=Topic%2C1%7CTrade%23TRD%23%7CTrade%20in%20goods%20and%20services%23TRD_GDS%23&pg=0&fc=Topic&bp=true&snb=24&vw=ov&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_BIMTS%40DF_BIMTS_CPA_2_1&df[ag]=OECD.SDD.TPS&df[vs]=1.0&dq=AUS%2BUSA.BEL%2BAUT..C._T..A.USD_EXC.B_ADJ_RX&pd=2019%2C&to[TIME_PERIOD]=false)
 Because of the file size I am not pushing it to git. However, I have saved the extracted csv files in raw folder in my machine and cleaned those using exactly how I have downloaded those. 
 
-`unique2000_2023_edgelist.csv`: This is an edgelist created from unique2000_2023.csv.
-'reproducible2000_2023_edgelist.csv`: This is an edgelist created from reproducible2000_2023.csv.
-`total2000_2023_edgelist.csv`: This is an edgelist created from `total2000_2023.csv`
+`unique2000_2023_edgelist.csv`: This is an edgelist created from `unique2000_2023.csv`.
+`reproducible2000_2023_edgelist.csv`: This is an edgelist created from `reproducible2000_2023.csv`.
+`total2000_2023_edgelist.csv`: This is an edgelist created from `total2000_2023.csv`.
