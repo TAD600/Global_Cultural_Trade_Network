@@ -1,0 +1,19 @@
+---
+title: "Data Analysis"
+output: html_document
+date: "2025-05-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Notebooks
+
+- `01_fixed_data.ipynb`: Preprocesses and cleans raw data from cepii.
+- `02_cultural_trade_data.ipynb`: Preprocesses and cleans raw trade data from the OECD BIMTS bulk data files at 2 digit HS code level.
+- `03_aggregating_reproducible_trade_data.ipynb`: Loads cleaned data on reproducible cultural trade and aggregates it to a single csv file.
+- `04_aggregating_total_trade_data.ipynb`: Estimates a structural gravity model.
+Estimates a structural gravity model.
+Each notebook is annotated with clear step-by-step instructions and expected outputs.
+
