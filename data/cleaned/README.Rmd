@@ -8,13 +8,7 @@ date: "2025-05-20"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Description of the csv files of this folder:
-
-`dyads_fixed.csv`: This is a cleaned dataset produced from dist_cepii data. It records time invariant dyadic variables, like, common language, common colonizer, distance etc. 
-
-`nodal_fixed.csv`: This is cleaned dataset produced from geo_cepii data, which has node level time invariant factors like landlockedness, primary language, continent, longitude, latitue etc. 
-
-`fixed.csv`: This file is produced from above 2 files nestedly indexing on the country pairs and records all time invariants factors for both dyadic and nodal level. This will be used in the gravity equation estimation. 
+### Description of the csv files of this folder:
 
 `unique2000_2023.csv`: This is the time series record of all trades in unique cultural products on the dyadic level. This is produced from the raw data (BIMTS_HS2017_2D_CSV_1995_To_2023) downloaded from [OECD BIMTS database](https://data-explorer.oecd.org/vis?fs[0]=Topic%2C1%7CTrade%23TRD%23%7CTrade%20in%20goods%20and%20services%23TRD_GDS%23&pg=0&fc=Topic&bp=true&snb=24&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_BIMTS%40DF_BIMTS_HS2017_2D&df[ag]=OECD.SDD.TPS&df[vs]=1.0) This dataset is freely available, extracting it expands to five csv files,
 HS17_2D_DE_2000_To_2004, HS17_2D_DE_2005_To_2009, HS17_2D_DE_2010_To_2014, HS17_2D_DE_2015_To_2019, and HS17_2D_DE_2020_To_2024. 
@@ -26,9 +20,30 @@ Due to huge size of the datasets, I am not pushing those to github. The Preparin
 
 `reproducible2000_2023.csv`: This is the time series record of all trades in reproducible cultural products on the dyadic level, aggregating `books2000_2023.csv`, `cinema2000_2023.csv`, and `tapes2000_2023.csv` on country pair and year from the OECD bulk data (BIMTS_HS2017_2D_CSV_1995_To_2023).
 
-`total2000_2023.csv`: This is the cleaned dataset for total amount of trade produced from five csv files containing data on total amount of trade between countries from 2000 to 2023. The datasets were extracted from the bulk file 'CPA_1995_To_2023' downloaded from [OECD BIMTS database](https://data-explorer.oecd.org/vis?lc=en&fs[0]=Topic%2C1%7CTrade%23TRD%23%7CTrade%20in%20goods%20and%20services%23TRD_GDS%23&pg=0&fc=Topic&bp=true&snb=24&vw=ov&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_BIMTS%40DF_BIMTS_CPA_2_1&df[ag]=OECD.SDD.TPS&df[vs]=1.0&dq=AUS%2BUSA.BEL%2BAUT..C._T..A.USD_EXC.B_ADJ_RX&pd=2019%2C&to[TIME_PERIOD]=false)
-Because of the file size I am not pushing it to git. However, I have saved the extracted csv files in raw folder in my machine and cleaned those using exactly how I have downloaded those. 
+`total2000_2023.csv`: This is the cleaned dataset for total amount of trade produced from five csv files containing data on total amount of trade between countries from 2000 to 2023. The datasets were extracted from the bulk file (BIMTS_HS2017_2D_CSV_1995_To_2023).
+
+`dyads_fixed.csv`: This is a cleaned dataset produced from dist_cepii data. It records time invariant dyadic variables, like, common language, common colonizer, distance etc. 
+`nodal_fixed.csv`: This is cleaned dataset produced from geo_cepii data, which has node level time invariant factors like landlockedness, primary language, continent, longitude, latitue etc. 
+`fixed.csv`: This file is produced from above 2 files nestedly indexing on the country pairs and records all time invariants factors for both dyadic and nodal level. This will be used in the gravity equation estimation. 
+
 
 `unique2000_2023_edgelist.csv`: This is an edgelist created from `unique2000_2023.csv`.
 `reproducible2000_2023_edgelist.csv`: This is an edgelist created from `reproducible2000_2023.csv`.
 `total2000_2023_edgelist.csv`: This is an edgelist created from `total2000_2023.csv`.
+
+`distance_edgelist.csv`: This is dyadic distance edgelist created from `fixed.csv`.
+`contiguity_edgelisst.csv`: This is dyadic contiguity edgelist created from `fixed.csv`.
+`comcol_edgelist.csv`: This is dyadic common language edgelist created from `fixed.csv`.
+`language_edgelist.csv`: This is dyadic language edgelist created from `fixed.csv`.
+
+
+`attribute2000.csv': 
+
+
+
+
+
+
+
+attributes2000_2023
+
