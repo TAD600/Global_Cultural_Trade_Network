@@ -1,0 +1,105 @@
+---
+title: "TERMS"
+output: html_document
+date: "2025-02-17"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Source: https://statnet.org/workshop-tergm/tergm_tutorial.html
+
+# statnet packages
+install.packages('tergm')
+install.packages('tsna')
+install.packages('ndtv')
+
+# other packages to enhance graphical output
+install.packages('htmlwidgets')
+install.packages('latticeExtra')
+```
+```{r}
+library(tergm)
+library(tsna)
+library(ndtv)
+library(htmlwidgets)
+library(latticeExtra)
+```
+
+```{r}
+sessionInfo()
+```
+
+```{r}
+set.seed(1)
+```
+
+```{r}
+data(samplk)
+```
+
+```{r}
+class(samplk1)
+network.size(samplk1)   # Number of nodes
+network.edgecount(samplk1)  # Number of edges
+```
+```{r}
+network.size(samplk2)   # Number of nodes
+network.edgecount(samplk2)
+```
+```{r}
+network.size(samplk3)   # Number of nodes
+network.edgecount(samplk3)
+```
+
+
+
+```{r}
+samplk12 <- stergm(list(samplk1, samplk2),
+                   formation=~edges+mutual+transitiveties+cyclicalties,
+                   dissolution=~edges+mutual+transitiveties+cyclicalties,
+                   estimate="CMLE")
+
+```
+
+
+```{r}
+mcmc.diagnostics(samplk12)
+summary(samplk12)
+```
+```{r}
+samplk123 <- stergm(list(samplk1, samplk2, samplk3),
+                    formation=~edges+mutual+transitiveties+cyclicalties,
+                    dissolution=~edges+mutual+transitiveties+cyclicalties,
+                    estimate="CMLE")
+```
+```{r}
+mcmc.diagnostics(samplk123)
+summary(samplk123)
+```
+
+
+
+
+
+
+
+```{r}
+# Draw from a Bernoulli model with 16 nodes
+# and tie probability 0.1
+#
+g.use <- network(16, density=0.1, directed=FALSE)
+#
+# Starting from this network let's draw 3 realizations
+# of a model with edges and 2-star terms
+#
+g.sim <- simulate(~edges+kstar(2), nsim=3, coef=c(-1.8, 0.03),
+               basis=g.use, control=control.simulate(
+                 MCMC.burnin=100000,
+                 MCMC.interval=1000))
+print(g.sim)
+summary(g.sim)
+```
+
