@@ -1,5 +1,5 @@
 # Global_Cultural_Trade_Network
-
+Reproduction of this project from this repository begins with `01_preparing` folder which takes data from the `raw` subfolder of the `data` folder, cleans, prepares and saves data in the 'cleaned' folder of the 'data' folder.
 
 ```mermaid
 flowchart TD
