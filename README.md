@@ -1,5 +1,5 @@
 # Global_Cultural_Trade_Network
-Reproduction of this project from this repository begins with `01_preparing` folder which takes data from the `raw` subfolder of the `data` folder, cleans, prepares and saves data in the 'cleaned' folder of the 'data' folder.
+Reproduction of this project from this repository begins with `01_preparing` folder which takes data from the `raw` subfolder of the `data` folder, cleans, prepares and saves data in the 'cleaned' subfolder of the 'data' folder. Then `02_eda` folder conducts exploratory analysis, generates plots and adds network metric datasets in the `cleaned` subfolder of the `data` folder. `03_regressions` runs the STERGMs and PPML regression for gravity model in trade and displays results. 
 
 ```mermaid
 flowchart TD
@@ -9,5 +9,5 @@ flowchart TD
     D --> |Uses data to conduct exploratory analysis|E[02_eda]
     E -->|Modifies a few datasets| D
     D --> |data goes to|F[03_regressions]
-    F -->|runs STERGMs and PPML regressions|H((End))
+    F -->|runs STERGMs, PPML regressions, displays resuts|H((End))
 ```
