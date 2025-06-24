@@ -8,6 +8,6 @@ flowchart TD
     B -->|Saves cleaned data to| D[(data/cleaned)]
     D --> |Uses data to conduct exploratory analysis|E[02_eda]
     E -->|Modifies a few datasets| D
-    D --> |data goes to|F[regressions]
+    D --> |data goes to|F[03_regressions]
     F -->|runs STERGMs and PPML regressions|H((End))
 ```
