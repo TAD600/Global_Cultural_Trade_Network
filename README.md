@@ -9,5 +9,6 @@ flowchart TD
     D --> |Uses data to conduct exploratory analysis|E[02_eda]
     E -->|generates network metric datasets| D
     D --> |data goes to|F[03_regressions]
-    F -->|runs STERGMs, PPML regressions, displays results|H((End))
+    F -->|runs STERGMs, PPML regressions|H[\Results/]
+    H -->|stores and displays results|I((End))
 ```
