@@ -12,3 +12,4 @@ flowchart TD
     F -->|runs STERGMs, PPML regressions|H[\Results/]
     H -->|stores and displays results|I((End))
 ```
+I have used Python packages ‘numpy’, ‘pandas’, and ‘matplotlib’ to prepare edge lists and to compute summary statistics. For calculating network centralities of weighted, directed networks, and for running STERGMs and PPML regressions, I utilized the RStudio packages ‘igraph’, ‘wdnet’, ‘tergm’, and ‘fixest’, respectively. Only unit root testing and differencing of the non-stationary variables were carried out using STATA.
