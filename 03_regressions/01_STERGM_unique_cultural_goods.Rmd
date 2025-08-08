@@ -1,0 +1,985 @@
+---
+title: "STERGM on unique cultural goods trade"
+author: "Author"
+date: "2025-06-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#install.packages("pacman")
+#pacman::p_unload(pacman::p_loaded(), character.only = TRUE) 
+```
+# Steps of STERGM:
+
+1. Loading `network`, `igraph`, `intergraph` and `reshape2` packages
+2. Making the distance network as a network object with edge weights as distances
+3. Making three adjacency matrices with binary values for common colonizer, common language, and contiguity
+4. Defining a function to add node attributes to the networks
+5. Loading the edgelist of unique cultural goods, and making 24 network objects for 24 consecutive years following the steps,     + Keeping only the pairs with positive weights
+    + Subsetting the dataframe with only 'iso_o' and 'iso_d' column
+    + Making an igraph object and assigning node attributes from the function created in the third step
+    + Sanity checking (is the node names character objects, is the number of node names equal to the number of nodes, the  names of the node attributes etc.)
+    + Repeating the above four steps for all the years.
+6. Detaching the igraph package and loading `sna` and `tergm` packages
+7. Converting all 24 igraph objects to network objects
+8. Checking the node attributes for all of the networks
+9. Running STERGM 
+10. Calculating odds ratios, standard errors, and confidence intervals
+11. Plotting goodness of fit and MCMC statistics
+
+```{r}
+library(network)
+library(igraph)
+library(intergraph)
+library(reshape2)
+```
+
+```{r}
+lang <- read.csv("../data/cleaned/language_edgelist.csv",stringsAsFactors = FALSE)
+lang_mat <- acast(lang, iso_o ~ iso_d, value.var = "comlang_off", fill = 0)
+
+contiguity <- read.csv("../data/cleaned/contiguity_edgelist.csv",stringsAsFactors = FALSE)
+contig_mat <- acast(contiguity, iso_o ~ iso_d, value.var = "contig", fill = 0)
+
+common_col <- read.csv("../data/cleaned/comcol_edgelist.csv",stringsAsFactors = FALSE)
+col_mat <- acast(common_col, iso_o ~ iso_d, value.var = "comcol", fill = 0)
+
+colonizer <- read.csv("../data/cleaned/colonizer_edgelist.csv",stringsAsFactors = FALSE)
+colony <- acast(colonizer, iso_o ~ iso_d, value.var = "colony", fill = 0)
+```
+
+```{r}
+dist_1 <- read.csv("../data/cleaned/distance_edgelist.csv",stringsAsFactors = FALSE)
+
+#sd(log(dist_1$dist))
+sd(log(dist_1$log_dist))
+```
+```{r}
+dist_net <- network(dist_1[, c("iso_o", "iso_d")], 
+                   directed = TRUE, 
+                   matrix.type = "edgelist", 
+                   loops = FALSE)
+
+# assigning the log_distance as edge attributes
+set.edge.value(dist_net, "log_dist", dist_1$log_dist)
+```
+
+```{r}
+summary(dist_net)
+#get.edge.value(dist_net, "log_dist")
+```
+# Unique culture Goods trade edgelist
+```{r}
+u <- read.csv("../data/cleaned/unique_edgelist.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+```
+
+# 2000
+```{r}
+y0 <- "X2000"
+u_y00 <- u[, c("iso_o", "iso_d", y0)]
+u_y00 <- subset(u_y00, u_y00[[y0]] > 0)
+u_y0 <- u_y00[, c('iso_o', 'iso_d')]
+```
+
+```{r}
+att2000 <- read.csv("../data/cleaned/attribute2000.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un00 <- graph_from_data_frame(d = u_y0, directed = TRUE)
+
+attify <- function(n_net, attr_df){
+  V(n_net)$iso_o <- V(n_net)$name
+  idx <- match(V(n_net)$name, attr_df$iso_o)
+  V(n_net)$country <- attr_df$Country[idx]
+  V(n_net)$D_log_gdp <- attr_df$D_log_gdp[idx]
+  V(n_net)$D_log_gdp_pct <- attr_df$D_log_gdp_pct[idx]
+  V(n_net)$log_population <- attr_df$log_population[idx]
+  V(n_net)$log_trade_gdp_ratio <- attr_df$log_trade_gdp_ratio[idx]
+  V(n_net)$landlocked <- attr_df$landlocked[idx]
+  V(n_net)$continent <- attr_df$continent[idx]
+  V(n_net)$lat <- attr_df$lat[idx]
+  V(n_net)$lon <- attr_df$lon[idx]
+  V(n_net)$development <- attr_df$development[idx]
+  
+  return(n_net)
+}
+
+
+un00 <- attify(un00, att2000)
+vertex_attr_names(un00)
+
+summary(un00)
+length(unique(V(un00)$name)) == gorder(un00)
+is.character(V(un00)$name) 
+length(unique(att2000$iso_o)) == length(unique(V(un00)$name))
+```
+
+# 2001
+```{r}
+y1 <- "X2001"
+u_y01 <- u[, c("iso_o", "iso_d", y1)]
+u_y01 <- subset(u_y01, u_y01[[y1]] > 0)
+u_y1 <- u_y01[, c('iso_o', 'iso_d')]
+att2001 <- read.csv("../data/cleaned/attribute2001.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un01 <- graph_from_data_frame(d = u_y1, directed = TRUE)
+un01 <- attify(un01, att2001)
+vertex_attr_names(un01)
+
+summary(un01)
+# V(un00)$name) is the name of all vertices. It chacks the number of node names are equal to the number of nodes.
+length(unique(V(un01)$name)) == gorder(un01) # number of vertices
+#V(un00)$name
+is.character(V(un01)$name) 
+length(unique(att2001$iso_o)) == length(unique(V(un01)$name))
+```
+# 2002
+```{r}
+y2 <- "X2002"
+u_y02 <- u[, c("iso_o", "iso_d", y2)]
+u_y02 <- subset(u_y02, u_y02[[y2]] > 0)
+u_y2 <- u_y02[, c('iso_o', 'iso_d')]
+att2002 <- read.csv("../data/cleaned/attribute2002.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un02 <- graph_from_data_frame(d = u_y2, directed = TRUE)
+un02 <- attify(un02, att2002)
+vertex_attr_names(un02)
+
+summary(un02)
+length(unique(V(un02)$name)) == gorder(un02)
+is.character(V(un02)$name) 
+length(unique(att2002$iso_o)) == length(unique(V(un02)$name))
+```
+# 2003
+```{r}
+y3 <- "X2003"
+u_y03 <- u[, c("iso_o", "iso_d", y3)]
+u_y03 <- subset(u_y03, u_y03[[y3]] > 0)
+u_y3 <- u_y03[, c('iso_o', 'iso_d')]
+att2003 <- read.csv("../data/cleaned/attribute2003.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un03 <- graph_from_data_frame(d = u_y3, directed = TRUE)
+un03 <- attify(un03, att2003)
+vertex_attr_names(un03)
+summary(un03)
+length(unique(V(un03)$name)) == gorder(un03)
+is.character(V(un03)$name) 
+length(unique(att2003$iso_o)) == length(unique(V(un03)$name))
+```
+# 2004
+```{r}
+y4 <- "X2004"
+u_y04 <- u[, c("iso_o", "iso_d", y4)]
+u_y04 <- subset(u_y04, u_y04[[y4]] > 0)
+u_y4 <- u_y04[, c('iso_o', 'iso_d')]
+att2004 <- read.csv("../data/cleaned/attribute2004.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un04 <- graph_from_data_frame(d = u_y4, directed = TRUE)
+un04 <- attify(un04, att2004)
+vertex_attr_names(un04)
+summary(un04)
+length(unique(V(un04)$name)) == gorder(un04)
+is.character(V(un04)$name) 
+length(unique(att2004$iso_o)) == length(unique(V(un04)$name))
+```
+# 2005
+```{r}
+y5 <- "X2005"
+u_y05 <- u[, c("iso_o", "iso_d", y5)]
+u_y05 <- subset(u_y05, u_y05[[y5]] > 0)
+u_y5 <- u_y05[, c('iso_o', 'iso_d')]
+att2005 <- read.csv("../data/cleaned/attribute2005.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un05 <- graph_from_data_frame(d = u_y5, directed = TRUE)
+un05 <- attify(un05, att2005)
+vertex_attr_names(un05)
+summary(un05)
+length(unique(V(un05)$name)) == gorder(un05)
+is.character(V(un05)$name) 
+length(unique(att2005$iso_o)) == length(unique(V(un05)$name))
+```
+# 2006
+```{r}
+y6 <- "X2006"
+u_y06 <- u[, c("iso_o", "iso_d", y6)]
+u_y06 <- subset(u_y06, u_y06[[y6]] > 0)
+u_y6 <- u_y06[, c('iso_o', 'iso_d')]
+att2006 <- read.csv("../data/cleaned/attribute2006.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un06 <- graph_from_data_frame(d = u_y6, directed = TRUE)
+un06 <- attify(un06, att2006)
+vertex_attr_names(un06)
+summary(un06)
+length(unique(V(un06)$name)) == gorder(un06)
+is.character(V(un06)$name) 
+length(unique(att2006$iso_o)) == length(unique(V(un06)$name))
+```
+
+# 2007
+```{r}
+y7 <- "X2007"
+u_y07 <- u[, c("iso_o", "iso_d", y7)]
+u_y07 <- subset(u_y07, u_y07[[y7]] > 0)
+u_y7 <- u_y07[, c('iso_o', 'iso_d')]
+att2007 <- read.csv("../data/cleaned/attribute2007.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un07 <- graph_from_data_frame(d = u_y7, directed = TRUE)
+un07 <- attify(un07, att2007)
+vertex_attr_names(un07)
+summary(un07)
+length(unique(V(un07)$name)) == gorder(un07)
+is.character(V(un07)$name) 
+length(unique(att2007$iso_o)) == length(unique(V(un07)$name))
+```
+# 2008
+```{r}
+y8 <- "X2008"
+u_y08 <- u[, c("iso_o", "iso_d", y8)]
+u_y08 <- subset(u_y08, u_y08[[y8]] > 0)
+u_y8 <- u_y08[, c('iso_o', 'iso_d')]
+att2008 <- read.csv("../data/cleaned/attribute2008.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un08 <- graph_from_data_frame(d = u_y8, directed = TRUE)
+un08 <- attify(un08, att2008)
+vertex_attr_names(un08)
+summary(un08)
+length(unique(V(un08)$name)) == gorder(un08)
+is.character(V(un08)$name) 
+length(unique(att2008$iso_o)) == length(unique(V(un08)$name))
+```
+# 2009
+```{r}
+y9 <- "X2009"
+u_y09 <- u[, c("iso_o", "iso_d", y9)]
+u_y09 <- subset(u_y09, u_y09[[y9]] > 0)
+u_y9 <- u_y09[, c('iso_o', 'iso_d')]
+att2009 <- read.csv("../data/cleaned/attribute2009.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un09 <- graph_from_data_frame(d = u_y9, directed = TRUE)
+un09 <- attify(un09, att2009)
+vertex_attr_names(un09)
+summary(un09)
+length(unique(V(un09)$name)) == gorder(un09)
+is.character(V(un09)$name) 
+length(unique(att2009$iso_o)) == length(unique(V(un09)$name))
+```
+# 2010
+```{r}
+y10 <- "X2010"
+u_y010 <- u[, c("iso_o", "iso_d", y10)]
+u_y010 <- subset(u_y010, u_y010[[y10]] > 0)
+u_y10 <- u_y010[, c('iso_o', 'iso_d')]
+att2010 <- read.csv("../data/cleaned/attribute2010.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un10 <- graph_from_data_frame(d = u_y10, directed = TRUE)
+un10 <- attify(un10, att2010)
+vertex_attr_names(un10)
+summary(un10)
+length(unique(V(un10)$name)) == gorder(un10)
+is.character(V(un10)$name) 
+length(unique(att2010$iso_o)) == length(unique(V(un10)$name))
+```
+# 2011
+```{r}
+y11 <- "X2011"
+u_y011 <- u[, c("iso_o", "iso_d", y11)]
+u_y011 <- subset(u_y011, u_y011[[y11]] > 0)
+u_y11 <- u_y011[, c('iso_o', 'iso_d')]
+att2011 <- read.csv("../data/cleaned/attribute2011.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un11 <- graph_from_data_frame(d = u_y11, directed = TRUE)
+un11 <- attify(un11, att2011)
+vertex_attr_names(un11)
+summary(un11)
+length(unique(V(un11)$name)) == gorder(un11)
+is.character(V(un11)$name) 
+length(unique(att2011$iso_o)) == length(unique(V(un11)$name))
+```
+# 2012
+```{r}
+y12 <- "X2012"
+u_y012 <- u[, c("iso_o", "iso_d", y12)]
+u_y012 <- subset(u_y012, u_y012[[y12]] > 0)
+u_y12 <- u_y012[, c('iso_o', 'iso_d')]
+att2012 <- read.csv("../data/cleaned/attribute2012.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un12 <- graph_from_data_frame(d = u_y12, directed = TRUE)
+un12 <- attify(un12, att2012)
+vertex_attr_names(un12)
+summary(un12)
+length(unique(V(un12)$name)) == gorder(un12)
+is.character(V(un12)$name) 
+length(unique(att2012$iso_o)) == length(unique(V(un12)$name))
+```
+# 2013
+```{r}
+y13 <- "X2013"
+u_y013 <- u[, c("iso_o", "iso_d", y13)]
+u_y013 <- subset(u_y013, u_y013[[y13]] > 0)
+u_y13 <- u_y013[, c('iso_o', 'iso_d')]
+att2013 <- read.csv("../data/cleaned/attribute2013.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un13 <- graph_from_data_frame(d = u_y13, directed = TRUE)
+un13 <- attify(un13, att2013)
+vertex_attr_names(un13)
+summary(un13)
+length(unique(V(un13)$name)) == gorder(un13)
+is.character(V(un13)$name) 
+length(unique(att2013$iso_o)) == length(unique(V(un13)$name))
+```
+# 2014
+```{r}
+y14 <- "X2014"
+u_y014 <- u[, c("iso_o", "iso_d", y14)]
+u_y014 <- subset(u_y014, u_y014[[y14]] > 0)
+u_y14 <- u_y014[, c('iso_o', 'iso_d')]
+att2014 <- read.csv("../data/cleaned/attribute2014.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un14 <- graph_from_data_frame(d = u_y14, directed = TRUE)
+un14 <- attify(un14, att2014)
+vertex_attr_names(un14)
+summary(un14)
+length(unique(V(un14)$name)) == gorder(un14)
+is.character(V(un14)$name) 
+length(unique(att2014$iso_o)) == length(unique(V(un14)$name))
+```
+# 2015
+```{r}
+y15 <- "X2015"
+u_y015 <- u[, c("iso_o", "iso_d", y15)]
+u_y015 <- subset(u_y015, u_y015[[y15]] > 0)
+u_y15 <- u_y015[, c('iso_o', 'iso_d')]
+att2015 <- read.csv("../data/cleaned/attribute2015.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un15 <- graph_from_data_frame(d = u_y15, directed = TRUE)
+un15 <- attify(un15, att2015)
+vertex_attr_names(un15)
+summary(un15)
+length(unique(V(un15)$name)) == gorder(un15)
+is.character(V(un15)$name) 
+length(unique(att2015$iso_o)) == length(unique(V(un15)$name))
+```
+# 2016
+```{r}
+y16 <- "X2016"
+u_y016 <- u[, c("iso_o", "iso_d", y16)]
+u_y016 <- subset(u_y016, u_y016[[y16]] > 0)
+u_y16 <- u_y016[, c('iso_o', 'iso_d')]
+att2016 <- read.csv("../data/cleaned/attribute2016.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un16 <- graph_from_data_frame(d = u_y16, directed = TRUE)
+un16 <- attify(un16, att2016)
+vertex_attr_names(un16)
+summary(un16)
+length(unique(V(un16)$name)) == gorder(un16)
+is.character(V(un16)$name) 
+length(unique(att2016$iso_o)) == length(unique(V(un16)$name))
+```
+
+# 2017
+```{r}
+y17 <- "X2017"
+u_y017 <- u[, c("iso_o", "iso_d", y17)]
+u_y017 <- subset(u_y017, u_y017[[y17]] > 0)
+u_y17 <- u_y017[, c('iso_o', 'iso_d')]
+att2017 <- read.csv("../data/cleaned/attribute2017.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un17 <- graph_from_data_frame(d = u_y17, directed = TRUE)
+un17 <- attify(un17, att2017)
+vertex_attr_names(un17)
+summary(un17)
+length(unique(V(un17)$name)) == gorder(un17)
+is.character(V(un17)$name) 
+length(unique(att2017$iso_o)) == length(unique(V(un17)$name))
+```
+# 2018
+```{r}
+y18 <- "X2018"
+u_y018 <- u[, c("iso_o", "iso_d", y18)]
+u_y018 <- subset(u_y018, u_y018[[y18]] > 0)
+u_y18 <- u_y018[, c('iso_o', 'iso_d')]
+att2018 <- read.csv("../data/cleaned/attribute2018.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un18 <- graph_from_data_frame(d = u_y18, directed = TRUE)
+un18 <- attify(un18, att2018)
+vertex_attr_names(un18)
+summary(un18)
+length(unique(V(un18)$name)) == gorder(un18)
+is.character(V(un18)$name) 
+length(unique(att2018$iso_o)) == length(unique(V(un18)$name))
+```
+# 2019
+```{r}
+y19 <- "X2019"
+u_y019 <- u[, c("iso_o", "iso_d", y19)]
+u_y019 <- subset(u_y019, u_y019[[y19]] > 0)
+u_y19 <- u_y019[, c('iso_o', 'iso_d')]
+att2019 <- read.csv("../data/cleaned/attribute2019.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un19 <- graph_from_data_frame(d = u_y19, directed = TRUE)
+un19 <- attify(un19, att2019)
+vertex_attr_names(un19)
+summary(un19)
+length(unique(V(un19)$name)) == gorder(un19)
+is.character(V(un19)$name) 
+length(unique(att2019$iso_o)) == length(unique(V(un19)$name))
+```
+# 2020
+```{r}
+y20 <- "X2020"
+u_y020 <- u[, c("iso_o", "iso_d", y20)]
+u_y020 <- subset(u_y020, u_y020[[y20]] > 0)
+u_y20 <- u_y020[, c('iso_o', 'iso_d')]
+att2020 <- read.csv("../data/cleaned/attribute2020.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un20 <- graph_from_data_frame(d = u_y20, directed = TRUE)
+un20 <- attify(un20, att2020)
+vertex_attr_names(un20)
+summary(un20)
+length(unique(V(un20)$name)) == gorder(un20)
+is.character(V(un20)$name) 
+length(unique(att2020$iso_o)) == length(unique(V(un20)$name))
+```
+
+# 2021
+```{r}
+y21 <- "X2021"
+u_y021 <- u[, c("iso_o", "iso_d", y21)]
+u_y021 <- subset(u_y021, u_y021[[y21]] > 0)
+u_y21 <- u_y021[, c('iso_o', 'iso_d')]
+att2021 <- read.csv("../data/cleaned/attribute2021.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un21 <- graph_from_data_frame(d = u_y21, directed = TRUE)
+un21 <- attify(un21, att2021)
+vertex_attr_names(un21)
+summary(un21)
+length(unique(V(un21)$name)) == gorder(un21)
+is.character(V(un21)$name) 
+length(unique(att2021$iso_o)) == length(unique(V(un21)$name))
+```
+# 2022
+```{r}
+y22 <- "X2022"
+u_y022 <- u[, c("iso_o", "iso_d", y22)]
+u_y022 <- subset(u_y022, u_y022[[y22]] > 0)
+u_y22 <- u_y022[, c('iso_o', 'iso_d')]
+att2022 <- read.csv("../data/cleaned/attribute2022.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un22 <- graph_from_data_frame(d = u_y22, directed = TRUE)
+un22 <- attify(un22, att2022)
+vertex_attr_names(un22)
+summary(un22)
+length(unique(V(un22)$name)) == gorder(un22)
+is.character(V(un22)$name) 
+length(unique(att2022$iso_o)) == length(unique(V(un22)$name))
+```
+
+# 2023
+```{r}
+y23 <- "X2023"
+u_y023 <- u[, c("iso_o", "iso_d", y23)]
+u_y023 <- subset(u_y023, u_y023[[y23]] > 0)
+u_y23 <- u_y023[, c('iso_o', 'iso_d')]
+att2023 <- read.csv("../data/cleaned/attribute2023.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un23 <- graph_from_data_frame(d = u_y23, directed = TRUE)
+un23 <- attify(un23, att2023)
+vertex_attr_names(un23)
+summary(un23)
+length(unique(V(un23)$name)) == gorder(un23)
+is.character(V(un23)$name) 
+length(unique(att2023$iso_o)) == length(unique(V(un23)$name))
+```
+
+
+
+
+
+
+
+
+
+#
+# Converting to network object,
+```{r}
+net_un00 <- intergraph::asNetwork(un00)
+net_un01 <- intergraph::asNetwork(un01)
+net_un02 <- intergraph::asNetwork(un02)
+net_un03 <- intergraph::asNetwork(un03)
+net_un04 <- intergraph::asNetwork(un04)
+net_un05 <- intergraph::asNetwork(un05)
+net_un06 <- intergraph::asNetwork(un06)
+net_un07 <- intergraph::asNetwork(un07)
+net_un08 <- intergraph::asNetwork(un08)
+net_un09 <- intergraph::asNetwork(un09)
+net_un10 <- intergraph::asNetwork(un10)
+net_un11 <- intergraph::asNetwork(un11)
+net_un12 <- intergraph::asNetwork(un12)
+net_un13 <- intergraph::asNetwork(un13)
+net_un14 <- intergraph::asNetwork(un14)
+net_un15 <- intergraph::asNetwork(un15)
+net_un16 <- intergraph::asNetwork(un16)
+net_un17 <- intergraph::asNetwork(un17)
+net_un18 <- intergraph::asNetwork(un18)
+net_un19 <- intergraph::asNetwork(un19)
+net_un20 <- intergraph::asNetwork(un20)
+net_un21 <- intergraph::asNetwork(un21)
+net_un22 <- intergraph::asNetwork(un22)
+net_un23 <- intergraph::asNetwork(un23)
+```
+
+
+```{r}
+detach(package:igraph)
+require(tergm)
+require(sna)
+```
+# checking the vertex attributes are still there,
+```{r}
+# Reference: https://cran.r-project.org/web/packages/network/network.pdf
+
+list.vertex.attributes(net_un00)
+list.vertex.attributes(net_un01)
+list.vertex.attributes(net_un02)
+list.vertex.attributes(net_un03)
+list.vertex.attributes(net_un04)
+list.vertex.attributes(net_un05)
+list.vertex.attributes(net_un06)
+list.vertex.attributes(net_un07)
+list.vertex.attributes(net_un08)
+list.vertex.attributes(net_un09)
+list.vertex.attributes(net_un10)
+list.vertex.attributes(net_un11)
+list.vertex.attributes(net_un12)
+list.vertex.attributes(net_un13)
+list.vertex.attributes(net_un14)
+list.vertex.attributes(net_un15)
+list.vertex.attributes(net_un16)
+list.vertex.attributes(net_un17)
+list.vertex.attributes(net_un18)
+list.vertex.attributes(net_un19)
+list.vertex.attributes(net_un20)
+list.vertex.attributes(net_un21)
+list.vertex.attributes(net_un22)
+list.vertex.attributes(net_un23)
+```
+
+```{r}
+library(networkDynamic)
+```
+
+# RTA -> NetworkDynamic object
+
+The following chunks of code creates network dynamic object for RTA over time which is stored in the 'results' folder. For faster reproducibility I am loading the object from there later. 
+
+```{r}
+# rta <- read.csv("../data/cleaned/rta_edgelist.csv",stringsAsFactors = FALSE)
+
+# rta0 <- acast(rta, iso_o ~ iso_d, value.var = "X2000", fill = 0)
+# rta1 <- acast(rta, iso_o ~ iso_d, value.var = "X2001", fill = 0)
+# rta2 <- acast(rta, iso_o ~ iso_d, value.var = "X2002", fill = 0)
+# rta3 <- acast(rta, iso_o ~ iso_d, value.var = "X2003", fill = 0)
+# rta4 <- acast(rta, iso_o ~ iso_d, value.var = "X2004", fill = 0)
+# rta5 <- acast(rta, iso_o ~ iso_d, value.var = "X2005", fill = 0)
+# rta6 <- acast(rta, iso_o ~ iso_d, value.var = "X2006", fill = 0)
+# rta7 <- acast(rta, iso_o ~ iso_d, value.var = "X2007", fill = 0)
+# rta8 <- acast(rta, iso_o ~ iso_d, value.var = "X2008", fill = 0)
+# rta9 <- acast(rta, iso_o ~ iso_d, value.var = "X2009", fill = 0)
+# rta10 <- acast(rta, iso_o ~ iso_d, value.var = "X2010", fill = 0)
+# rta11 <- acast(rta, iso_o ~ iso_d, value.var = "X2011", fill = 0)
+# rta12 <- acast(rta, iso_o ~ iso_d, value.var = "X2012", fill = 0)
+# rta13 <- acast(rta, iso_o ~ iso_d, value.var = "X2013", fill = 0)
+# rta14 <- acast(rta, iso_o ~ iso_d, value.var = "X2014", fill = 0)
+# rta15 <- acast(rta, iso_o ~ iso_d, value.var = "X2015", fill = 0)
+# rta16 <- acast(rta, iso_o ~ iso_d, value.var = "X2016", fill = 0)
+# rta17 <- acast(rta, iso_o ~ iso_d, value.var = "X2017", fill = 0)
+# rta18 <- acast(rta, iso_o ~ iso_d, value.var = "X2018", fill = 0)
+# rta19 <- acast(rta, iso_o ~ iso_d, value.var = "X2019", fill = 0)
+# rta20 <- acast(rta, iso_o ~ iso_d, value.var = "X2020", fill = 0)
+# rta21 <- acast(rta, iso_o ~ iso_d, value.var = "X2021", fill = 0)
+# rta22 <- acast(rta, iso_o ~ iso_d, value.var = "X2022", fill = 0)
+# rta23 <- acast(rta, iso_o ~ iso_d, value.var = "X2023", fill = 0)
+
+# nrta0 <- as.network(rta0, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta1 <- as.network(rta1, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta2 <- as.network(rta2, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta3 <- as.network(rta3, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta4 <- as.network(rta4, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta5 <- as.network(rta5, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta6 <- as.network(rta6, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta7 <- as.network(rta7, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta8 <- as.network(rta8, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta9 <- as.network(rta9, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta10 <- as.network(rta10, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta11 <- as.network(rta11, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta12 <- as.network(rta12, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta13 <- as.network(rta13, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta14 <- as.network(rta14, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta15 <- as.network(rta15, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta16 <- as.network(rta16, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta17 <- as.network(rta17, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta18 <- as.network(rta18, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta19 <- as.network(rta19, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta20 <- as.network(rta20, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta21 <- as.network(rta21, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta22 <- as.network(rta22, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+# nrta23 <- as.network(rta23, loops = FALSE, directed = FALSE, matrix.type = "adjacency")
+```
+
+8 July, 2025, starts 4:11AM, ends 4:13AM
+# The following code runs for 3 minutes 
+```{r}
+#net_dynamic_rta <- networkDynamic(network.list = list(nrta0, nrta1, nrta2, nrta3, nrta4, nrta5, nrta6, nrta7, nrta8, nrta9, nrta10, nrta11, nrta12, nrta13, nrta14, nrta15, nrta16, nrta17, nrta18, nrta19, nrta20, nrta21, nrta22, nrta23))
+```
+```{r}
+#class(net_dynamic_rta)
+```
+```{r}
+#saveRDS(net_dynamic_rta, file = "../results/net_dynamic_rta.rds")
+```
+
+#Hysteresis Effect
+I am hashing the following chunk of codes that create a network dynamic object for hysteresis effect of unique cultural goods trade, which takes more than an hour to run. For faster reproducibility, I have saved it in 'results' folder and am loading it from there in the following code block along with 'RTA' network dynamic object. 
+```{r}
+#hyst_unique <- read.csv("../data/cleaned/edgelist_unique_hyst.csv",stringsAsFactors = FALSE)
+
+#hyst_unique_n0 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n0, "X2000", hyst_unique$X2000)
+# 
+# #hyst_unique_n1 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n1, "X2001", hyst_unique$X2001)
+# 
+# #hyst_unique_n2 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n2, "X2002", hyst_unique$X2002)
+# 
+# #hyst_unique_n3 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n3, "X2003", hyst_unique$X2003)
+# 
+# #hyst_unique_n4 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n4, "X2004", hyst_unique$X2004)
+# 
+# #hyst_unique_n5 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n5, "X2005", hyst_unique$X2005)
+# 
+# #hyst_unique_n6 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n6, "X2006", hyst_unique$X2006)
+# 
+# #hyst_unique_n7 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n7, "X2007", hyst_unique$X2007)
+# 
+# #hyst_unique_n8 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n8, "X2008", hyst_unique$X2008)
+# 
+# #hyst_unique_n9 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n9, "X2009", hyst_unique$X2009)
+# 
+# #hyst_unique_n10 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n10, "X2010", hyst_unique$X2010)
+# 
+# #hyst_unique_n11 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n11, "X2011", hyst_unique$X2011)
+# 
+# #hyst_unique_n12 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n12, "X2012", hyst_unique$X2012)
+# 
+# hyst_unique_n13 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n13, "X2013", hyst_unique$X2013)
+# 
+# hyst_unique_n14 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n14, "X2014", hyst_unique$X2014)
+# 
+# hyst_unique_n15 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n15, "X2015", hyst_unique$X2015)
+# 
+# hyst_unique_n16 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n16, "X2016", hyst_unique$X2016)
+# 
+# hyst_unique_n17 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n17, "X2017", hyst_unique$X2017)
+# 
+# hyst_unique_n18 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n18, "X2018", hyst_unique$X2018)
+# 
+# hyst_unique_n19 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n19, "X2019", hyst_unique$X2019)
+# 
+# hyst_unique_n20 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n20, "X2020", hyst_unique$X2020)
+# 
+# hyst_unique_n21 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n21, "X2021", hyst_unique$X2021)
+# 
+# hyst_unique_n22 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n22, "X2022", hyst_unique$X2022)
+# 
+# hyst_unique_n23 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
+# set.edge.value(hyst_unique_n23, "X2023", hyst_unique$X2023)
+# 
+# #get.edge.value(hyst_unique_n23, "X2023"))
+# class(hyst_unique_n23)
+
+#net_dynamic_hyst_u <- networkDynamic(network.list = list(hyst_unique_n0, hyst_unique_n1, hyst_unique_n2, hyst_unique_n3, hyst_unique_n4, hyst_unique_n5, hyst_unique_n6, hyst_unique_n7, hyst_unique_n8, hyst_unique_n9, hyst_unique_n10, hyst_unique_n11, hyst_unique_n12, hyst_unique_n13, hyst_unique_n14, hyst_unique_n15,hyst_unique_n16 ,hyst_unique_n17, hyst_unique_n18, hyst_unique_n19, hyst_unique_n20, hyst_unique_n21, hyst_unique_n22, hyst_unique_n23),  verbose = TRUE)
+
+#saveRDS(net_dynamic_hyst_u, file = "../results/net_dynamic_hyst_u.rds")
+
+```
+
+```{r}
+net_dynamic_rta <- readRDS("../results/net_dynamic_rta.rds")
+net_dynamic_hyst_u <- readRDS("../results/net_dynamic_hyst_u.rds")
+```
+
+
+```{r}
+class(net_dynamic_hyst_u)
+```
+
+
+
+```{r}
+#install.packages("Rglpk")
+```
+
+
+```{r}
+#dim(rta0)
+#dim(colony)
+#network.size(nrta0)
+#network.size(net_un00)
+#network.size(dist_net)
+#network.size(colony)
+```
+
+
+
+
+
+# Estimating STERGM
+Started: 28 July, 2025 at 8:19 PM
+Ended: 29 July, 2025 at 5AM (approximately)
+```{r}
+#Reference: https://www.rdocumentation.org/packages/ergm/versions/4.8.1/topics/edgecov-ergmTerm
+set.seed(312)
+
+unique_stgm <- tergm(list(net_un00, net_un01, net_un02, net_un03, net_un04, net_un05, net_un06, net_un07, net_un08, net_un09, net_un10, net_un11, net_un12, net_un13, net_un14, net_un15, net_un16, net_un17, net_un18, net_un19, net_un20, net_un21, net_un22, net_un23) ~ 
+                                       Form(~edges + nodecov("D_log_gdp_pct") 
+                                                   + absdiff("D_log_gdp_pct")
+                                                   + nodemix("development")
+                                                   + edgecov(net_dynamic_rta)
+                                                   + nodematch("landlocked")
+                                                   + edgecov(dist_net, "log_dist")
+                                                   + edgecov(contig_mat)
+                                                   + edgecov(colony)
+                                                   + edgecov(col_mat)
+                                                   + edgecov(lang_mat)
+                                                   + mutual) +
+                                    Persist(~edges + nodecov("D_log_gdp_pct") 
+                                                   + absdiff("D_log_gdp_pct")
+                                                   + nodemix("development")
+                                                   + edgecov(net_dynamic_rta)
+                                                   + nodematch("landlocked")
+                                                   + edgecov(dist_net, "log_dist")
+                                                   + edgecov(contig_mat)
+                                                   + edgecov(colony)
+                                                   + edgecov(col_mat)
+                                                   + edgecov(lang_mat)
+                                                   + mutual), 
+                                                   estimate = "CMLE", times = c(1:24))
+```
+
+```{r}
+print(summary(unique_stgm))
+```
+
+```{r}
+#saveRDS(unique_stgm, "../results/unique_stgm1.rds")
+#unique_stgm <- readRDS("unique_stgm.rds")
+
+```
+
+
+
+
+```{r}
+pvals_u <- summary(unique_stgm)$coefficients[, "Pr(>|z|)"]
+or_u <- exp(coef(unique_stgm))
+ste <- sqrt(diag(unique_stgm$covar))
+lci <- exp(coef(unique_stgm) - 1.96 * ste) # the lower bound of the 95% confidence interval (see https://en.wikipedia.org/wiki/1.96)
+uci <- exp(coef(unique_stgm) + 1.96 * ste) 
+oddsratios <- cbind(coef(unique_stgm), round(lci, digits = 4), round(or_u, digits = 4), round(uci, digits = 4), pvals_u)
+dataframe_u1 =as.data.frame(oddsratios)
+dataframe_u1$model_terms <- rownames(dataframe_u1)
+rownames(dataframe_u1) <- NULL
+colnames(dataframe_u1) <- c('Estimate_u','lCI_u', 'OR_u','uCI_u', 'pvals_u', 'model_terms')
+```
+
+
+```{r}
+#knitr::kable(coef(summary(unique_stgm)))
+```
+
+```{r}
+dataframe_u1
+```
+
+```{r}
+write.csv(dataframe_u1, "../results/unique_stgm1_results.csv")
+```
+
+
+```{r}
+AIC(unique_stgm)[1]
+BIC(unique_stgm)[1]
+```
+
+```{r}
+mcmc.diagnostics(unique_stgm)
+```
+
+```{r}
+goftest <- gof(unique_stgm) 
+plot(goftest)
+```
+
+```{r}
+saveRDS(goftest, "../results/goftest_model1_u.rds")
+```
+
+```{r}
+goftest <- readRDS("../results/goftest_model1_u.rds")
+```
+
+
+```{r}
+names(goftest)
+
+```
+
+```{r}
+#Reference: https://www.datamentor.io/r-programming/saving-plot#:~:text=Save%20as%20tiff%20Image,filename%20%3D%20%22saving_plot3%22)%20.
+
+all_stats <- c("odegree", "idegree", "espartners", "distance", "model")
+
+selected_stats <- all_stats[2:5]
+
+
+tiff(file = "../results/goftest_model1_u.tiff",
+     width = 12, height = 3, units = "in", res = 100)
+
+par(mfrow = c(1, 4),
+    mar = c(5, 5, 5, 1),
+    oma = c(0.2, 1, 0.2, 1))
+
+for (stat in selected_stats) {
+  plot(goftest, which = stat, main = "Model 1", cex.lab = 1.5)
+}
+
+dev.off()
+
+```
+
+
+## With Accumulated consumption
+
+Start: 2 August, at 11;06PM
+End: 3 August, at 11:57PM
+```{r}
+#Reference: https://www.rdocumentation.org/packages/ergm/versions/4.8.1/topics/edgecov-ergmTerm
+set.seed(312)
+
+unique_stgm_hyst <- tergm(list(net_un00, net_un01, net_un02, net_un03, net_un04, net_un05, net_un06, net_un07, net_un08, net_un09, net_un10, net_un11, net_un12, net_un13, net_un14, net_un15, net_un16, net_un17, net_un18, net_un19, net_un20, net_un21, net_un22, net_un23) ~ 
+                                              Form(~nodecov("D_log_gdp_pct") 
+                                                   + absdiff("D_log_gdp_pct")
+                                                   + nodemix("development")
+                                                   + edgecov(net_dynamic_hyst_u)
+                                                   + edgecov(net_dynamic_rta)
+                                                   + nodematch("landlocked")
+                                                   + edgecov(dist_net, "log_dist")
+                                                   + edgecov(contig_mat)
+                                                   + edgecov(colony)
+                                                   + edgecov(col_mat)
+                                                   + edgecov(lang_mat)
+                                                   + mutual) +
+                                           Persist(~nodecov("D_log_gdp_pct") 
+                                                   + absdiff("D_log_gdp_pct")
+                                                   + nodemix("development")
+                                                   + edgecov(net_dynamic_hyst_u)
+                                                   + edgecov(net_dynamic_rta)
+                                                   + nodematch("landlocked")
+                                                   + edgecov(dist_net, "log_dist")
+                                                   + edgecov(contig_mat)
+                                                   + edgecov(colony)
+                                                   + edgecov(col_mat)
+                                                   + edgecov(lang_mat)
+                                                   + mutual), 
+                                                   estimate = "CMLE", times = c(1:24))
+```
+
+```{r}
+saveRDS(unique_stgm_hyst, "../results/unique_stgm2.rds")
+```
+
+```{r}
+print(summary(unique_stgm_hyst))
+```
+
+```{r}
+pvals_u_h <- summary(unique_stgm_hyst)$coefficients[, "Pr(>|z|)"]
+or_u_h <- exp(coef(unique_stgm_hyst))
+ste_h <- sqrt(diag(unique_stgm_hyst$covar))
+lci_h <- exp(coef(unique_stgm_hyst) - 1.96 * ste_h) 
+uci_h <- exp(coef(unique_stgm_hyst) + 1.96 * ste_h)  
+oddsratios_h <- cbind(coef(unique_stgm_hyst), round(lci_h, digits = 4), round(or_u_h, digits = 4), round(uci_h, digits = 4), pvals_u_h)
+dataframe_u_h =as.data.frame(oddsratios_h)
+dataframe_u_h$model_terms <- rownames(dataframe_u_h)
+rownames(dataframe_u_h) <- NULL
+colnames(dataframe_u_h) <- c('Estimate_u','lCI_u', 'OR_u','uCI_u', 'pvals_u', 'model_terms')
+```
+
+```{r}
+write.csv(dataframe_u_h, "../results/unique_stgm2_results.csv")
+```
+
+```{r}
+mcmc.diagnostics(unique_stgm_hyst)
+```
+Start: 12:12PM 5
+
+
+Start: 3 August at 9:08PM
+End: 3 August at 10:30PM
+```{r}
+goftest_hyst <- gof(unique_stgm_hyst)
+#plot(goftest_hyst)
+```
+
+```{r}
+#saveRDS(goftest_hyst, "../results/goftest_model2_u.rds")
+goftest_hyst <- readRDS("../results/goftest_model2_u.rds")
+```
+
+
+```{r}
+
+# selected_stats_2 <- c("odegree", "idegree", "espart", "distance")
+# 
+# for (stat in selected_stats_2) {
+#   cat("Trying to plot:", stat, "\n")
+#   tryCatch({
+#     plot(goftest_hyst, which = stat, main = paste("Model 2:", stat))
+#   }, error = function(e) {
+#     message("Error with stat:", stat)
+#     message(e$message)
+#   })
+# }
+# 
+
+```
+
+```{r}
+#class(goftest_hyst)
+#str(goftest_hyst$obs.odeg)
+```
+
+```{r}
+#Reference: https://www.datamentor.io/r-programming/saving-plot#:~:text=Save%20as%20tiff%20Image,filename%20%3D%20%22saving_plot3%22)%20.
+
+all_stats_2 <- c("odegree", "idegree", "espartners", "distance", "model")
+
+selected_stats_2 <- all_stats_2[2:5]
+
+
+tiff(file = "../results/goftest_model2_u.tiff",
+     width = 12, height = 3, units = "in", res = 100)
+
+par(mfrow = c(1, 4),
+    mar = c(5, 5, 5, 1),
+    oma = c(0.2, 1, 0.2, 1))
+
+for (stat in selected_stats_2) {
+  plot(goftest_hyst, which = stat, main = "Model 2", cex.lab = 1.5)
+}
+
+dev.off()
+```
+
+

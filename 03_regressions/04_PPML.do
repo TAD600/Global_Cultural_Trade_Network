@@ -1,0 +1,36 @@
+
+import delimited "C:\Users\Lenovo\Desktop\cultural goods trade\1st_paper\Global_Cultural_Trade_Network\data\cleaned\panel_complete.csv"
+
+ssc install reghdfe
+ssc install ppmlhdfe, replace
+
+// Landlocked
+gen landlock = .
+replace landlock = 1 if landlocked == 1 & landlocked_d == 1
+replace landlock = 0 if landlock==.
+tab landlock
+
+// Development
+gen dev=.
+replace dev= 1 if development== 0 & development_d == 0
+replace dev= 2 if development== 1 & development_d == 0
+replace dev= 3 if development== 0 & development_d == 1
+replace dev= 4 if development== 1 & development_d == 1
+tab dev
+label variable landlock "1 developing-developing, 2 developed-developing, 3 developing-developed, 4 developed-developed"
+
+// unique cultural goods 
+ppmlhdfe unique_cultural_tr log_gdp_pct log_gdp_pct_d hysteresis_unique rta contig comlang_off colony comcol log_dist landlock i.dev , a(time_period) vce(cluster dyad_id) d
+
+// reproducible cultural goods
+ppmlhdfe reproducible_cultural_tr log_gdp_pct log_gdp_pct_d hysteresis_repro rta contig comlang_off colony comcol log_dist landlock i.dev , a(time_period) vce(cluster dyad_id) d
+
+// non-cultural goods
+ppmlhdfe total_tr log_gdp_pct log_gdp_pct_d hysteresis_total rta contig comlang_off colony comcol log_dist landlock i.dev , a(time_period) vce(cluster dyad_id) d
+
+
+*predict mu, mu
+*twoway (scatter total_tr log_gdp_pct, msymbol(o))  (line mu log_gdp_pct, sort lcolor(red))
+*predict res
+*summarize res, detail
+*twoway scatter res mu
