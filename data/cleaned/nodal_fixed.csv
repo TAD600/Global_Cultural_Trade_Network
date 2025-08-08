@@ -1,0 +1,225 @@
+iso_o,country,landlocked,continent,lat,lon,langoff_1,colonizer1,category,development
+AND,Andorra,0,Europe,42.5,1.5,Catalan,,Advanced Economies,1.0
+ARE,United Arab Emirates,0,Asia,24.466667,54.416668,Arabic,GBR,Emerging and Developing Economies,0.0
+AFG,Afghanistan,1,Asia,34.516666,69.199997,Persian,,Emerging and Developing Economies,0.0
+ATG,Antigua and Barbuda,0,America,17.133333,-61.833332,English,GBR,Emerging and Developing Economies,0.0
+AIA,Anguilla,0,America,18.216667,-63.066666,English,GBR,,
+ALB,Albania,0,Europe,41.333332,19.816668,Albanian,TUR,Emerging and Developing Economies,0.0
+ARM,Armenia,1,Asia,40.183334,44.5,Armenian,TUR,Emerging and Developing Economies,0.0
+ANT,Netherland Antilles,0,America,12.1,-68.933334,Dutch,NLD,,
+AGO,Angola,0,Africa,-8.833333,13.25,Portuguese,PRT,Emerging and Developing Economies,0.0
+ARG,Argentina,0,America,-34.666668,-58.5,Spanish,ESP,Emerging and Developing Economies,0.0
+AUT,Austria,1,Europe,48.216667,16.366667,German,,Advanced Economies,1.0
+AUS,Australia,0,Pacific,-35.299999,149.133,English,GBR,Advanced Economies,1.0
+ABW,Aruba,0,America,12.55,-70.099998,Dutch,NLD,Emerging and Developing Economies,0.0
+AZE,Azerbaijan,1,Asia,40.366665,49.883335,Azeri,RUS,Emerging and Developing Economies,0.0
+BIH,Bosnia and Herzegovina,0,Europe,43.866665,18.433332,Serbo-Croatian,TUR,Emerging and Developing Economies,0.0
+BRB,Barbados,0,America,13.1,-59.616665,English,GBR,Emerging and Developing Economies,0.0
+BGD,Bangladesh,0,Asia,23.700001,90.366669,Bengali,GBR,Emerging and Developing Economies,0.0
+BEL,Belgium,0,Europe,50.833332,4.3499999,Dutch,,Advanced Economies,1.0
+BFA,Burkina Faso,1,Africa,12.333333,-1.6666666,French,FRA,Emerging and Developing Economies,0.0
+BGR,Bulgaria,0,Europe,42.666668,23.299999,Bulgarian,TUR,Emerging and Developing Economies,0.0
+BHR,Bahrain,0,Asia,26.200001,50.633335,Arabic,GBR,Emerging and Developing Economies,0.0
+BDI,Burundi,1,Africa,-3.3666666,29.316668,French,BEL,Emerging and Developing Economies,0.0
+BEN,Benin,0,Africa,6.5,2.7833333,French,FRA,Emerging and Developing Economies,0.0
+BMU,Bermuda,0,America,32.299999,-64.800003,English,GBR,,
+BRN,Brunei Darussalam,0,Asia,4.9333334,114.96667,Malay,GBR,Emerging and Developing Economies,0.0
+BOL,Bolivia,1,America,-16.5,-68.166664,Spanish,ESP,Emerging and Developing Economies,0.0
+BRA,Brazil,0,America,-15.78,-47.91,Portuguese,PRT,Emerging and Developing Economies,0.0
+BHS,The Bahamas,0,America,25.083334,-77.333336,English,GBR,Emerging and Developing Economies,0.0
+BTN,Bhutan,1,Asia,27.533333,89.75,Burmese,,Emerging and Developing Economies,0.0
+BWA,Botswana,1,Africa,-24.75,25.916666,English,GBR,Emerging and Developing Economies,0.0
+BLR,Belarus,0,Europe,53.849998,27.5,Belarussian,RUS,Emerging and Developing Economies,0.0
+BLZ,Belize,0,America,17.216667,-88.800003,English,GBR,Emerging and Developing Economies,0.0
+CAN,Canada,0,America,45.419998,-75.709999,English,GBR,Advanced Economies,1.0
+CCK,Cocos (Keeling) Islands,0,Pacific,-12.5,96.833336,Malay,GBR,,
+CAF,Central African Republic,1,Africa,4.3833332,18.616667,French,FRA,Emerging and Developing Economies,0.0
+COG,Republic of Congo,0,Africa,-4.2333331,15.233334,French,FRA,Emerging and Developing Economies,0.0
+CHE,Switzerland,1,Europe,46.950001,7.4333334,German,,Advanced Economies,1.0
+CIV,Côte d'Ivoire,0,Africa,5.3166666,-4.0166669,French,FRA,Emerging and Developing Economies,0.0
+COK,Cook Islands,0,Pacific,-21.200001,-159.76666,English,GBR,,
+CHL,Chile,0,America,-33.5,-70.666664,Spanish,ESP,Emerging and Developing Economies,0.0
+CMR,Cameroon,0,Africa,3.8499999,11.516666,French,FRA,Emerging and Developing Economies,0.0
+CHN,China,0,Asia,39.916668,116.43333,Chinese,,Emerging and Developing Economies,0.0
+COL,Colombia,0,America,4.6333332,-75.066666,Spanish,ESP,Emerging and Developing Economies,0.0
+CRI,Costa Rica,0,America,9.9833336,-84.066666,Spanish,ESP,Emerging and Developing Economies,0.0
+CUB,Cuba,0,America,23.116667,-82.416664,Spanish,ESP,,
+CPV,Cabo Verde,0,Africa,14.916667,-23.5,Portuguese,PRT,Emerging and Developing Economies,0.0
+CXR,Christmas Island,0,Pacific,-10.416667,105.71667,English,GBR,,
+CYP,Cyprus,0,Europe,35.150002,33.349998,Greek,GBR,Advanced Economies,1.0
+CZE,Czech Republic,1,Europe,50.099998,14.433333,Czech,AUT,Advanced Economies,1.0
+DEU,Germany,0,Europe,52.533001,13.417,German,,Advanced Economies,1.0
+DJI,Djibouti,0,Africa,11.6,43.150002,French,FRA,Emerging and Developing Economies,0.0
+DNK,Denmark,0,Europe,55.666668,12.583333,Danish,,Advanced Economies,1.0
+DMA,Dominica,0,America,15.3,-61.383335,English,GBR,Emerging and Developing Economies,0.0
+DOM,Dominican Republic,0,America,18.5,-69.783333,Spanish,FRA,Emerging and Developing Economies,0.0
+DZA,Algeria,0,Africa,36.833332,3.0,Arabic,FRA,Emerging and Developing Economies,0.0
+ECU,Ecuador,0,America,-0.23333333,-78.5,Spanish,ESP,Emerging and Developing Economies,0.0
+EST,Estonia,0,Europe,59.416668,24.75,Estonian,RUS,Advanced Economies,1.0
+EGY,Egypt,0,Africa,30.049999,31.25,Arabic,GBR,Emerging and Developing Economies,0.0
+ESH,Western Sahara,0,Africa,27.166666,-13.183333,Arabic,ESP,,
+ERI,Eritrea,0,Africa,15.333333,38.883335,English,GBR,Emerging and Developing Economies,0.0
+ESP,Spain,0,Europe,40.416668,-3.7166667,Spanish,,Advanced Economies,1.0
+ETH,Ethiopia,1,Africa,9.0500002,38.833332,Amharic,,Emerging and Developing Economies,0.0
+FIN,Finland,0,Europe,60.133335,25.0,Swedish,RUS,Advanced Economies,1.0
+FJI,Fiji,0,Pacific,-18.133333,178.41667,English,GBR,Emerging and Developing Economies,0.0
+FLK,Falkland Islands,0,America,-51.700001,-57.849998,English,GBR,,
+FSM,Micronesia,0,Pacific,6.9166665,158.25,English,ESP,Emerging and Developing Economies,0.0
+FRO,Faroe Islands,0,Europe,62.016666,-6.7666669,Faroese,DNK,,
+FRA,France,0,Europe,48.866665,2.3333333,French,,Advanced Economies,1.0
+GAB,Gabon,0,Africa,0.38333333,9.416667,French,FRA,Emerging and Developing Economies,0.0
+GBR,United Kingdom,0,Europe,51.5,-0.16666667,English,,Advanced Economies,1.0
+GRD,Grenada,0,America,12.066667,-61.733334,English,GBR,Emerging and Developing Economies,0.0
+GEO,Georgia,0,Asia,41.716667,44.816666,Georgian,RUS,Emerging and Developing Economies,0.0
+GUF,French Guiana,0,America,4.9333334,-52.333332,French,FRA,,
+GHA,Ghana,0,Africa,5.5500002,-0.25,English,GBR,Emerging and Developing Economies,0.0
+GIB,Gibraltar,0,Europe,36.133335,-5.3499999,English,GBR,,
+GRL,Greenland,0,America,64.183334,-51.733334,Greenlandic,DNK,,
+GMB,The Gambia,0,Africa,13.466666,-16.65,English,GBR,Emerging and Developing Economies,0.0
+GIN,Guinea,0,Africa,9.5166664,-15.716666,French,FRA,Emerging and Developing Economies,0.0
+GLP,Guadeloupe,0,America,16.0,-61.733334,French,FRA,,
+GNQ,Equatorial Guinea,0,Africa,3.75,8.8000002,Spanish,ESP,Emerging and Developing Economies,0.0
+GRC,Greece,0,Europe,38.0,23.733334,Greek,TUR,Advanced Economies,1.0
+GTM,Guatemala,0,America,14.633333,-90.51667,Spanish,ESP,Emerging and Developing Economies,0.0
+GNB,Guinea-Bissau,0,Africa,11.866667,-15.65,Portuguese,PRT,Emerging and Developing Economies,0.0
+GUY,Guyana,0,America,6.7666669,-58.166668,English,GBR,Emerging and Developing Economies,0.0
+HKG,Hong Kong SAR,0,Asia,22.266666,114.15,English,GBR,Advanced Economies,1.0
+HND,Honduras,0,America,14.083333,-87.23333,Spanish,ESP,Emerging and Developing Economies,0.0
+HRV,Croatia,0,Europe,45.799999,15.966666,Serbo-Croatian,AUT,Advanced Economies,1.0
+HTI,Haiti,0,America,18.549999,-72.333336,French,,Emerging and Developing Economies,0.0
+HUN,Hungary,1,Europe,47.5,19.049999,Hungarian,,Emerging and Developing Economies,0.0
+IDN,Indonesia,0,Asia,-6.1333332,106.75,Indonesian,NLD,Emerging and Developing Economies,0.0
+IRL,Ireland,0,Europe,53.333332,-6.25,English,GBR,Advanced Economies,1.0
+ISR,Israel,0,Asia,32.083332,34.766666,Hebrew,GBR,Advanced Economies,1.0
+IND,India,0,Asia,28.616667,77.216667,English,GBR,Emerging and Developing Economies,0.0
+IRQ,Iraq,0,Asia,33.333332,44.433334,Arabic,TUR,Emerging and Developing Economies,0.0
+IRN,Iran,0,Asia,35.666668,51.433334,Persian,,Emerging and Developing Economies,0.0
+ISL,Iceland,0,Europe,64.150002,-21.966667,Icelandic,DNK,Advanced Economies,1.0
+ITA,Italy,0,Europe,41.883335,12.5,Italian,,Advanced Economies,1.0
+JAM,Jamaica,0,America,17.966667,-76.800003,English,GBR,Emerging and Developing Economies,0.0
+JOR,Jordan,0,Asia,31.950001,35.933334,Arabic,GBR,Emerging and Developing Economies,0.0
+JPN,Japan,0,Asia,35.666668,139.75,Japanese,,Advanced Economies,1.0
+KEN,Kenya,0,Africa,-1.2833333,36.833332,English,GBR,Emerging and Developing Economies,0.0
+KGZ,Kyrgyz Republic,1,Asia,42.900002,74.599998,Kyrgyz,RUS,Emerging and Developing Economies,0.0
+KHM,Cambodia,0,Asia,11.583333,104.91666,Khmer,FRA,Emerging and Developing Economies,0.0
+KIR,Kiribati,0,Pacific,1.3833333,173.14999,English,GBR,Emerging and Developing Economies,0.0
+COM,Comoros,0,Africa,-11.666667,43.266666,Arabic,FRA,Emerging and Developing Economies,0.0
+KNA,St. Kitts and Nevis,0,America,17.283333,-62.716667,English,GBR,Emerging and Developing Economies,0.0
+PRK,Korea,0,Asia,39.0,125.78333,Korean,JPN,Advanced Economies,1.0
+KOR,Korea,0,Asia,37.5,127.0,Korean,JPN,Advanced Economies,1.0
+KWT,Kuwait,0,Asia,29.333334,48.0,Arabic,GBR,Emerging and Developing Economies,0.0
+CYM,Cayman Islands,0,America,19.299999,-81.383331,English,GBR,,
+KAZ,Kazakhstan,1,Asia,51.169998,71.470001,Kazakh,RUS,Emerging and Developing Economies,0.0
+LAO,Lao P.D.R.,1,Asia,17.983334,102.63333,Lao,FRA,Emerging and Developing Economies,0.0
+LBN,Lebanon,0,Asia,33.866665,35.5,Arabic,FRA,Emerging and Developing Economies,0.0
+LCA,St. Lucia,0,America,14.016666,-60.983334,English,GBR,Emerging and Developing Economies,0.0
+LKA,Sri Lanka,0,Asia,6.9166665,79.866669,Sinhala,GBR,Emerging and Developing Economies,0.0
+LBR,Liberia,0,Africa,6.3333335,-10.766666,English,FRA,Emerging and Developing Economies,0.0
+LSO,Lesotho,1,Africa,-29.316668,27.483334,English,GBR,Emerging and Developing Economies,0.0
+LTU,Lithuania,0,Europe,54.683334,25.316668,Lithuanian,RUS,Advanced Economies,1.0
+LUX,Luxembourg,1,Europe,49.599998,6.1500001,French,NLD,Advanced Economies,1.0
+LVA,Latvia,0,Europe,56.950001,24.1,Latvian,RUS,Advanced Economies,1.0
+LBY,Libya,0,Africa,32.733334,13.116667,Arabic,TUR,Emerging and Developing Economies,0.0
+MAR,Morocco,0,Africa,34.033333,-6.8499999,Arabic,FRA,Emerging and Developing Economies,0.0
+MDA,Moldova,0,Europe,47.0,28.833334,Romanian,RUS,Emerging and Developing Economies,0.0
+MDG,Madagascar,0,Africa,-18.866667,47.5,French,FRA,Emerging and Developing Economies,0.0
+MHL,Marshall Islands,0,Pacific,7.1500001,171.2,English,,Emerging and Developing Economies,0.0
+MKD,North Macedonia,1,Europe,42.0,21.466667,Macedonian,TUR,Emerging and Developing Economies,0.0
+MLI,Mali,1,Africa,12.666667,-7.9833331,French,FRA,Emerging and Developing Economies,0.0
+MMR,Myanmar,0,Asia,16.783333,96.166664,Burmese,GBR,Emerging and Developing Economies,0.0
+MNG,Mongolia,1,Asia,47.900002,106.86667,Mongolian,CHN,Emerging and Developing Economies,0.0
+MAC,Macao SAR,0,Asia,22.27,113.56,Portuguese,PRT,Advanced Economies,1.0
+MNP,Northern Mariana Islands,0,Pacific,15.2,145.75,English,ESP,,
+MTQ,Martinique,0,America,14.6,-61.083332,French,FRA,,
+MRT,Mauritania,0,Africa,18.15,-15.966666,Arabic,FRA,Emerging and Developing Economies,0.0
+MSR,Montserrat,0,America,16.700001,-62.216667,English,GBR,,
+MLT,Malta,0,Europe,35.900002,14.533334,English,GBR,Advanced Economies,1.0
+MUS,Mauritius,0,Africa,-20.166666,57.5,English,GBR,Emerging and Developing Economies,0.0
+MDV,Maldives,0,Asia,4.1666665,73.466667,Maldivian,GBR,Emerging and Developing Economies,0.0
+MWI,Malawi,1,Africa,-13.966666,33.816666,English,GBR,Emerging and Developing Economies,0.0
+MEX,Mexico,0,America,19.416666,-99.166664,Spanish,ESP,Emerging and Developing Economies,0.0
+MYS,Malaysia,0,Asia,3.1333334,101.7,Malay,GBR,Emerging and Developing Economies,0.0
+MOZ,Mozambique,0,Africa,-25.966667,32.583332,Portuguese,PRT,Emerging and Developing Economies,0.0
+NAM,Namibia,0,Africa,-22.566668,17.1,English,DEU,Emerging and Developing Economies,0.0
+NCL,New Caledonia,0,Pacific,-22.266666,166.45,French,FRA,,
+NER,Niger,1,Africa,13.533334,2.0833333,French,FRA,Emerging and Developing Economies,0.0
+NFK,Norfolk Island,0,Pacific,-29.049999,167.96666,English,,,
+NGA,Nigeria,0,Africa,6.4499998,3.4666667,English,GBR,Emerging and Developing Economies,0.0
+NIC,Nicaragua,0,America,12.1,-86.300003,Spanish,ESP,Emerging and Developing Economies,0.0
+NLD,The Netherlands,0,Europe,52.349998,4.9000001,Dutch,,Advanced Economies,1.0
+NOR,Norway,0,Europe,59.916668,10.75,Norwegian,,Advanced Economies,1.0
+NPL,Nepal,1,Asia,27.700001,85.316666,Nepali,,Emerging and Developing Economies,0.0
+NRU,Nauru,0,Pacific,-0.53333336,166.91667,Nauruan,GBR,Emerging and Developing Economies,0.0
+NIU,Niue,0,Pacific,-19.016666,-169.91667,Niuean,GBR,,
+NZL,New Zealand,0,Pacific,-44.283333,174.78334,English,GBR,Advanced Economies,1.0
+OMN,Oman,0,Asia,23.616667,58.633335,Arabic,,Emerging and Developing Economies,0.0
+PAN,Panama,0,America,8.9499998,-79.5,Spanish,ESP,Emerging and Developing Economies,0.0
+PER,Peru,0,America,-12.1,-77.050003,Spanish,ESP,Emerging and Developing Economies,0.0
+PYF,French Polynesia,0,Pacific,-17.533333,-149.56667,French,FRA,,
+PNG,Papua New Guinea,0,Pacific,-9.5,147.11667,English,GBR,Emerging and Developing Economies,0.0
+PHL,Philippines,0,Asia,14.616667,120.96667,English,ESP,Emerging and Developing Economies,0.0
+PAK,Pakistan,0,Asia,33.666668,73.133331,Urdu,GBR,Emerging and Developing Economies,0.0
+POL,Poland,0,Europe,52.25,21.0,Polish,DEU,Emerging and Developing Economies,0.0
+SPM,St. Pierre and Miquelon,0,America,46.666668,-56.166668,French,FRA,,
+PCN,Pitcairn,0,Pacific,-25.066668,-130.08333,English,GBR,,
+PRI,Puerto Rico,0,America,18.440001,-66.129997,English,ESP,Advanced Economies,1.0
+PAL,West Bank and Gaza,0,Asia,31.530001,34.439999,Arabic,GBR,Emerging and Developing Economies,0.0
+PRT,Portugal,0,Europe,38.733334,-9.1333332,Portuguese,,Advanced Economies,1.0
+PLW,Palau,0,Pacific,7.3333335,134.48334,English,GBR,Emerging and Developing Economies,0.0
+PRY,Paraguay,1,America,-25.25,-57.666668,Spanish,ESP,Emerging and Developing Economies,0.0
+QAT,Qatar,0,Asia,25.25,51.533333,Arabic,GBR,Emerging and Developing Economies,0.0
+REU,Reunion,0,Africa,-20.866667,55.466667,French,FRA,,
+ROM,Romania,0,Europe,44.416668,26.116667,Romanian,,Emerging and Developing Economies,0.0
+RUS,Russia,0,Asia,55.75,37.700001,Russian,,Emerging and Developing Economies,0.0
+RWA,Rwanda,1,Africa,-1.9333333,30.066668,French,BEL,Emerging and Developing Economies,0.0
+SAU,Saudi Arabia,0,Asia,24.65,46.766666,Arabic,,Emerging and Developing Economies,0.0
+SLB,Solomon Islands,0,Pacific,-9.4666662,159.95,English,GBR,Emerging and Developing Economies,0.0
+SYC,Seychelles,0,Africa,-4.6333332,55.466667,English,GBR,Emerging and Developing Economies,0.0
+SDN,Sudan,0,Africa,15.55,32.533333,Arabic,GBR,Emerging and Developing Economies,0.0
+SWE,Sweden,0,Europe,59.333332,18.083334,Swedish,,Advanced Economies,1.0
+SGP,Singapore,0,Asia,1.2833333,103.85,English,GBR,Advanced Economies,1.0
+SHN,Saint Helena,0,Africa,-15.916667,-5.6999998,English,GBR,,
+SVN,Slovenia,0,Europe,46.066666,14.5,Slovenian,AUT,Advanced Economies,1.0
+SVK,Slovak Republic,1,Europe,48.166668,17.166666,Slovak,HUN,Advanced Economies,1.0
+SLE,Sierra Leone,0,Africa,8.5,-13.283334,English,GBR,Emerging and Developing Economies,0.0
+SMR,San Marino,0,Europe,43.950001,12.49,Italian,,Advanced Economies,1.0
+SEN,Senegal,0,Africa,14.633333,-17.450001,French,FRA,Emerging and Developing Economies,0.0
+SOM,Somalia,0,Africa,2.0333333,45.349998,Somali,GBR,Emerging and Developing Economies,0.0
+SUR,Suriname,0,America,5.8666668,-55.233334,Dutch,NLD,Emerging and Developing Economies,0.0
+STP,São Tomé and Príncipe,0,Africa,0.2,6.7166667,Portuguese,PRT,Emerging and Developing Economies,0.0
+SLV,El Salvador,0,America,13.666667,-89.166664,Spanish,ESP,Emerging and Developing Economies,0.0
+SYR,Syria,0,Asia,33.5,36.316666,Arabic,FRA,Emerging and Developing Economies,0.0
+SWZ,Eswatini,1,Africa,-26.333334,31.133333,Swati,GBR,Emerging and Developing Economies,0.0
+TCA,Turks and Caicos Islands,0,America,21.466667,-71.133331,English,GBR,,
+TCD,Chad,1,Africa,12.166667,14.983334,French,FRA,Emerging and Developing Economies,0.0
+TGO,Togo,0,Africa,6.1666665,1.35,French,FRA,Emerging and Developing Economies,0.0
+THA,Thailand,0,Asia,13.733334,100.5,Thai,,Emerging and Developing Economies,0.0
+TJK,Tajikistan,1,Asia,38.633335,68.849998,Tajik,RUS,Emerging and Developing Economies,0.0
+TKL,Tokelau,0,Pacific,-9.0,-172.0,Tokelauan,GBR,,
+TKM,Turkmenistan,1,Asia,37.950001,58.383335,Turkmen,RUS,Emerging and Developing Economies,0.0
+TUN,Tunisia,0,Africa,36.833332,10.216666,Arabic,FRA,Emerging and Developing Economies,0.0
+TON,Tonga,0,Pacific,-21.15,-175.23334,Tongan,GBR,Emerging and Developing Economies,0.0
+TMP,Timor-Leste,0,Asia,-8.5699997,125.58,Tetum,PRT,Emerging and Developing Economies,0.0
+TUR,Türkiye,0,Europe,39.93,32.849998,Turkish,,Emerging and Developing Economies,0.0
+TTO,Trinidad and Tobago,0,America,10.633333,-61.516666,English,GBR,Emerging and Developing Economies,0.0
+TUV,Tuvalu,0,Pacific,-8.5,179.2,Tuvaluan,GBR,Emerging and Developing Economies,0.0
+TWN,Taiwan Province of China,0,Asia,25.083334,121.53333,Chinese,JPN,Advanced Economies,1.0
+TZA,Tanzania,0,Africa,-6.1700001,35.740002,English,GBR,Emerging and Developing Economies,0.0
+UKR,Ukraine,0,Europe,50.416668,30.5,Ukrainian,RUS,Emerging and Developing Economies,0.0
+UGA,Uganda,1,Africa,0.33333334,32.583332,English,GBR,Emerging and Developing Economies,0.0
+USA,United States,0,America,38.867001,-77.0,English,GBR,Advanced Economies,1.0
+URY,Uruguay,0,America,-34.916668,-56.166668,Spanish,ESP,Emerging and Developing Economies,0.0
+UZB,Uzbekistan,1,Asia,41.266666,69.216667,Uzbek,RUS,Emerging and Developing Economies,0.0
+VCT,St. Vincent and the Grenadines,0,America,13.2,-61.233334,English,GBR,Emerging and Developing Economies,0.0
+VEN,Venezuela,0,America,10.583333,-66.933334,Spanish,ESP,Emerging and Developing Economies,0.0
+VGB,British Virgin Islands,0,America,18.450001,-64.616669,English,GBR,,
+VNM,Vietnam,0,Asia,21.016666,105.86667,Vietnamese,FRA,Emerging and Developing Economies,0.0
+VUT,Vanuatu,0,Pacific,-17.75,168.3,English,GBR,Emerging and Developing Economies,0.0
+WLF,Wallis and Futuna,0,Pacific,-13.3,-176.2,French,FRA,,
+WSM,Samoa,0,Pacific,-13.8,171.75,Samoan,DEU,Emerging and Developing Economies,0.0
+YEM,Yemen,0,Asia,15.4,44.233334,Arabic,GBR,Emerging and Developing Economies,0.0
+YUG,Serbia,0,Europe,44.833332,20.5,Serbo-Croatian,TUR,Emerging and Developing Economies,0.0
+ZAF,South Africa,0,Africa,-25.73,28.219999,English,GBR,Emerging and Developing Economies,0.0
+ZMB,Zambia,1,Africa,-15.466666,28.266666,English,GBR,Emerging and Developing Economies,0.0
+ZAR,Democratic Republic of the Congo,0,Africa,-4.3000002,15.3,French,BEL,Emerging and Developing Economies,0.0
+ZWE,Zimbabwe,1,Africa,-17.833334,31.049999,English,GBR,Emerging and Developing Economies,0.0
