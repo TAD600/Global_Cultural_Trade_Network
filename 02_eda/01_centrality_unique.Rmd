@@ -1,0 +1,1400 @@
+---
+title: "Measuring centralities of unique cultural goods trade networks"
+author: "Author"
+date: "2025-05-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(igraph)
+```
+
+## Steps: 
+1. Reading the edgelist for unique cultural goods trade
+2. Making 24 subsets of the edgelist with 24 different year columns
+3. Doing the followings for each subset:
+   a. Making igraph object from each one of them
+   b. Reading each attribute file while merging the 'iso_o' values as vertex names with the igraph object
+   c. making sure the igraph object used the vertex attributes
+   d. Setting the edge weight
+   e. Sanity checking for 
+    * The graph is directed
+    * Edge weights are valid-
+    * Vertex names are unique and character
+    * No self-loops or duplicate vertices
+    * You’ve added only vertex attributes
+4. Counting the number of nodes of all 24 networks to see if all matches
+5. converting all 24 networks to 'wdnet' object
+6. Finding out global and average local clustering coefficients
+7. Finding out assortativity coefficient of four types
+8. Making data frame with rows as times and the measures computed in step 6 and 7, saving that in the 'cleaned' subfolder of thedata' folder
+9. Measuring  centralities of each network and making a dataframe for the respective years network metrices and saving that as a csv file in the 'cleaned' subfolder of th 'data' folder
+
+10. Making a time series data for the global metrices of the network and saving a csv file in the 'cleaned' subfolder of th 'data' folder
+
+```{r}
+u <- read.csv("../data/cleaned/unique_edgelist.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+```
+
+## 2000
+```{r}
+y0 <- "X2000"
+u_y0 <- u[, c("iso_o", "iso_d", y0)]
+u_y0 <- subset(u_y0, u_y0[[y0]] > 0)
+att2000 <- read.csv("../data/cleaned/attribute2000.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un00 <- graph_from_data_frame(d = u_y0, directed = TRUE)
+E(un00)$weight <- u_y0[[y0]]
+is_directed(un00) 
+length(E(un00)) == length(E(un00)$weight)
+length(unique(V(un00)$name)) == gorder(un00)  # should be TRUE
+is.character(V(un00)$name) 
+any(is.na(E(un00)$weight))      # should be FALSE
+any(!is.finite(E(un00)$weight)) # should be FALSE
+edge_list <- as_data_frame(un00, what = "edges")
+duplicated_rows <- duplicated(edge_list[, c("from", "to")])
+any(duplicated_rows)  # should be FALSE
+length(unique(V(un00)$name))
+```
+
+```{r}
+attify <- function(n_net, attr_df){
+  V(n_net)$iso_o <- V(n_net)$name
+  idx <- match(V(n_net)$name, attr_df$iso_o)
+  V(n_net)$country <- attr_df$Country[idx]
+  V(n_net)$D_log_gdp <- attr_df$D_log_gdp[idx]
+  V(n_net)$D_log_gdp_pct <- attr_df$D_log_gdp_pct[idx]
+  V(n_net)$log_population <- attr_df$log_population[idx]
+  V(n_net)$log_trade_gdp_ratio <- attr_df$log_trade_gdp_ratio[idx]
+  V(n_net)$landlocked <- attr_df$landlocked[idx]
+  V(n_net)$continent <- attr_df$continent[idx]
+  V(n_net)$lat <- attr_df$lat[idx]
+  V(n_net)$lon <- attr_df$lon[idx]
+  V(n_net)$development <- attr_df$development[idx]
+  
+  return(n_net)
+}
+
+un00 <- attify(un00, att2000)
+vertex_attr_names(un00)
+```
+
+
+```{r}
+summary(E(un00)$weight)
+hist(E(un00)$weight, breaks = 100)
+```
+```{r}
+class(un00)
+```
+
+
+
+
+```{r}
+library(wdnet)
+g1 <- igraph_to_wdnet(un00)
+class(g1)
+summary(g1)
+print(g1, node.attrs = TRUE, edge.attrs = TRUE)
+```
+
+
+```{r}
+node_names1 <- g1$node.attr$iso_o  # or $name, if that’s what you want to use
+
+pageRank0 <- centrality(g1, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness0 <- centrality(g1, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree0 <- centrality(g1, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree0 <- centrality(g1, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct01 <- clustcoef(g1, method = "Clemente")$total$localcc
+lct02 <- clustcoef(g1, method = "Clemente")$out$localcc
+
+centrality_df0 <- data.frame(iso_o = node_names1, pageRank_unique = pageRank0, close_unique = closeness0, outdegree_unique = outdegree0, indegree_unique = indegree0, local_clust_tt_unique = lct01, local_clust_out_unique = lct02)
+head(centrality_df0)
+```
+
+
+```{r}
+# writing csv
+write.csv(centrality_df0, "../data/cleaned/network_metrics_unique2000.csv")
+```
+
+# 2001
+```{r}
+y1 <- "X2001"   
+u_y1 <- u[, c("iso_o", "iso_d", y1)]
+# Filter out edges with zero trade
+u_y1 <- subset(u_y1, u_y1[[y1]] > 0)
+att2001 <- read.csv("../data/cleaned/attribute2001.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un01 <- graph_from_data_frame(d = u_y1, directed = TRUE)
+E(un01)$weight <- u_y1[[y1]]
+is_directed(un01) 
+length(E(un01)) == length(E(un01)$weight)
+length(unique(V(un01)$name)) == gorder(un01)  # should be TRUE
+is.character(V(un01)$name) 
+any(is.na(E(un01)$weight))      # should be FALSE
+any(!is.finite(E(un01)$weight)) # should be FALSE
+edge_list1 <- as_data_frame(un01, what = "edges")
+duplicated_rows1 <- duplicated(edge_list1[, c("from", "to")])
+any(duplicated_rows1)  # should be FALSE
+length(unique(V(un01)$name))
+un01 <- attify(un01, att2001)
+vertex_attr_names(un01)
+```
+```{r}
+class(un01)
+g2 <- igraph_to_wdnet(un01)
+class(g2)
+summary(g2)
+print(g2, node.attrs = TRUE, edge.attrs = TRUE)
+```
+
+```{r}
+node_names2 <- g2$node.attr$iso_o  # or $name, if that’s what you want to use
+
+pageRank1 <- centrality(g2, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness1 <- centrality(g2, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree1 <- centrality(g2, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree1 <- centrality(g2, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct11 <- clustcoef(g2, method = "Clemente")$total$localcc
+lct12 <- clustcoef(g2, method = "Clemente")$out$localcc
+
+centrality_df1 <- data.frame(iso_o = node_names2, pageRank_unique = pageRank1, close_unique = closeness1, outdegree_unique = outdegree1, indegree_unique = indegree1, local_clust_tt_unique = lct11, local_clust_out_unique = lct12)
+centrality_df1
+write.csv(centrality_df1, "../data/cleaned/network_metrics_unique2001.csv")
+```
+
+
+## 2002
+```{r}
+y2 <- "X2002"   
+u_y2 <- u[, c("iso_o", "iso_d", y2)]
+# Filter out edges with zero trade
+u_y2 <- subset(u_y2, u_y2[[y2]] > 0)
+att2002 <- read.csv("../data/cleaned/attribute2002.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un02 <- graph_from_data_frame(d = u_y2, directed = TRUE)
+E(un02)$weight <- u_y2[[y2]]
+is_directed(un02) 
+length(E(un02)) == length(E(un02)$weight)
+length(unique(V(un02)$name)) == gorder(un02)  # should be TRUE
+is.character(V(un02)$name) 
+any(is.na(E(un02)$weight))      # should be FALSE
+any(!is.finite(E(un02)$weight)) # should be FALSE
+edge_list2 <- as_data_frame(un02, what = "edges")
+duplicated_rows2 <- duplicated(edge_list2[, c("from", "to")])
+any(duplicated_rows2)  # should be FALSE
+length(unique(V(un02)$name))
+un02 <- attify(un02, att2002)
+vertex_attr_names(un02)
+
+```
+```{r}
+class(un02)
+g3 <- igraph_to_wdnet(un02)
+class(g3)
+summary(g3)
+print(g3, node.attrs = TRUE, edge.attrs = TRUE)
+```
+
+```{r}
+node_names3 <- g3$node.attr$iso_o  # or $name, if that’s what you want to use
+
+pageRank2 <- centrality(g3, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness2 <- centrality(g3, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree2 <- centrality(g3, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree2 <- centrality(g3, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct21 <- clustcoef(g3, method = "Clemente")$total$localcc
+lct22 <- clustcoef(g3, method = "Clemente")$out$localcc
+
+centrality_df2 <- data.frame(iso_o = node_names3, pageRank_unique = pageRank2, close_unique = closeness2, outdegree_unique = outdegree2, indegree_unique = indegree2, local_clust_tt_unique = lct21, local_clust_out_unique = lct22)
+centrality_df2
+write.csv(centrality_df2, "../data/cleaned/network_metrics_unique2002.csv")
+```
+
+
+## 2003
+```{r}
+y3 <- "X2003"   
+u_y3 <- u[, c("iso_o", "iso_d", y3)]
+# Filter out edges with zero trade
+u_y3 <- subset(u_y3, u_y3[[y3]] > 0)
+att2003 <- read.csv("../data/cleaned/attribute2003.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un03 <- graph_from_data_frame(d = u_y3, directed = TRUE)
+E(un03)$weight <- u_y3[[y3]]
+is_directed(un03) 
+length(E(un03)) == length(E(un03)$weight)
+length(unique(V(un03)$name)) == gorder(un03)  # should be TRUE
+is.character(V(un03)$name) 
+any(is.na(E(un03)$weight))      # should be FALSE
+any(!is.finite(E(un03)$weight)) # should be FALSE
+edge_list3 <- as_data_frame(un03, what = "edges")
+duplicated_rows3 <- duplicated(edge_list3[, c("from", "to")])
+any(duplicated_rows3)  # should be FALSE
+length(unique(V(un03)$name))
+un03 <- attify(un03, att2003)
+vertex_attr_names(un03)
+```
+```{r}
+class(un03)
+g4 <- igraph_to_wdnet(un03)
+class(g4)
+summary(g4)
+print(g4, node.attrs = TRUE, edge.attrs = TRUE)
+```
+```{r}
+node_names4 <- g4$node.attr$iso_o  # or $name, if that’s what you want to use
+
+pageRank3 <- centrality(g4, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness3 <- centrality(g4, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree3 <- centrality(g4, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree3 <- centrality(g4, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct31 <- clustcoef(g4, method = "Clemente")$total$localcc
+lct32 <- clustcoef(g4, method = "Clemente")$out$localcc
+
+centrality_df3 <- data.frame(iso_o = node_names4, pageRank_unique = pageRank3, close_unique = closeness3, outdegree_unique = outdegree3, indegree_unique = indegree3, local_clust_tt_unique = lct31, local_clust_out_unique = lct32)
+centrality_df3
+write.csv(centrality_df3, "../data/cleaned/network_metrics_unique2003.csv")
+```
+
+# 2004
+```{r}
+y4 <- "X2004"   
+u_y4 <- u[, c("iso_o", "iso_d", y4)]
+# Filter out edges with zero trade
+u_y4 <- subset(u_y4, u_y4[[y4]] > 0)
+att2004 <- read.csv("../data/cleaned/attribute2004.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un04 <- graph_from_data_frame(d = u_y4, directed = TRUE)
+E(un04)$weight <- u_y4[[y4]]
+is_directed(un04) 
+length(E(un04)) == length(E(un04)$weight)
+length(unique(V(un04)$name)) == gorder(un04)  # should be TRUE
+is.character(V(un04)$name) 
+any(is.na(E(un04)$weight))      # should be FALSE
+any(!is.finite(E(un04)$weight)) # should be FALSE
+edge_list4 <- as_data_frame(un04, what = "edges")
+duplicated_rows4 <- duplicated(edge_list4[, c("from", "to")])
+any(duplicated_rows4)  # should be FALSE
+length(unique(V(un04)$name))
+un04 <- attify(un04, att2004)
+vertex_attr_names(un04)
+```
+
+```{r}
+class(un04)
+g5 <- igraph_to_wdnet(un04)
+class(g5)
+summary(g5)
+print(g5, node.attrs = TRUE, edge.attrs = TRUE)
+
+```
+```{r}
+node_names5 <- g5$node.attr$iso_o  # or $name, if that’s what you want to use
+
+pageRank4 <- centrality(g5, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness4 <- centrality(g5, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree4 <- centrality(g5, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree4 <- centrality(g5, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct41 <- clustcoef(g5, method = "Clemente")$total$localcc
+lct42 <- clustcoef(g5, method = "Clemente")$out$localcc
+
+
+centrality_df4 <- data.frame(iso_o = node_names5, pageRank_unique = pageRank4, close_unique = closeness4, outdegree_unique = outdegree4, indegree_unique = indegree4, local_clust_tt_unique = lct41, local_clust_out_unique = lct42)
+centrality_df4
+write.csv(centrality_df4, "../data/cleaned/network_metrics_unique2004.csv")
+
+```
+
+
+# 2005
+```{r}
+y5 <- "X2005"   
+u_y5 <- u[, c("iso_o", "iso_d", y5)]
+# Filter out edges with zero trade
+u_y5 <- subset(u_y5, u_y5[[y5]] > 0)
+att2005 <- read.csv("../data/cleaned/attribute2005.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un05 <- graph_from_data_frame(d = u_y5, directed = TRUE)
+E(un05)$weight <- u_y5[[y5]]
+is_directed(un05) 
+length(E(un05)) == length(E(un05)$weight)
+length(unique(V(un05)$name)) == gorder(un05)  # should be TRUE
+is.character(V(un05)$name) 
+any(is.na(E(un05)$weight))      # should be FALSE
+any(!is.finite(E(un05)$weight)) # should be FALSE
+edge_list5 <- as_data_frame(un05, what = "edges")
+duplicated_rows5 <- duplicated(edge_list5[, c("from", "to")])
+any(duplicated_rows5)  # should be FALSE
+length(unique(V(un05)$name))
+un05 <- attify(un05, att2005)
+vertex_attr_names(un05)
+```
+
+```{r}
+class(un05)
+g6 <- igraph_to_wdnet(un05)
+class(g6)
+summary(g6)
+print(g6, node.attrs = TRUE, edge.attrs = TRUE)
+```
+
+```{r}
+node_names6 <- g6$node.attr$iso_o  # or $name, if that’s what you want to use
+
+pageRank5 <- centrality(g6, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness5 <- centrality(g6, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree5 <- centrality(g6, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree5 <- centrality(g6, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct51 <- clustcoef(g6, method = "Clemente")$total$localcc
+lct52 <- clustcoef(g6, method = "Clemente")$out$localcc
+
+centrality_df5 <- data.frame(iso_o = node_names6, pageRank_unique = pageRank5, close_unique = closeness5, outdegree_unique = outdegree5, indegree_unique = indegree5, local_clust_tt_unique = lct51, local_clust_out_unique = lct52)
+centrality_df5
+write.csv(centrality_df5, "../data/cleaned/network_metrics_unique2005.csv")
+```
+
+# 2006
+```{r}
+y6 <- "X2006"   
+u_y6 <- u[, c("iso_o", "iso_d", y6)]
+# Filter out edges with zero trade
+u_y6 <- subset(u_y6, u_y6[[y6]] > 0)
+att2006 <- read.csv("../data/cleaned/attribute2006.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un06 <- graph_from_data_frame(d = u_y6, directed = TRUE)
+E(un06)$weight <- u_y6[[y6]]
+is_directed(un06) 
+length(E(un06)) == length(E(un06)$weight)
+length(unique(V(un06)$name)) == gorder(un06)  # should be TRUE
+is.character(V(un06)$name) 
+any(is.na(E(un06)$weight))      
+any(!is.finite(E(un06)$weight)) 
+edge_list6 <- as_data_frame(un06, what = "edges")
+duplicated_rows6 <- duplicated(edge_list6[, c("from", "to")])
+any(duplicated_rows6)  # should be FALSE
+length(unique(V(un06)$name))
+un06 <- attify(un06, att2006)
+vertex_attr_names(un06)
+
+```
+
+```{r}
+class(un06)
+g7 <- igraph_to_wdnet(un06)
+class(g7)
+summary(g7)
+print(g7, node.attrs = TRUE, edge.attrs = TRUE)
+```
+
+```{r}
+node_names7 <- g7$node.attr$iso_o  # or $name, if that’s what you want to use
+pageRank6 <- centrality(g7, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness6 <- centrality(g7, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree6 <- centrality(g7, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree6 <- centrality(g7, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct61 <- clustcoef(g7, method = "Clemente")$total$localcc
+lct62 <- clustcoef(g7, method = "Clemente")$out$localcc
+
+centrality_df6 <- data.frame(iso_o = node_names7, pageRank_unique = pageRank6, close_unique = closeness6, outdegree_unique = outdegree6, indegree_unique = indegree6,local_clust_tt_unique = lct61, local_clust_out_unique = lct62)
+centrality_df6
+write.csv(centrality_df6, "../data/cleaned/network_metrics_unique2006.csv")
+
+```
+
+## 2007
+```{r}
+y7 <- "X2007"   
+u_y7 <- u[, c("iso_o", "iso_d", y7)]
+# Filter out edges with zero trade
+u_y7 <- subset(u_y7, u_y7[[y7]] > 0)
+att2007 <- read.csv("../data/cleaned/attribute2007.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un07 <- graph_from_data_frame(d = u_y7, directed = TRUE)
+E(un07)$weight <- u_y7[[y7]]
+is_directed(un07) 
+length(E(un07)) == length(E(un07)$weight)
+length(unique(V(un07)$name)) == gorder(un07)  # should be TRUE
+is.character(V(un07)$name) 
+any(is.na(E(un07)$weight))      
+any(!is.finite(E(un07)$weight)) 
+edge_list7 <- as_data_frame(un07, what = "edges")
+duplicated_rows7 <- duplicated(edge_list7[, c("from", "to")])
+any(duplicated_rows7)  # should be FALSE
+length(unique(V(un07)$name))
+un07 <- attify(un07, att2007)
+vertex_attr_names(un07)
+```
+```{r}
+class(un07)
+g8 <- igraph_to_wdnet(un07)
+class(g8)
+summary(g8)
+print(g8, node.attrs = TRUE, edge.attrs = TRUE)
+
+```
+
+```{r}
+node_names8 <- g8$node.attr$iso_o 
+pageRank7 <- centrality(g8, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness7 <- centrality(g8, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree7 <- centrality(g8, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree7 <- centrality(g8, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct71 <- clustcoef(g8, method = "Clemente")$total$localcc
+lct72 <- clustcoef(g8, method = "Clemente")$out$localcc
+```
+
+```{r}
+centrality_df7 <- data.frame(iso_o = node_names8, pageRank_unique = pageRank7, close_unique = closeness7, outdegree_unique = outdegree7, indegree_unique = indegree7, local_clust_tt_unique = lct71, local_clust_out_unique = lct72)
+centrality_df7
+write.csv(centrality_df7, "../data/cleaned/network_metrics_unique2007.csv")
+
+```
+
+
+## 2008
+```{r}
+y8 <- "X2008"   
+u_y8 <- u[, c("iso_o", "iso_d", y8)]
+# Filter out edges with zero trade
+u_y8 <- subset(u_y8, u_y8[[y8]] > 0)
+att2008 <- read.csv("../data/cleaned/attribute2008.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un08 <- graph_from_data_frame(d = u_y8, directed = TRUE)
+E(un08)$weight <- u_y8[[y8]]
+is_directed(un08) 
+length(E(un08)) == length(E(un08)$weight)
+length(unique(V(un08)$name)) == gorder(un08)  # should be TRUE
+is.character(V(un08)$name) 
+any(is.na(E(un08)$weight))      
+any(!is.finite(E(un08)$weight)) 
+edge_list8 <- as_data_frame(un08, what = "edges")
+duplicated_rows8 <- duplicated(edge_list8[, c("from", "to")])
+any(duplicated_rows8)  # should be FALSE
+length(unique(V(un08)$name))
+un08 <- attify(un08, att2008)
+vertex_attr_names(un08)
+
+```
+
+```{r}
+class(un08)
+g9 <- igraph_to_wdnet(un08)
+class(g9)
+summary(g9)
+print(g9, node.attrs = TRUE, edge.attrs = TRUE)
+```
+
+```{r}
+node_names9 <- g9$node.attr$iso_o 
+pageRank8 <- centrality(g9, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness8 <- centrality(g9, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree8 <- centrality(g9, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree8 <- centrality(g9, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct81 <- clustcoef(g9, method = "Clemente")$total$localcc
+lct82 <- clustcoef(g9, method = "Clemente")$out$localcc
+
+```
+
+```{r}
+centrality_df8 <- data.frame(iso_o = node_names9, pageRank_unique = pageRank8, close_unique = closeness8, outdegree_unique = outdegree8, indegree_unique = indegree8,local_clust_tt_unique = lct81, local_clust_out_unique = lct82)
+centrality_df8
+write.csv(centrality_df8, "../data/cleaned/network_metrics_unique2008.csv")
+```
+
+
+## 2009
+```{r}
+y9 <- "X2009"   
+u_y9 <- u[, c("iso_o", "iso_d", y9)]
+# Filter out edges with zero trade
+u_y9 <- subset(u_y9, u_y9[[y9]] > 0)
+att2009 <- read.csv("../data/cleaned/attribute2009.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un09 <- graph_from_data_frame(d = u_y9, directed = TRUE)
+E(un09)$weight <- u_y9[[y9]]
+is_directed(un09) 
+length(E(un09)) == length(E(un09)$weight)
+length(unique(V(un09)$name)) == gorder(un09)  # should be TRUE
+is.character(V(un09)$name) 
+any(is.na(E(un09)$weight))      
+any(!is.finite(E(un09)$weight)) 
+edge_list9 <- as_data_frame(un09, what = "edges")
+duplicated_rows9 <- duplicated(edge_list9[, c("from", "to")])
+any(duplicated_rows9)  # should be FALSE
+length(unique(V(un09)$name))
+un09 <- attify(un09, att2009)
+vertex_attr_names(un09)
+
+```
+
+```{r}
+class(un09)
+g10 <- igraph_to_wdnet(un09)
+class(g10)
+summary(g10)
+print(g10, node.attrs = TRUE, edge.attrs = TRUE)
+
+```
+
+```{r}
+node_names10 <- g10$node.attr$iso_o 
+pageRank9 <- centrality(g10, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness9 <- centrality(g10, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree9 <- centrality(g10, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree9 <- centrality(g10, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct91 <- clustcoef(g10, method = "Clemente")$total$localcc
+lct92 <- clustcoef(g10, method = "Clemente")$out$localcc
+
+```
+
+```{r}
+centrality_df9 <- data.frame(iso_o = node_names10, pageRank_unique = pageRank9, close_unique = closeness9, outdegree_unique = outdegree9, indegree_unique = indegree9, local_clust_tt_unique = lct91, local_clust_out_unique = lct92)
+centrality_df9
+write.csv(centrality_df9, "../data/cleaned/network_metrics_unique2009.csv")
+```
+
+
+## 2010
+```{r}
+y10 <- "X2010"   
+u_y10 <- u[, c("iso_o", "iso_d", y10)]
+# Filter out edges with zero trade
+u_y10 <- subset(u_y10, u_y10[[y10]] > 0)
+att2010 <- read.csv("../data/cleaned/attribute2010.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un10 <- graph_from_data_frame(d = u_y10, directed = TRUE)
+E(un10)$weight <- u_y10[[y10]]
+is_directed(un10) 
+length(E(un10)) == length(E(un10)$weight)
+length(unique(V(un10)$name)) == gorder(un10)  # should be TRUE
+is.character(V(un10)$name) 
+any(is.na(E(un10)$weight))      
+any(!is.finite(E(un10)$weight)) 
+edge_list10 <- as_data_frame(un10, what = "edges")
+duplicated_rows10 <- duplicated(edge_list10[, c("from", "to")])
+any(duplicated_rows10)  # should be FALSE
+length(unique(V(un10)$name))
+un10 <- attify(un10, att2010)
+vertex_attr_names(un10)
+
+```
+```{r}
+class(un10)
+g11 <- igraph_to_wdnet(un10)
+class(g11)
+summary(g11)
+print(g11, node.attrs = TRUE, edge.attrs = TRUE)
+
+```
+
+```{r}
+node_names11 <- g11$node.attr$iso_o 
+pageRank10 <- centrality(g11, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness10 <- centrality(g11, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree10 <- centrality(g11, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree10 <- centrality(g11, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct101 <- clustcoef(g11, method = "Clemente")$total$localcc
+lct102 <- clustcoef(g11, method = "Clemente")$out$localcc
+```
+```{r}
+centrality_df10 <- data.frame(iso_o = node_names11, pageRank_unique = pageRank10, close_unique = closeness10, outdegree_unique = outdegree10, indegree_unique = indegree10, local_clust_tt_unique = lct101, local_clust_out_unique = lct102)
+centrality_df10
+write.csv(centrality_df10, "../data/cleaned/network_metrics_unique2010.csv")
+```
+
+## 2011
+```{r}
+y11 <- "X2011"   
+u_y11 <- u[, c("iso_o", "iso_d", y11)]
+# Filter out edges with zero trade
+u_y11 <- subset(u_y11, u_y11[[y11]] > 0)
+att2011 <- read.csv("../data/cleaned/attribute2011.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un11 <- graph_from_data_frame(d = u_y11, directed = TRUE)
+E(un11)$weight <- u_y11[[y11]]
+is_directed(un11) 
+length(E(un11)) == length(E(un11)$weight)
+length(unique(V(un11)$name)) == gorder(un11)  # should be TRUE
+is.character(V(un11)$name) 
+any(is.na(E(un11)$weight))      
+any(!is.finite(E(un11)$weight)) 
+edge_list11 <- as_data_frame(un11, what = "edges")
+duplicated_rows11 <- duplicated(edge_list11[, c("from", "to")])
+any(duplicated_rows11)  # should be FALSE
+length(unique(V(un11)$name))
+un11 <- attify(un11, att2011)
+vertex_attr_names(un11)
+```
+
+```{r}
+class(un11)
+g12 <- igraph_to_wdnet(un11)
+class(g12)
+summary(g12)
+print(g12, node.attrs = TRUE, edge.attrs = TRUE)
+```
+
+```{r}
+node_names12 <- g12$node.attr$iso_o 
+pageRank11 <- centrality(g12, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness11 <- centrality(g12, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree11 <- centrality(g12, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree11 <- centrality(g12, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct111 <- clustcoef(g12, method = "Clemente")$total$localcc
+lct112 <- clustcoef(g12, method = "Clemente")$out$localcc
+
+```
+
+```{r}
+centrality_df11 <- data.frame(iso_o = node_names12, pageRank_unique = pageRank11, close_unique = closeness11, outdegree_unique = outdegree11, indegree_unique = indegree11,local_clust_tt_unique = lct111, local_clust_out_unique = lct112)
+centrality_df11
+write.csv(centrality_df11, "../data/cleaned/network_metrics_unique2011.csv")
+
+```
+
+
+## 2012
+```{r}
+y12 <- "X2012"   
+u_y12 <- u[, c("iso_o", "iso_d", y12)]
+# Filter out edges with zero trade
+u_y12 <- subset(u_y12, u_y12[[y12]] > 0)
+att2012 <- read.csv("../data/cleaned/attribute2012.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un12 <- graph_from_data_frame(d = u_y12, directed = TRUE)
+E(un12)$weight <- u_y12[[y12]]
+is_directed(un12) 
+length(E(un12)) == length(E(un12)$weight)
+length(unique(V(un12)$name)) == gorder(un12)  # should be TRUE
+is.character(V(un12)$name) 
+any(is.na(E(un12)$weight))      
+any(!is.finite(E(un12)$weight)) 
+edge_list12 <- as_data_frame(un12, what = "edges")
+duplicated_rows12 <- duplicated(edge_list12[, c("from", "to")])
+any(duplicated_rows12)  # should be FALSE
+length(unique(V(un12)$name))
+un12 <- attify(un12, att2012)
+vertex_attr_names(un12)
+
+```
+
+```{r}
+class(un12)
+g13 <- igraph_to_wdnet(un12)
+class(g13)
+summary(g13)
+print(g13, node.attrs = TRUE, edge.attrs = TRUE)
+
+```
+
+```{r}
+node_names13 <- g13$node.attr$iso_o 
+pageRank12 <- centrality(g13, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness12 <- centrality(g13, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree12 <- centrality(g13, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree12 <- centrality(g13, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct121 <- clustcoef(g13, method = "Clemente")$total$localcc
+lct122 <- clustcoef(g13, method = "Clemente")$out$localcc
+```
+
+```{r}
+centrality_df12 <- data.frame(iso_o = node_names13, pageRank_unique = pageRank12, close_unique = closeness12, outdegree_unique = outdegree12, indegree_unique = indegree12,local_clust_tt_unique = lct121, local_clust_out_unique = lct122)
+centrality_df12
+write.csv(centrality_df12, "../data/cleaned/network_metrics_unique2012.csv")
+```
+
+## 2013
+```{r}
+y13 <- "X2013"   
+u_y13 <- u[, c("iso_o", "iso_d", y13)]
+# Filter out edges with zero trade
+u_y13 <- subset(u_y13, u_y13[y13] > 0)
+att2013 <- read.csv("../data/cleaned/attribute2013.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un13 <- graph_from_data_frame(d = u_y13, directed = TRUE)
+E(un13)$weight <- u_y13[[y13]]
+is_directed(un13) 
+length(E(un13)) == length(E(un13)$weight)
+length(unique(V(un13)$name)) == gorder(un13)  # should be TRUE
+is.character(V(un13)$name) 
+any(is.na(E(un13)$weight))      
+any(!is.finite(E(un13)$weight)) 
+edge_list13 <- as_data_frame(un13, what = "edges")
+duplicated_rows13 <- duplicated(edge_list13[, c("from", "to")])
+any(duplicated_rows13)  # should be FALSE
+length(unique(V(un13)$name))
+un13 <- attify(un13, att2013)
+vertex_attr_names(un13)
+```
+
+```{r}
+class(un13)
+g14 <- igraph_to_wdnet(un13)
+class(g14)
+summary(g14)
+print(g14, node.attrs = TRUE, edge.attrs = TRUE)
+
+```
+
+```{r}
+node_names14 <- g14$node.attr$iso_o 
+pageRank13 <- centrality(g14, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness13 <- centrality(g14, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree13 <- centrality(g14, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree13 <- centrality(g14, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct131 <- clustcoef(g14, method = "Clemente")$total$localcc
+lct132 <- clustcoef(g14, method = "Clemente")$out$localcc
+```
+
+```{r}
+centrality_df13 <- data.frame(iso_o = node_names14, pageRank_unique = pageRank13, close_unique = closeness13, outdegree_unique = outdegree13, indegree_unique = indegree13,local_clust_tt_unique = lct131, local_clust_out_unique = lct132)
+centrality_df13
+write.csv(centrality_df13, "../data/cleaned/network_metrics_unique2013.csv")
+
+```
+
+
+## 2014
+```{r}
+y14 <- "X2014"   
+u_y14 <- u[, c("iso_o", "iso_d", y14)]
+# Filter out edges with zero trade
+u_y14 <- subset(u_y14, u_y14[y14] > 0)
+att2014 <- read.csv("../data/cleaned/attribute2014.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un14 <- graph_from_data_frame(d = u_y14, directed = TRUE)
+E(un14)$weight <- u_y14[[y14]]
+is_directed(un14) 
+length(E(un14)) == length(E(un14)$weight)
+length(unique(V(un14)$name)) == gorder(un14)  # should be TRUE
+is.character(V(un14)$name) 
+any(is.na(E(un14)$weight))      
+any(!is.finite(E(un14)$weight)) 
+edge_list14 <- as_data_frame(un14, what = "edges")
+duplicated_rows14 <- duplicated(edge_list14[, c("from", "to")])
+any(duplicated_rows14)  # should be FALSE
+length(unique(V(un14)$name))
+un14 <- attify(un14, att2014)
+vertex_attr_names(un14)
+```
+
+```{r}
+class(un14)
+g15 <- igraph_to_wdnet(un14)
+class(g15)
+summary(g15)
+print(g15, node.attrs = TRUE, edge.attrs = TRUE)
+
+```
+
+```{r}
+node_names15 <- g15$node.attr$iso_o 
+pageRank14 <- centrality(g15, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness14 <- centrality(g15, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree14 <- centrality(g15, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree14 <- centrality(g15, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct141 <- clustcoef(g15, method = "Clemente")$total$localcc
+lct142 <- clustcoef(g15, method = "Clemente")$out$localcc
+
+```
+
+```{r}
+centrality_df14 <- data.frame(iso_o = node_names15, pageRank_unique = pageRank14, close_unique = closeness14, outdegree_unique = outdegree14, indegree_unique = indegree14, local_clust_tt_unique = lct141, local_clust_out_unique = lct142)
+centrality_df14
+write.csv(centrality_df14, "../data/cleaned/network_metrics_unique2014.csv")
+```
+
+## 2015
+```{r}
+y15 <- "X2015"   
+u_y15 <- u[, c("iso_o", "iso_d", y15)]
+# Filter out edges with zero trade
+u_y15 <- subset(u_y15, u_y15[y15] > 0)
+att2015 <- read.csv("../data/cleaned/attribute2015.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un15 <- graph_from_data_frame(d = u_y15, directed = TRUE)
+E(un15)$weight <- u_y15[[y15]]
+is_directed(un15) 
+length(E(un15)) == length(E(un15)$weight)
+length(unique(V(un15)$name)) == gorder(un15)  # should be TRUE
+is.character(V(un15)$name) 
+any(is.na(E(un15)$weight))      
+any(!is.finite(E(un15)$weight)) 
+edge_list15 <- as_data_frame(un15, what = "edges")
+duplicated_rows15 <- duplicated(edge_list15[, c("from", "to")])
+any(duplicated_rows15)  # should be FALSE
+length(unique(V(un15)$name))
+un15 <- attify(un15, att2015)
+vertex_attr_names(un15)
+
+```
+
+```{r}
+class(un15)
+g16 <- igraph_to_wdnet(un15)
+class(g16)
+summary(g16)
+print(g16, node.attrs = TRUE, edge.attrs = TRUE)
+
+```
+
+```{r}
+node_names16 <- g16$node.attr$iso_o 
+pageRank15 <- centrality(g16, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness15 <- centrality(g16, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree15 <- centrality(g16, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree15 <- centrality(g16, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct151 <- clustcoef(g16, method = "Clemente")$total$localcc
+lct152 <- clustcoef(g16, method = "Clemente")$out$localcc
+
+```
+
+```{r}
+centrality_df15 <- data.frame(iso_o = node_names16, pageRank_unique = pageRank15, close_unique = closeness15, outdegree_unique = outdegree15, indegree_unique = indegree15, local_clust_tt_unique = lct151, local_clust_out_unique = lct152)
+centrality_df15
+write.csv(centrality_df15, "../data/cleaned/network_metrics_unique2015.csv")
+```
+
+
+# 2016
+```{r}
+y16 <- "X2016"   
+u_y16 <- u[, c("iso_o", "iso_d", y16)]
+# Filter out edges with zero trade
+u_y16 <- subset(u_y16, u_y16[y16] > 0)
+att2016 <- read.csv("../data/cleaned/attribute2016.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un16 <- graph_from_data_frame(d = u_y16, directed = TRUE)
+E(un16)$weight <- u_y16[[y16]]
+is_directed(un16) 
+length(E(un16)) == length(E(un16)$weight)
+length(unique(V(un16)$name)) == gorder(un16)  # should be TRUE
+is.character(V(un16)$name) 
+any(is.na(E(un16)$weight))      
+any(!is.finite(E(un16)$weight)) 
+edge_list16 <- as_data_frame(un16, what = "edges")
+duplicated_rows16 <- duplicated(edge_list16[, c("from", "to")])
+any(duplicated_rows16)  # should be FALSE
+length(unique(V(un16)$name))
+un16 <- attify(un16, att2016)
+vertex_attr_names(un16)
+
+```
+
+```{r}
+class(un16)
+g17 <- igraph_to_wdnet(un16)
+class(g17)
+summary(g17)
+print(g17, node.attrs = TRUE, edge.attrs = TRUE)
+
+```
+
+```{r}
+node_names17 <- g17$node.attr$iso_o 
+pageRank16 <- centrality(g17, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness16 <- centrality(g17, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree16 <- centrality(g17, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree16 <- centrality(g17, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct161 <- clustcoef(g17, method = "Clemente")$total$localcc
+lct162 <- clustcoef(g17, method = "Clemente")$out$localcc
+
+```
+
+```{r}
+centrality_df16 <- data.frame(iso_o = node_names17, pageRank_unique = pageRank16, close_unique = closeness16, outdegree_unique = outdegree16, indegree_unique = indegree16, local_clust_tt_unique = lct161, local_clust_out_unique = lct162)
+centrality_df16
+write.csv(centrality_df16, "../data/cleaned/network_metrics_unique2016.csv")
+```
+
+## 2017
+```{r}
+y17 <- "X2017"   
+u_y17 <- u[, c("iso_o", "iso_d", y17)]
+# Filter out edges with zero trade
+u_y17 <- subset(u_y17, u_y17[y17] > 0)
+att2017 <- read.csv("../data/cleaned/attribute2017.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un17 <- graph_from_data_frame(d = u_y17, directed = TRUE)
+E(un17)$weight <- u_y17[[y17]]
+is_directed(un17) 
+length(E(un17)) == length(E(un17)$weight)
+length(unique(V(un17)$name)) == gorder(un17)  # should be TRUE
+is.character(V(un17)$name) 
+any(is.na(E(un17)$weight))      
+any(!is.finite(E(un17)$weight)) 
+edge_list17 <- as_data_frame(un17, what = "edges")
+duplicated_rows17 <- duplicated(edge_list17[, c("from", "to")])
+any(duplicated_rows17)  # should be FALSE
+length(unique(V(un17)$name))
+un17 <- attify(un17, att2017)
+vertex_attr_names(un17)
+
+```
+
+```{r}
+class(un17)
+g18 <- igraph_to_wdnet(un17)
+class(g18)
+summary(g18)
+print(g18, node.attrs = TRUE, edge.attrs = TRUE)
+
+```
+
+```{r}
+node_names18 <- g18$node.attr$iso_o 
+pageRank17 <- centrality(g18, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness17 <- centrality(g18, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree17 <- centrality(g18, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree17 <- centrality(g18, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct171 <- clustcoef(g18, method = "Clemente")$total$localcc
+lct172 <- clustcoef(g18, method = "Clemente")$out$localcc
+```
+
+```{r}
+centrality_df17 <- data.frame(iso_o = node_names18, pageRank_unique = pageRank17, close_unique = closeness17, outdegree_unique = outdegree17, indegree_unique = indegree17, local_clust_tt_unique = lct171, local_clust_out_unique = lct172)
+centrality_df17
+write.csv(centrality_df17, "../data/cleaned/network_metrics_unique2017.csv")
+```
+## 2018
+```{r}
+y18 <- "X2018"   
+u_y18 <- u[, c("iso_o", "iso_d", y18)]
+# Filter out edges with zero trade
+u_y18 <- subset(u_y18, u_y18[y18] > 0)
+att2018 <- read.csv("../data/cleaned/attribute2018.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un18 <- graph_from_data_frame(d = u_y18, directed = TRUE)
+E(un18)$weight <- u_y18[[y18]]
+is_directed(un18) 
+length(E(un18)) == length(E(un18)$weight)
+length(unique(V(un18)$name)) == gorder(un18)  # should be TRUE
+is.character(V(un18)$name) 
+any(is.na(E(un18)$weight))      
+any(!is.finite(E(un18)$weight)) 
+edge_list18 <- as_data_frame(un18, what = "edges")
+duplicated_rows18 <- duplicated(edge_list18[, c("from", "to")])
+any(duplicated_rows18)  # should be FALSE
+length(unique(V(un18)$name))
+un18 <- attify(un18, att2018)
+vertex_attr_names(un18)
+```
+```{r}
+class(un18)
+g19<- igraph_to_wdnet(un18)
+class(g19)
+summary(g19)
+vertex_attr_names(un18)
+print(g19, node.attrs= TRUE, edge.attrs= TRUE)
+```
+```{r}
+node_names19 <- g19$node.attr$iso_o 
+pageRank18 <- centrality(g19, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness18 <- centrality(g19, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree18 <- centrality(g19, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree18 <- centrality(g19, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct181 <- clustcoef(g19, method = "Clemente")$total$localcc
+lct182 <- clustcoef(g19, method = "Clemente")$out$localcc
+```
+
+```{r}
+centrality_df18 <- data.frame(iso_o = node_names19, pageRank_unique = pageRank18, close_unique = closeness18, outdegree_unique = outdegree18, indegree_unique = indegree18, local_clust_tt_unique = lct181, local_clust_out_unique = lct182)
+centrality_df18
+write.csv(centrality_df18, "../data/cleaned/network_metrics_unique2018.csv")
+
+```
+
+## 2019
+```{r}
+y19 <- "X2019"   
+u_y19 <- u[, c("iso_o", "iso_d", y19)]
+# Filter out edges with zero trade
+u_y19 <- subset(u_y19, u_y19[y19] > 0)
+att2019 <- read.csv("../data/cleaned/attribute2019.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un19 <- graph_from_data_frame(d = u_y19, directed = TRUE)
+E(un19)$weight <- u_y19[[y19]]
+is_directed(un19) 
+length(E(un19)) == length(E(un19)$weight)
+length(unique(V(un19)$name)) == gorder(un19)  # should be TRUE
+is.character(V(un19)$name) 
+any(is.na(E(un19)$weight))      
+any(!is.finite(E(un19)$weight)) 
+edge_list19 <- as_data_frame(un19, what = "edges")
+duplicated_rows19 <- duplicated(edge_list19[, c("from", "to")])
+any(duplicated_rows19)  # should be FALSE
+length(unique(V(un19)$name))
+un19 <- attify(un19, att2019)
+vertex_attr_names(un19)
+
+```
+
+```{r}
+class(un19)
+g20<- igraph_to_wdnet(un19)
+class(g20)
+summary(g20)
+vertex_attr_names(un19)
+print(g20, node.attrs= TRUE, edge.attrs= TRUE)
+```
+
+```{r}
+node_names20 <- g20$node.attr$iso_o 
+pageRank19 <- centrality(g20, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness19 <- centrality(g20, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree19 <- centrality(g20, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree19 <- centrality(g20, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct191 <- clustcoef(g20, method = "Clemente")$total$localcc
+lct192 <- clustcoef(g20, method = "Clemente")$out$localcc
+
+centrality_df19 <- data.frame(iso_o = node_names20, pageRank_unique = pageRank19, close_unique = closeness19, outdegree_unique = outdegree19, indegree_unique = indegree19, local_clust_tt_unique = lct191, local_clust_out_unique = lct192)
+centrality_df19
+write.csv(centrality_df19, "../data/cleaned/network_metrics_unique2019.csv")
+```
+
+
+# 2020
+```{r}
+y20 <- "X2020"   
+u_y20 <- u[, c("iso_o", "iso_d", y20)]
+# Filter out edges with zero trade
+u_y20 <- subset(u_y20, u_y20[y20] > 0)
+att2020 <- read.csv("../data/cleaned/attribute2020.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un20 <- graph_from_data_frame(d = u_y20, directed = TRUE)
+E(un20)$weight <- u_y20[[y20]]
+is_directed(un20) 
+length(E(un20)) == length(E(un20)$weight)
+length(unique(V(un20)$name)) == gorder(un20)  # should be TRUE
+is.character(V(un20)$name) 
+any(is.na(E(un20)$weight))      
+any(!is.finite(E(un20)$weight)) 
+edge_list20 <- as_data_frame(un20, what = "edges")
+duplicated_rows20 <- duplicated(edge_list20[, c("from", "to")])
+any(duplicated_rows20)  # should be FALSE
+length(unique(V(un20)$name))
+un20 <- attify(un20, att2020)
+vertex_attr_names(un20)
+```
+
+```{r}
+class(un20)
+g21<- igraph_to_wdnet(un20)
+class(g21)
+summary(g21)
+vertex_attr_names(un20)
+print(g21, node.attrs= TRUE, edge.attrs= TRUE)
+
+```
+
+```{r}
+node_names21 <- g21$node.attr$iso_o 
+pageRank20 <- centrality(g21, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness20 <- centrality(g21, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree20 <- centrality(g21, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree20 <- centrality(g21, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct201 <- clustcoef(g21, method = "Clemente")$total$localcc
+lct202 <- clustcoef(g21, method = "Clemente")$out$localcc
+
+centrality_df20 <- data.frame(iso_o = node_names21, pageRank_unique = pageRank20, close_unique = closeness20, outdegree_unique = outdegree20, indegree_unique = indegree20, local_clust_tt_unique = lct201, local_clust_out_unique = lct202)
+centrality_df20
+write.csv(centrality_df20, "../data/cleaned/network_metrics_unique2020.csv")
+```
+
+# 2021
+```{r}
+y21 <- "X2021"   
+u_y21 <- u[, c("iso_o", "iso_d", y21)]
+# Filter out edges with zero trade
+u_y21 <- subset(u_y21, u_y21[y21] > 0)
+att2021 <- read.csv("../data/cleaned/attribute2021.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un21 <- graph_from_data_frame(d = u_y21, directed = TRUE)
+E(un21)$weight <- u_y21[[y21]]
+is_directed(un21) 
+length(E(un21)) == length(E(un21)$weight)
+length(unique(V(un21)$name)) == gorder(un21)  # should be TRUE
+is.character(V(un21)$name) 
+any(is.na(E(un21)$weight))      
+any(!is.finite(E(un21)$weight)) 
+edge_list21 <- as_data_frame(un21, what = "edges")
+duplicated_rows21 <- duplicated(edge_list21[, c("from", "to")])
+any(duplicated_rows21)  # should be FALSE
+length(unique(V(un21)$name))
+un21 <- attify(un21, att2021)
+vertex_attr_names(un21)
+
+```
+
+```{r}
+class(un21)
+g22 <- igraph_to_wdnet(un21)
+class(g22)
+summary(g22)
+vertex_attr_names(un21)
+print(g22, node.attrs= TRUE, edge.attrs= TRUE)
+```
+
+```{r}
+node_names22 <- g22$node.attr$iso_o 
+pageRank21 <- centrality(g22, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness21 <- centrality(g22, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree21 <- centrality(g22, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree21 <- centrality(g22, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct211 <- clustcoef(g22, method = "Clemente")$total$localcc
+lct212 <- clustcoef(g22, method = "Clemente")$out$localcc
+
+centrality_df21 <- data.frame(iso_o = node_names22, pageRank_unique = pageRank21, close_unique = closeness21, outdegree_unique = outdegree21, indegree_unique = indegree21,local_clust_tt_unique = lct211, local_clust_out_unique = lct212)
+centrality_df21
+write.csv(centrality_df21, "../data/cleaned/network_metrics_unique2021.csv")
+```
+
+# 2022
+```{r}
+y22 <- "X2022"   
+u_y22 <- u[, c("iso_o", "iso_d", y22)]
+# Filter out edges with zero trade
+u_y22 <- subset(u_y22, u_y22[y22] > 0)
+att2022 <- read.csv("../data/cleaned/attribute2022.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un22 <- graph_from_data_frame(d = u_y22, directed = TRUE)
+E(un22)$weight <- u_y22[[y22]]
+is_directed(un22) 
+length(E(un22)) == length(E(un22)$weight)
+length(unique(V(un22)$name)) == gorder(un22)  # should be TRUE
+is.character(V(un22)$name) 
+any(is.na(E(un22)$weight))      
+any(!is.finite(E(un22)$weight)) 
+edge_list22 <- as_data_frame(un22, what = "edges")
+duplicated_rows22 <- duplicated(edge_list22[, c("from", "to")])
+any(duplicated_rows22)  # should be FALSE
+length(unique(V(un22)$name))
+un22 <- attify(un22, att2022)
+vertex_attr_names(un22)
+
+```
+
+```{r}
+class(un22)
+g23 <- igraph_to_wdnet(un22)
+class(g23)
+summary(g23)
+vertex_attr_names(un22)
+print(g23, node.attrs= TRUE, edge.attrs= TRUE)
+
+```
+
+```{r}
+node_names23 <- g23$node.attr$iso_o 
+pageRank22 <- centrality(g23, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness22 <- centrality(g23, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree22 <- centrality(g23, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree22 <- centrality(g23, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct221 <- clustcoef(g23, method = "Clemente")$total$localcc
+lct222 <- clustcoef(g23, method = "Clemente")$out$localcc
+
+centrality_df22 <- data.frame(iso_o = node_names23, pageRank_unique = pageRank22, close_unique = closeness22, outdegree_unique = outdegree22, indegree_unique = indegree22, local_clust_tt_unique = lct221, local_clust_out_unique = lct222)
+centrality_df22
+write.csv(centrality_df22, "../data/cleaned/network_metrics_unique2022.csv")
+```
+
+#2023
+```{r}
+y23 <- "X2023"   
+u_y23 <- u[, c("iso_o", "iso_d", y23)]
+# Filter out edges with zero trade
+u_y23 <- subset(u_y23, u_y23[y23] > 0)
+att2023 <- read.csv("../data/cleaned/attribute2023.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+un23 <- graph_from_data_frame(d = u_y23, directed = TRUE)
+E(un23)$weight <- u_y23[[y23]]
+is_directed(un23) 
+length(E(un23)) == length(E(un23)$weight)
+length(unique(V(un23)$name)) == gorder(un23)  # should be TRUE
+is.character(V(un23)$name) 
+any(is.na(E(un23)$weight))      
+any(!is.finite(E(un23)$weight)) 
+edge_list23 <- as_data_frame(un23, what = "edges")
+duplicated_rows23 <- duplicated(edge_list23[, c("from", "to")])
+any(duplicated_rows23)  # should be FALSE
+length(unique(V(un23)$name))
+un23 <- attify(un23, att2023)
+vertex_attr_names(un23)
+
+```
+
+```{r}
+class(un23)
+g24 <- igraph_to_wdnet(un23)
+class(g24)
+summary(g24)
+vertex_attr_names(un23)
+print(g24, node.attrs= TRUE, edge.attrs= TRUE)
+```
+
+```{r}
+node_names24 <- g24$node.attr$iso_o 
+pageRank23 <- centrality(g24, measure = "wpr", wpr.control = list(gamma = 0.85, theta = 0.75))
+closeness23 <- centrality(g24, measure = "closeness", closeness.control =list(alpha = 0.8, mode = "out", method = "harmonic", distance = FALSE))
+outdegree23 <- centrality(g24, measure = "degree", degree.control = list(alpha = 0.8, mode = "out"))
+indegree23 <- centrality(g24, measure = "degree", degree.control = list(alpha = 0.8, mode = "in"))
+lct231 <- clustcoef(g24, method = "Clemente")$total$localcc
+lct232 <- clustcoef(g24, method = "Clemente")$out$localcc
+
+centrality_df23 <- data.frame(iso_o = node_names24, pageRank_unique = pageRank23, close_unique = closeness23, outdegree_unique = outdegree23, indegree_unique = indegree23,local_clust_tt_unique = lct231, local_clust_out_unique = lct232)
+centrality_df23
+write.csv(centrality_df23, "../data/cleaned/network_metrics_unique2023.csv")
+```
+
+
+```{r}
+metric_time_u <- data.frame(TIME_PERIOD = c(2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+                                          2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017,
+                                          2018, 2019, 2020, 2021, 2022, 2023),
+                   Global_CC_Cl_unique = c(clustcoef(g1, method ="Clemente")$total$globalcc,
+                                         clustcoef(g2, method = "Clemente")$total$globalcc,
+                                         clustcoef(g3, method = "Clemente")$total$globalcc,
+                                         clustcoef(g4, method = "Clemente")$total$globalcc,
+                                         clustcoef(g5, method = "Clemente")$total$globalcc,
+                                         clustcoef(g6, method = "Clemente")$total$globalcc,
+                                         clustcoef(g7, method ="Clemente")$total$globalcc,
+                                         clustcoef(g8, method = "Clemente")$total$globalcc,
+                                         clustcoef(g9, method = "Clemente")$total$globalcc,
+                                         clustcoef(g10, method = "Clemente")$total$globalcc,
+                                         clustcoef(g11, method = "Clemente")$total$globalcc,
+                                         clustcoef(g12, method = "Clemente")$total$globalcc,
+                                         clustcoef(g13, method ="Clemente")$total$globalcc,
+                                         clustcoef(g14, method = "Clemente")$total$globalcc,
+                                         clustcoef(g15, method = "Clemente")$total$globalcc,
+                                         clustcoef(g16, method = "Clemente")$total$globalcc,
+                                         clustcoef(g17, method = "Clemente")$total$globalcc,
+                                         clustcoef(g18, method = "Clemente")$total$globalcc,
+                                         clustcoef(g19, method ="Clemente")$total$globalcc,
+                                         clustcoef(g20, method = "Clemente")$total$globalcc,
+                                         clustcoef(g21, method = "Clemente")$total$globalcc,
+                                         clustcoef(g22, method = "Clemente")$total$globalcc,
+                                         clustcoef(g23, method = "Clemente")$total$globalcc,
+                                         clustcoef(g24, method = "Clemente")$total$globalcc),
+                   Global_CC_Fg_unique = c(clustcoef(g1, method = "Clemente")$out$globalcc,
+                                         clustcoef(g2, method = "Clemente")$out$globalcc,
+                                         clustcoef(g3, method = "Clemente")$out$globalcc,
+                                         clustcoef(g4, method = "Clemente")$out$globalcc,
+                                         clustcoef(g5, method = "Clemente")$out$globalcc,
+                                         clustcoef(g6, method = "Clemente")$out$globalcc,
+                                         clustcoef(g7, method = "Clemente")$out$globalcc,
+                                         clustcoef(g8, method = "Clemente")$out$globalcc,
+                                         clustcoef(g9, method = "Clemente")$out$globalcc,
+                                         clustcoef(g10, method = "Clemente")$out$globalcc,
+                                         clustcoef(g11, method = "Clemente")$out$globalcc,
+                                         clustcoef(g12, method = "Clemente")$out$globalcc,
+                                         clustcoef(g13, method = "Clemente")$out$globalcc,
+                                         clustcoef(g14, method = "Clemente")$out$globalcc,
+                                         clustcoef(g15, method = "Clemente")$out$globalcc,
+                                         clustcoef(g16, method = "Clemente")$out$globalcc,
+                                         clustcoef(g17, method = "Clemente")$out$globalcc,
+                                         clustcoef(g18, method = "Clemente")$out$globalcc,
+                                         clustcoef(g19, method = "Clemente")$out$globalcc,
+                                         clustcoef(g20, method = "Clemente")$out$globalcc,
+                                         clustcoef(g21, method = "Clemente")$out$globalcc,
+                                         clustcoef(g22, method = "Clemente")$out$globalcc,
+                                         clustcoef(g23, method = "Clemente")$out$globalcc,
+                                         clustcoef(g24, method = "Clemente")$out$globalcc),
+                  Avg_CC_Cl_unique = c(mean(clustcoef(g1, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g2, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g3, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g4, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g5, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g6, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g7, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g8, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g9, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g10, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g11, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g12, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g13, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g14, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g15, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g16, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g17, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g18, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g19, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g20, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g21, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g22, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g23, method = "Clemente")$total$localcc),
+                                      mean(clustcoef(g24, method = "Clemente")$total$localcc)),
+                  Avg_CC_Fg_unique = c(mean(clustcoef(g1, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g2, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g3, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g4, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g5, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g6, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g7, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g8, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g9, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g10, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g11, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g12, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g13, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g14, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g15, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g16, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g17, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g18, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g19, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g20, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g21, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g21, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g23, method = "Clemente")$out$localcc),
+                                      mean(clustcoef(g24, method = "Clemente")$out$localcc)),
+                  assortcoef_unique = c(assortcoef(g1), 
+                                      assortcoef(g2), 
+                                      assortcoef(g3), 
+                                      assortcoef(g4),
+                                      assortcoef(g5), 
+                                      assortcoef(g6), 
+                                      assortcoef(g7), 
+                                      assortcoef(g8),
+                                      assortcoef(g9), 
+                                      assortcoef(g10), 
+                                      assortcoef(g11), 
+                                      assortcoef(g12),
+                                      assortcoef(g13), 
+                                      assortcoef(g14), 
+                                      assortcoef(g15), 
+                                      assortcoef(g16),
+                                      assortcoef(g17), 
+                                      assortcoef(g18), 
+                                      assortcoef(g19), 
+                                      assortcoef(g20),
+                                      assortcoef(g21), 
+                                      assortcoef(g22), 
+                                      assortcoef(g23), 
+                                      assortcoef(g24)))
+
+```
+
+```{r}
+metric_time_u
+```
+
+
+```{r}
+write.csv(metric_time_u, "../data/cleaned/network_metrics_timeseries_unique.csv")
+```
+
+
+
+```{r}
+vcount(un00)
+vcount(un01)
+vcount(un02)
+vcount(un03)
+vcount(un04)
+vcount(un05)
+vcount(un06)
+vcount(un07)
+vcount(un08)
+vcount(un09)
+vcount(un10)
+vcount(un11)
+vcount(un12)
+vcount(un13)
+vcount(un14)
+vcount(un15)
+vcount(un16)
+vcount(un17)
+vcount(un18)
+vcount(un19)
+vcount(un20)
+vcount(un21)
+vcount(un22)
+vcount(un23)
+```
+
+
+
