@@ -633,41 +633,41 @@ End: 28 july, 2025 at 2:20PM
 ```{r}
 #Reference: https://www.rdocumentation.org/packages/ergm/versions/4.8.1/topics/edgecov-ergmTerm
 
-set.seed(312)
-
-repro_stgm <- tergm(list(net_re00, net_re01, net_re02, net_re03, net_re04, net_re05, net_re06, net_re07, net_re08, net_re09, net_re10, net_re11, net_re12, net_re13, net_re14, net_re15, net_re16, net_re17, net_re18, net_re19, net_re20, net_re21, net_re22, net_re23)~
-                                       Form(~edges + nodecov("D_log_gdp_pct")
-                                                   + absdiff("D_log_gdp_pct")
-                                                   + nodemix("development")
-                                                   + edgecov(net_dynamic_rta)
-                                                   + nodematch("landlocked")
-                                                   + edgecov(dist_net, "log_dist")
-                                                   + edgecov(contig_mat)
-                                                   + edgecov(colony)
-                                                   + edgecov(col_mat)
-                                                   + edgecov(lang_mat)
-                                                   + mutual) +
-                                    Persist(~edges + nodecov("D_log_gdp_pct")
-                                                   + absdiff("D_log_gdp_pct")
-                                                   + nodemix("development")
-                                                   + edgecov(net_dynamic_rta)
-                                                   + nodematch("landlocked")
-                                                   + edgecov(dist_net, "log_dist")
-                                                   + edgecov(contig_mat)
-                                                   + edgecov(colony)
-                                                   + edgecov(col_mat)
-                                                   + edgecov(lang_mat)
-                                                   + mutual), estimate = "CMLE", times = c(1:24))
+# set.seed(312)
+# 
+# repro_stgm <- tergm(list(net_re00, net_re01, net_re02, net_re03, net_re04, net_re05, net_re06, net_re07, net_re08, net_re09, net_re10, net_re11, net_re12, net_re13, net_re14, net_re15, net_re16, net_re17, net_re18, net_re19, net_re20, net_re21, net_re22, net_re23)~
+#                                        Form(~edges + nodecov("D_log_gdp_pct")
+#                                                    + absdiff("D_log_gdp_pct")
+#                                                    + nodemix("development")
+#                                                    + edgecov(net_dynamic_rta)
+#                                                    + nodematch("landlocked")
+#                                                    + edgecov(dist_net, "log_dist")
+#                                                    + edgecov(contig_mat)
+#                                                    + edgecov(colony)
+#                                                    + edgecov(col_mat)
+#                                                    + edgecov(lang_mat)
+#                                                    + mutual) +
+#                                     Persist(~edges + nodecov("D_log_gdp_pct")
+#                                                    + absdiff("D_log_gdp_pct")
+#                                                    + nodemix("development")
+#                                                    + edgecov(net_dynamic_rta)
+#                                                    + nodematch("landlocked")
+#                                                    + edgecov(dist_net, "log_dist")
+#                                                    + edgecov(contig_mat)
+#                                                    + edgecov(colony)
+#                                                    + edgecov(col_mat)
+#                                                    + edgecov(lang_mat)
+#                                                    + mutual), estimate = "CMLE", times = c(1:24))
 ```
 
 ```{r}
 #summary(repro_stgm)
-```
-
-```{r}
 #saveRDS(repro_stgm, "../results/reproducible_stgm3.rds")
 ```
 
+```{r}
+repro_stgm <- readRDS("../results/reproducible_stgm3.rds")
+```
 
 
 ```{r}
@@ -693,28 +693,20 @@ colnames(dataframe_r1) <- c('Estimates_r','lCI_r', 'odds_r','uCI_r', 'pvals_r', 
 
 ## Goodness of fit statistics
 
-
-
 ```{r}
 # AIC(repro_stgm)[1]
 # BIC(repro_stgm)[1]
 ```
 
-(Seminar 10 has most of it)
 
 ```{r}
 mcmc.diagnostics(repro_stgm)
 ```
 
 ```{r}
-goftest_r <- gof(repro_stgm)
-
-plot(goftest_r)
-```
-
-```{r}
+# goftest_r <- gof(repro_stgm)
+# plot(goftest_r)
 # saveRDS(goftest_r, "../results/goftest_model3_r.rds")
-# 
 goftest_r <- readRDS("../results/goftest_model3_r.rds")
 ```
 
@@ -747,45 +739,40 @@ dev.off()
 Start: 31 July at 8:48PM
 End: 2 July 6:44AM
 ```{r}
-set.seed(312)
-
-repro_stgm_hyst <- tergm(list(net_re00, net_re01, net_re02, net_re03, net_re04, net_re05, net_re06, net_re07, net_re08, net_re09, net_re10, net_re11, net_re12, net_re13, net_re14, net_re15, net_re16, net_re17, net_re18, net_re19, net_re20, net_re21, net_re22, net_re23)~  
-                                              Form(~ nodecov("D_log_gdp_pct") 
-                                                   + absdiff("D_log_gdp_pct")
-                                                   + nodemix("development")
-                                                   + edgecov(net_dynamic_hyst_r)
-                                                   + edgecov(net_dynamic_rta)
-                                                   + nodematch("landlocked")
-                                                   + edgecov(dist_net, "log_dist")
-                                                   + edgecov(contig_mat)
-                                                   + edgecov(colony)
-                                                   + edgecov(col_mat)
-                                                   + edgecov(lang_mat)
-                                                   + mutual) +
-                                           Persist(~ nodecov("D_log_gdp_pct") 
-                                                   + absdiff("D_log_gdp_pct")
-                                                   + nodemix("development")
-                                                   + edgecov(net_dynamic_hyst_r)
-                                                   + edgecov(net_dynamic_rta)
-                                                   + nodematch("landlocked")
-                                                   + edgecov(dist_net, "log_dist")
-                                                   + edgecov(contig_mat)
-                                                   + edgecov(colony)
-                                                   + edgecov(col_mat)
-                                                   + edgecov(lang_mat)
-                                                   + mutual), estimate = "CMLE", times = c(1:24))
+# set.seed(312)
+# 
+# repro_stgm_hyst <- tergm(list(net_re00, net_re01, net_re02, net_re03, net_re04, net_re05, net_re06, net_re07, net_re08, net_re09, net_re10, net_re11, net_re12, net_re13, net_re14, net_re15, net_re16, net_re17, net_re18, net_re19, net_re20, net_re21, net_re22, net_re23)~  
+#                                               Form(~ nodecov("D_log_gdp_pct") 
+#                                                    + absdiff("D_log_gdp_pct")
+#                                                    + nodemix("development")
+#                                                    + edgecov(net_dynamic_hyst_r)
+#                                                    + edgecov(net_dynamic_rta)
+#                                                    + nodematch("landlocked")
+#                                                    + edgecov(dist_net, "log_dist")
+#                                                    + edgecov(contig_mat)
+#                                                    + edgecov(colony)
+#                                                    + edgecov(col_mat)
+#                                                    + edgecov(lang_mat)
+#                                                    + mutual) +
+#                                            Persist(~ nodecov("D_log_gdp_pct") 
+#                                                    + absdiff("D_log_gdp_pct")
+#                                                    + nodemix("development")
+#                                                    + edgecov(net_dynamic_hyst_r)
+#                                                    + edgecov(net_dynamic_rta)
+#                                                    + nodematch("landlocked")
+#                                                    + edgecov(dist_net, "log_dist")
+#                                                    + edgecov(contig_mat)
+#                                                    + edgecov(colony)
+#                                                    + edgecov(col_mat)
+#                                                    + edgecov(lang_mat)
+#                                                    + mutual), estimate = "CMLE", times = c(1:24))
+# 
+# summary(repro_stgm_hyst)
 ```
 
 ```{r}
-summary(repro_stgm_hyst)
-```
-
-
-
-
-
-```{r}
-saveRDS(repro_stgm_hyst, "../results/reproducible_stgm4.rds")
+#saveRDS(repro_stgm_hyst, "../results/reproducible_stgm4.rds")
+repro_stgm_hyst <- readRDS("../results/reproducible_stgm4.rds")
 ```
 
 ```{r}
@@ -803,7 +790,7 @@ colnames(dataframe_r_h) <- c('Estimates_r_h','lCI_r_h', 'odds_r_h','uCI_r_h', 'p
 ```
 
 ```{r}
-write.csv(dataframe_r_h, "../results/reproducible_stgm4_results.csv")
+#write.csv(dataframe_r_h, "../results/reproducible_stgm4_results.csv")
 ```
 
 ```{r}
@@ -811,21 +798,14 @@ mcmc.diagnostics(repro_stgm_hyst)
 ```
 
 Start: 2 August, 2005 at 7:18AM
-
-
+End: 2 August, 2005 almost 6 hours
 ```{r}
-goftest_r_hyst <- gof(repro_stgm_hyst) 
-plot(goftest_r_hyst)
-```
+# goftest_r_hyst <- gof(repro_stgm_hyst) 
+# plot(goftest_r_hyst)
+# saveRDS(goftest_r_hyst, "../results/goftest_model4_r.rds")
 
-```{r}
-saveRDS(goftest_r_hyst, "../results/goftest_model4_r.rds")
-```
-
-```{r}
 goftest_r_hyst <- readRDS("../results/goftest_model4_r.rds")
 ```
-
 
 
 ```{r}

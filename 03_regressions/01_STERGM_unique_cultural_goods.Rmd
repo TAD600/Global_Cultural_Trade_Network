@@ -738,45 +738,42 @@ Started: 28 July, 2025 at 8:19 PM
 Ended: 29 July, 2025 at 5AM (approximately)
 ```{r}
 #Reference: https://www.rdocumentation.org/packages/ergm/versions/4.8.1/topics/edgecov-ergmTerm
-set.seed(312)
-
-unique_stgm <- tergm(list(net_un00, net_un01, net_un02, net_un03, net_un04, net_un05, net_un06, net_un07, net_un08, net_un09, net_un10, net_un11, net_un12, net_un13, net_un14, net_un15, net_un16, net_un17, net_un18, net_un19, net_un20, net_un21, net_un22, net_un23) ~ 
-                                       Form(~edges + nodecov("D_log_gdp_pct") 
-                                                   + absdiff("D_log_gdp_pct")
-                                                   + nodemix("development")
-                                                   + edgecov(net_dynamic_rta)
-                                                   + nodematch("landlocked")
-                                                   + edgecov(dist_net, "log_dist")
-                                                   + edgecov(contig_mat)
-                                                   + edgecov(colony)
-                                                   + edgecov(col_mat)
-                                                   + edgecov(lang_mat)
-                                                   + mutual) +
-                                    Persist(~edges + nodecov("D_log_gdp_pct") 
-                                                   + absdiff("D_log_gdp_pct")
-                                                   + nodemix("development")
-                                                   + edgecov(net_dynamic_rta)
-                                                   + nodematch("landlocked")
-                                                   + edgecov(dist_net, "log_dist")
-                                                   + edgecov(contig_mat)
-                                                   + edgecov(colony)
-                                                   + edgecov(col_mat)
-                                                   + edgecov(lang_mat)
-                                                   + mutual), 
-                                                   estimate = "CMLE", times = c(1:24))
+# set.seed(312)
+# 
+# unique_stgm <- tergm(list(net_un00, net_un01, net_un02, net_un03, net_un04, net_un05, net_un06, net_un07, net_un08, net_un09, net_un10, net_un11, net_un12, net_un13, net_un14, net_un15, net_un16, net_un17, net_un18, net_un19, net_un20, net_un21, net_un22, net_un23) ~ 
+#                                        Form(~edges + nodecov("D_log_gdp_pct") 
+#                                                    + absdiff("D_log_gdp_pct")
+#                                                    + nodemix("development")
+#                                                    + edgecov(net_dynamic_rta)
+#                                                    + nodematch("landlocked")
+#                                                    + edgecov(dist_net, "log_dist")
+#                                                    + edgecov(contig_mat)
+#                                                    + edgecov(colony)
+#                                                    + edgecov(col_mat)
+#                                                    + edgecov(lang_mat)
+#                                                    + mutual) +
+#                                     Persist(~edges + nodecov("D_log_gdp_pct") 
+#                                                    + absdiff("D_log_gdp_pct")
+#                                                    + nodemix("development")
+#                                                    + edgecov(net_dynamic_rta)
+#                                                    + nodematch("landlocked")
+#                                                    + edgecov(dist_net, "log_dist")
+#                                                    + edgecov(contig_mat)
+#                                                    + edgecov(colony)
+#                                                    + edgecov(col_mat)
+#                                                    + edgecov(lang_mat)
+#                                                    + mutual), 
+#                                                    estimate = "CMLE", times = c(1:24))
 ```
 
 ```{r}
-print(summary(unique_stgm))
+#print(summary(unique_stgm))
 ```
 
 ```{r}
 #saveRDS(unique_stgm, "../results/unique_stgm1.rds")
-#unique_stgm <- readRDS("unique_stgm.rds")
-
+unique_stgm <- readRDS("../results/unique_stgm.rds")
 ```
-
-
 
 
 ```{r}
@@ -802,7 +799,7 @@ dataframe_u1
 ```
 
 ```{r}
-write.csv(dataframe_u1, "../results/unique_stgm1_results.csv")
+#write.csv(dataframe_u1, "../results/unique_stgm1_results.csv")
 ```
 
 
@@ -816,12 +813,10 @@ mcmc.diagnostics(unique_stgm)
 ```
 
 ```{r}
-goftest <- gof(unique_stgm) 
-plot(goftest)
-```
-
-```{r}
-saveRDS(goftest, "../results/goftest_model1_u.rds")
+# goftest <- gof(unique_stgm) 
+# plot(goftest)
+# 
+# saveRDS(goftest, "../results/goftest_model1_u.rds")
 ```
 
 ```{r}
@@ -830,8 +825,7 @@ goftest <- readRDS("../results/goftest_model1_u.rds")
 
 
 ```{r}
-names(goftest)
-
+#names(goftest)
 ```
 
 ```{r}
@@ -864,38 +858,39 @@ Start: 2 August, at 11;06PM
 End: 3 August, at 11:57PM
 ```{r}
 #Reference: https://www.rdocumentation.org/packages/ergm/versions/4.8.1/topics/edgecov-ergmTerm
-set.seed(312)
-
-unique_stgm_hyst <- tergm(list(net_un00, net_un01, net_un02, net_un03, net_un04, net_un05, net_un06, net_un07, net_un08, net_un09, net_un10, net_un11, net_un12, net_un13, net_un14, net_un15, net_un16, net_un17, net_un18, net_un19, net_un20, net_un21, net_un22, net_un23) ~ 
-                                              Form(~nodecov("D_log_gdp_pct") 
-                                                   + absdiff("D_log_gdp_pct")
-                                                   + nodemix("development")
-                                                   + edgecov(net_dynamic_hyst_u)
-                                                   + edgecov(net_dynamic_rta)
-                                                   + nodematch("landlocked")
-                                                   + edgecov(dist_net, "log_dist")
-                                                   + edgecov(contig_mat)
-                                                   + edgecov(colony)
-                                                   + edgecov(col_mat)
-                                                   + edgecov(lang_mat)
-                                                   + mutual) +
-                                           Persist(~nodecov("D_log_gdp_pct") 
-                                                   + absdiff("D_log_gdp_pct")
-                                                   + nodemix("development")
-                                                   + edgecov(net_dynamic_hyst_u)
-                                                   + edgecov(net_dynamic_rta)
-                                                   + nodematch("landlocked")
-                                                   + edgecov(dist_net, "log_dist")
-                                                   + edgecov(contig_mat)
-                                                   + edgecov(colony)
-                                                   + edgecov(col_mat)
-                                                   + edgecov(lang_mat)
-                                                   + mutual), 
-                                                   estimate = "CMLE", times = c(1:24))
+# set.seed(312)
+# 
+# unique_stgm_hyst <- tergm(list(net_un00, net_un01, net_un02, net_un03, net_un04, net_un05, net_un06, net_un07, net_un08, net_un09, net_un10, net_un11, net_un12, net_un13, net_un14, net_un15, net_un16, net_un17, net_un18, net_un19, net_un20, net_un21, net_un22, net_un23) ~ 
+#                                               Form(~nodecov("D_log_gdp_pct") 
+#                                                    + absdiff("D_log_gdp_pct")
+#                                                    + nodemix("development")
+#                                                    + edgecov(net_dynamic_hyst_u)
+#                                                    + edgecov(net_dynamic_rta)
+#                                                    + nodematch("landlocked")
+#                                                    + edgecov(dist_net, "log_dist")
+#                                                    + edgecov(contig_mat)
+#                                                    + edgecov(colony)
+#                                                    + edgecov(col_mat)
+#                                                    + edgecov(lang_mat)
+#                                                    + mutual) +
+#                                            Persist(~nodecov("D_log_gdp_pct") 
+#                                                    + absdiff("D_log_gdp_pct")
+#                                                    + nodemix("development")
+#                                                    + edgecov(net_dynamic_hyst_u)
+#                                                    + edgecov(net_dynamic_rta)
+#                                                    + nodematch("landlocked")
+#                                                    + edgecov(dist_net, "log_dist")
+#                                                    + edgecov(contig_mat)
+#                                                    + edgecov(colony)
+#                                                    + edgecov(col_mat)
+#                                                    + edgecov(lang_mat)
+#                                                    + mutual), 
+#                                                    estimate = "CMLE", times = c(1:24))
 ```
 
 ```{r}
-saveRDS(unique_stgm_hyst, "../results/unique_stgm2.rds")
+#saveRDS(unique_stgm_hyst, "../results/unique_stgm2.rds")
+unique_stgm_hyst <- readRDS("../results/unique_stgm2.rds")
 ```
 
 ```{r}
@@ -916,8 +911,14 @@ colnames(dataframe_u_h) <- c('Estimate_u','lCI_u', 'OR_u','uCI_u', 'pvals_u', 'm
 ```
 
 ```{r}
-write.csv(dataframe_u_h, "../results/unique_stgm2_results.csv")
+#write.csv(dataframe_u_h, "../results/unique_stgm2_results.csv")
 ```
+
+```{r}
+dataframe_u_h
+```
+
+
 
 ```{r}
 mcmc.diagnostics(unique_stgm_hyst)
@@ -928,11 +929,8 @@ Start: 12:12PM 5
 Start: 3 August at 9:08PM
 End: 3 August at 10:30PM
 ```{r}
-goftest_hyst <- gof(unique_stgm_hyst)
+#goftest_hyst <- gof(unique_stgm_hyst)
 #plot(goftest_hyst)
-```
-
-```{r}
 #saveRDS(goftest_hyst, "../results/goftest_model2_u.rds")
 goftest_hyst <- readRDS("../results/goftest_model2_u.rds")
 ```
