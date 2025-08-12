@@ -69,7 +69,7 @@ set.edge.value(dist_net, "log_dist", dist_1$log_dist)
 ```{r}
 class(dist_net)
 ```
-# Unique culture Goods trade edgelist
+# Reproducible-culture Goods trade edgelist
 ```{r}
 r <- read.csv("../data/cleaned/reproducible_edgelist.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 ```
