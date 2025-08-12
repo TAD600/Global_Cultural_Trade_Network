@@ -44,20 +44,19 @@ r <- read.csv("../data/cleaned/reproducible_edgelist.csv", header = TRUE, as.is 
 ```{r}
 y0 <- "X2000"   
 r_y0 <- r[, c("iso_o", "iso_d", y0)]
-# Filter out edges with zero trade
 r_y0 <- subset(r_y0, r_y0[[y0]] > 0)
 att2000 <- read.csv("../data/cleaned/attribute2000.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re00 <- graph_from_data_frame(d = r_y0, directed = TRUE)
 E(re00)$weight <- r_y0[[y0]]
 is_directed(re00) 
 length(E(re00)) == length(E(re00)$weight)
-length(unique(V(re00)$name)) == gorder(re00)  # should be TRUE
+length(unique(V(re00)$name)) == gorder(re00) 
 is.character(V(re00)$name) 
-any(is.na(E(re00)$weight))      # should be FALSE
-any(!is.finite(E(re00)$weight)) # should be FALSE
+any(is.na(E(re00)$weight))      
+any(!is.finite(E(re00)$weight)) 
 edge_list_r1 <- as_data_frame(re00, what = "edges")
 duplicated_rows_r1 <- duplicated(edge_list_r1[, c("from", "to")])
-any(duplicated_rows_r1)  # should be FALSE
+any(duplicated_rows_r1)  
 length(unique(V(re00)$name))
 ```
 
@@ -111,20 +110,19 @@ write.csv(centrality_rf0, "../data/cleaned/network_metrics_reproducible2000.csv"
 ```{r}
 y1 <- "X2001"   
 r_y1 <- r[, c("iso_o", "iso_d", y1)]
-# Filter out edges with zero trade
 r_y1 <- subset(r_y1, r_y1[[y1]] > 0)
 att2001 <- read.csv("../data/cleaned/attribute2001.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re01 <- graph_from_data_frame(d = r_y1, directed = TRUE)
 E(re01)$weight <- r_y1[[y1]]
 is_directed(re01) 
 length(E(re01)) == length(E(re01)$weight)
-length(unique(V(re01)$name)) == gorder(re01)  # should be TRUE
+length(unique(V(re01)$name)) == gorder(re01)  
 is.character(V(re01)$name) 
-any(is.na(E(re01)$weight))      # should be FALSE
-any(!is.finite(E(re01)$weight)) # should be FALSE
+any(is.na(E(re01)$weight))     
+any(!is.finite(E(re01)$weight))
 edge_list_r2 <- as_data_frame(re01, what = "edges")
 duplicated_rows_r2 <- duplicated(edge_list_r2[, c("from", "to")])
-any(duplicated_rows_r1)  # should be FALSE
+any(duplicated_rows_r1)  
 length(unique(V(re01)$name))
 re01 <- attify(re01, att2001)
 vertex_attr_names(re01)
@@ -158,20 +156,19 @@ write.csv(centrality_rf1, "../data/cleaned/network_metrics_reproducible2001.csv"
 ```{r}
 y2 <- "X2002"   
 r_y2 <- r[, c("iso_o", "iso_d", y2)]
-# Filter out edges with zero trade
 r_y2 <- subset(r_y2, r_y2[[y2]] > 0)
 att2002 <- read.csv("../data/cleaned/attribute2002.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re02 <- graph_from_data_frame(d = r_y2, directed = TRUE)
 E(re02)$weight <- r_y2[[y2]]
 is_directed(re02) 
 length(E(re02)) == length(E(re02)$weight)
-length(unique(V(re02)$name)) == gorder(re02)  # should be TRUE
+length(unique(V(re02)$name)) == gorder(re02)  
 is.character(V(re02)$name) 
-any(is.na(E(re02)$weight))      # should be FALSE
-any(!is.finite(E(re02)$weight)) # should be FALSE
+any(is.na(E(re02)$weight))     
+any(!is.finite(E(re02)$weight)) 
 edge_list_r3 <- as_data_frame(re02, what = "edges")
 duplicated_rows_r3 <- duplicated(edge_list_r3[, c("from", "to")])
-any(duplicated_rows_r3)  # should be FALSE
+any(duplicated_rows_r3)  
 length(unique(V(re02)$name))
 re02 <- attify(re02, att2002)
 vertex_attr_names(re02)
@@ -205,20 +202,19 @@ write.csv(centrality_rf2, "../data/cleaned/network_metrics_reproducible2002.csv"
 ```{r}
 y3 <- "X2003"   
 r_y3 <- r[, c("iso_o", "iso_d", y3)]
-# Filter out edges with zero trade
 r_y3 <- subset(r_y3, r_y3[[y3]] > 0)
 att2003 <- read.csv("../data/cleaned/attribute2003.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re03 <- graph_from_data_frame(d = r_y3, directed = TRUE)
 E(re03)$weight <- r_y3[[y3]]
 is_directed(re03) 
 length(E(re03)) == length(E(re03)$weight)
-length(unique(V(re03)$name)) == gorder(re03)  # should be TRUE
+length(unique(V(re03)$name)) == gorder(re03)  
 is.character(V(re03)$name) 
-any(is.na(E(re03)$weight))      # should be FALSE
-any(!is.finite(E(re03)$weight)) # should be FALSE
+any(is.na(E(re03)$weight))     
+any(!is.finite(E(re03)$weight)) 
 edge_list_r3 <- as_data_frame(re03, what = "edges")
 duplicated_rows_r3 <- duplicated(edge_list_r3[, c("from", "to")])
-any(duplicated_rows_r3)  # should be FALSE
+any(duplicated_rows_r3)  
 length(unique(V(re03)$name))
 re03 <- attify(re03, att2003)
 vertex_attr_names(re03)
@@ -249,20 +245,19 @@ write.csv(centrality_rf3, "../data/cleaned/network_metrics_reproducible2003.csv"
 ```{r}
 y4 <- "X2004"   
 r_y4 <- r[, c("iso_o", "iso_d", y4)]
-# Filter out edges with zero trade
 r_y4 <- subset(r_y4, r_y4[[y4]] > 0)
 att2004 <- read.csv("../data/cleaned/attribute2004.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re04 <- graph_from_data_frame(d = r_y4, directed = TRUE)
 E(re04)$weight <- r_y4[[y4]]
 is_directed(re04) 
 length(E(re04)) == length(E(re04)$weight)
-length(unique(V(re04)$name)) == gorder(re04)  # should be TRUE
+length(unique(V(re04)$name)) == gorder(re04)  
 is.character(V(re04)$name) 
-any(is.na(E(re04)$weight))      # should be FALSE
-any(!is.finite(E(re04)$weight)) # should be FALSE
+any(is.na(E(re04)$weight))    
+any(!is.finite(E(re04)$weight)) 
 edge_list_r4 <- as_data_frame(re04, what = "edges")
 duplicated_rows_r4 <- duplicated(edge_list_r4[, c("from", "to")])
-any(duplicated_rows_r4)  # should be FALSE
+any(duplicated_rows_r4)  
 length(unique(V(re04)$name))
 re04 <- attify(re04, att2004)
 vertex_attr_names(re04)
@@ -295,20 +290,19 @@ write.csv(centrality_rf4, "../data/cleaned/network_metrics_reproducible2004.csv"
 ```{r}
 y5 <- "X2005"   
 r_y5 <- r[, c("iso_o", "iso_d", y5)]
-# Filter out edges with zero trade
 r_y5 <- subset(r_y5, r_y5[[y5]] > 0)
 att2005 <- read.csv("../data/cleaned/attribute2005.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re05 <- graph_from_data_frame(d = r_y5, directed = TRUE)
 E(re05)$weight <- r_y5[[y5]]
 is_directed(re05) 
 length(E(re05)) == length(E(re05)$weight)
-length(unique(V(re05)$name)) == gorder(re05)  # should be TRUE
+length(unique(V(re05)$name)) == gorder(re05)  
 is.character(V(re05)$name) 
-any(is.na(E(re05)$weight))      # should be FALSE
-any(!is.finite(E(re05)$weight)) # should be FALSE
+any(is.na(E(re05)$weight))     
+any(!is.finite(E(re05)$weight)) 
 edge_list_r5 <- as_data_frame(re05, what = "edges")
 duplicated_rows_r5 <- duplicated(edge_list_r5[, c("from", "to")])
-any(duplicated_rows_r5)  # should be FALSE
+any(duplicated_rows_r5)  
 length(unique(V(re05)$name))
 re05 <- attify(re05, att2005)
 vertex_attr_names(re05)
@@ -341,20 +335,19 @@ write.csv(centrality_rf5, "../data/cleaned/network_metrics_reproducible2005.csv"
 ```{r}
 y6 <- "X2006"   
 r_y6 <- r[, c("iso_o", "iso_d", y6)]
-# Filter out edges with zero trade
 r_y6 <- subset(r_y6, r_y6[[y6]] > 0)
 att2006 <- read.csv("../data/cleaned/attribute2006.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re06 <- graph_from_data_frame(d = r_y6, directed = TRUE)
 E(re06)$weight <- r_y6[[y6]]
 is_directed(re06) 
 length(E(re06)) == length(E(re06)$weight)
-length(unique(V(re06)$name)) == gorder(re06)  # should be TRUE
+length(unique(V(re06)$name)) == gorder(re06)  
 is.character(V(re06)$name) 
-any(is.na(E(re06)$weight))      # should be FALSE
-any(!is.finite(E(re06)$weight)) # should be FALSE
+any(is.na(E(re06)$weight))      
+any(!is.finite(E(re06)$weight)) 
 edge_list_r6 <- as_data_frame(re06, what = "edges")
 duplicated_rows_r6 <- duplicated(edge_list_r6[, c("from", "to")])
-any(duplicated_rows_r6)  # should be FALSE
+any(duplicated_rows_r6) 
 length(unique(V(re06)$name))
 re06 <- attify(re06, att2006)
 vertex_attr_names(re06)
@@ -437,20 +430,19 @@ write.csv(centrality_rf7, "../data/cleaned/network_metrics_reproducible2007.csv"
 ```{r}
 y8 <- "X2008"   
 r_y8 <- r[, c("iso_o", "iso_d", y8)]
-# Filter out edges with zero trade
 r_y8 <- subset(r_y8, r_y8[[y8]] > 0)
 att2008 <- read.csv("../data/cleaned/attribute2008.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re08 <- graph_from_data_frame(d = r_y8, directed = TRUE)
 E(re08)$weight <- r_y8[[y8]]
 is_directed(re08) 
 length(E(re08)) == length(E(re08)$weight)
-length(unique(V(re08)$name)) == gorder(re08)  # should be TRUE
+length(unique(V(re08)$name)) == gorder(re08)  
 is.character(V(re08)$name) 
-any(is.na(E(re08)$weight))      # should be FALSE
-any(!is.finite(E(re08)$weight)) # should be FALSE
+any(is.na(E(re08)$weight))     
+any(!is.finite(E(re08)$weight)) 
 edge_list_r8 <- as_data_frame(re08, what = "edges")
 duplicated_rows_r8 <- duplicated(edge_list_r8[, c("from", "to")])
-any(duplicated_rows_r8)  # should be FALSE
+any(duplicated_rows_r8)  
 length(unique(V(re08)$name))
 re08 <- attify(re08, att2008)
 vertex_attr_names(re08)
@@ -484,17 +476,16 @@ write.csv(centrality_rf8, "../data/cleaned/network_metrics_reproducible2008.csv"
 ```{r}
 y9 <- "X2009"   
 r_y9 <- r[, c("iso_o", "iso_d", y9)]
-# Filter out edges with zero trade
 r_y9 <- subset(r_y9, r_y9[[y9]] > 0)
 att2009 <- read.csv("../data/cleaned/attribute2009.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re09 <- graph_from_data_frame(d = r_y9, directed = TRUE)
 E(re09)$weight <- r_y9[[y9]]
 is_directed(re09) 
 length(E(re09)) == length(E(re09)$weight)
-length(unique(V(re09)$name)) == gorder(re09)  # should be TRUE
+length(unique(V(re09)$name)) == gorder(re09)  
 is.character(V(re09)$name) 
-any(is.na(E(re09)$weight))      # should be FALSE
-any(!is.finite(E(re09)$weight)) # should be FALSE
+any(is.na(E(re09)$weight))      
+any(!is.finite(E(re09)$weight))
 edge_list_r9 <- as_data_frame(re09, what = "edges")
 duplicated_rows_r9 <- duplicated(edge_list_r9[, c("from", "to")])
 any(duplicated_rows_r9)  # should be FALSE
@@ -531,20 +522,19 @@ write.csv(centrality_rf9, "../data/cleaned/network_metrics_reproducible2009.csv"
 ```{r}
 y10 <- "X2010"   
 r_y10 <- r[, c("iso_o", "iso_d", y10)]
-# Filter out edges with zero trade
 r_y10 <- subset(r_y10, r_y10[[y10]] > 0)
 att2010 <- read.csv("../data/cleaned/attribute2010.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re10 <- graph_from_data_frame(d = r_y10, directed = TRUE)
 E(re10)$weight <- r_y10[[y10]]
 is_directed(re10) 
 length(E(re10)) == length(E(re10)$weight)
-length(unique(V(re10)$name)) == gorder(re10)  # should be TRUE
+length(unique(V(re10)$name)) == gorder(re10) 
 is.character(V(re10)$name) 
-any(is.na(E(re10)$weight))      # should be FALSE
-any(!is.finite(E(re10)$weight)) # should be FALSE
+any(is.na(E(re10)$weight))      
+any(!is.finite(E(re10)$weight)) 
 edge_list_r10 <- as_data_frame(re10, what = "edges")
 duplicated_rows_r10 <- duplicated(edge_list_r10[, c("from", "to")])
-any(duplicated_rows_r10)  # should be FALSE
+any(duplicated_rows_r10)  
 length(unique(V(re10)$name))
 re10 <- attify(re10, att2010)
 vertex_attr_names(re10)
@@ -577,20 +567,19 @@ write.csv(centrality_rf10, "../data/cleaned/network_metrics_reproducible2010.csv
 ```{r}
 y11 <- "X2011"   
 r_y11 <- r[, c("iso_o", "iso_d", y11)]
-# Filter out edges with zero trade
 r_y11 <- subset(r_y11, r_y11[[y11]] > 0)
 att2011 <- read.csv("../data/cleaned/attribute2011.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re11 <- graph_from_data_frame(d = r_y11, directed = TRUE)
 E(re11)$weight <- r_y11[[y11]]
 is_directed(re11) 
 length(E(re11)) == length(E(re11)$weight)
-length(unique(V(re11)$name)) == gorder(re11)  # should be TRUE
+length(unique(V(re11)$name)) == gorder(re11)  
 is.character(V(re11)$name) 
-any(is.na(E(re11)$weight))      # should be FALSE
-any(!is.finite(E(re11)$weight)) # should be FALSE
+any(is.na(E(re11)$weight))      
+any(!is.finite(E(re11)$weight)) 
 edge_list_r11 <- as_data_frame(re11, what = "edges")
 duplicated_rows_r11 <- duplicated(edge_list_r11[, c("from", "to")])
-any(duplicated_rows_r11)  # should be FALSE
+any(duplicated_rows_r11)  
 length(unique(V(re11)$name))
 re11 <- attify(re11, att2011)
 vertex_attr_names(re11)
@@ -624,20 +613,19 @@ write.csv(centrality_rf11, "../data/cleaned/network_metrics_reproducible2011.csv
 ```{r}
 y12 <- "X2012"   
 r_y12 <- r[, c("iso_o", "iso_d", y12)]
-# Filter out edges with zero trade
 r_y12 <- subset(r_y12, r_y12[[y12]] > 0)
 att2012 <- read.csv("../data/cleaned/attribute2012.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re12 <- graph_from_data_frame(d = r_y12, directed = TRUE)
 E(re12)$weight <- r_y12[[y12]]
 is_directed(re12) 
 length(E(re12)) == length(E(re12)$weight)
-length(unique(V(re12)$name)) == gorder(re12)  # should be TRUE
+length(unique(V(re12)$name)) == gorder(re12)  
 is.character(V(re12)$name) 
-any(is.na(E(re12)$weight))      # should be FALSE
-any(!is.finite(E(re12)$weight)) # should be FALSE
+any(is.na(E(re12)$weight))      
+any(!is.finite(E(re12)$weight)) 
 edge_list_r12 <- as_data_frame(re12, what = "edges")
 duplicated_rows_r12 <- duplicated(edge_list_r12[, c("from", "to")])
-any(duplicated_rows_r12)  # should be FALSE
+any(duplicated_rows_r12)  
 length(unique(V(re12)$name))
 re12 <- attify(re12, att2012)
 vertex_attr_names(re12)
@@ -671,20 +659,19 @@ write.csv(centrality_rf12, "../data/cleaned/network_metrics_reproducible2012.csv
 ```{r}
 y13 <- "X2013"   
 r_y13 <- r[, c("iso_o", "iso_d", y13)]
-# Filter out edges with zero trade
 r_y13 <- subset(r_y13, r_y13[[y13]] > 0)
 att2013 <- read.csv("../data/cleaned/attribute2013.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re13 <- graph_from_data_frame(d = r_y13, directed = TRUE)
 E(re13)$weight <- r_y13[[y13]]
 is_directed(re13) 
 length(E(re13)) == length(E(re13)$weight)
-length(unique(V(re13)$name)) == gorder(re13)  # should be TRUE
+length(unique(V(re13)$name)) == gorder(re13)  
 is.character(V(re13)$name) 
-any(is.na(E(re13)$weight))      # should be FALSE
-any(!is.finite(E(re13)$weight)) # should be FALSE
+any(is.na(E(re13)$weight))      
+any(!is.finite(E(re13)$weight)) 
 edge_list_r13 <- as_data_frame(re13, what = "edges")
 duplicated_rows_r13 <- duplicated(edge_list_r13[, c("from", "to")])
-any(duplicated_rows_r13)  # should be FALSE
+any(duplicated_rows_r13)  
 length(unique(V(re13)$name))
 re13 <- attify(re13, att2013)
 vertex_attr_names(re13)
@@ -719,20 +706,19 @@ write.csv(centrality_rf13, "../data/cleaned/network_metrics_reproducible2013.csv
 ```{r}
 y14 <- "X2014"   
 r_y14 <- r[, c("iso_o", "iso_d", y14)]
-# Filter out edges with zero trade
 r_y14 <- subset(r_y14, r_y14[[y14]] > 0)
 att2014 <- read.csv("../data/cleaned/attribute2014.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re14 <- graph_from_data_frame(d = r_y14, directed = TRUE)
 E(re14)$weight <- r_y14[[y14]]
 is_directed(re14) 
 length(E(re14)) == length(E(re14)$weight)
-length(unique(V(re14)$name)) == gorder(re14)  # should be TRUE
+length(unique(V(re14)$name)) == gorder(re14)  
 is.character(V(re14)$name) 
-any(is.na(E(re14)$weight))      # should be FALSE
-any(!is.finite(E(re14)$weight)) # should be FALSE
+any(is.na(E(re14)$weight))     
+any(!is.finite(E(re14)$weight)) 
 edge_list_r14 <- as_data_frame(re14, what = "edges")
 duplicated_rows_r14 <- duplicated(edge_list_r14[, c("from", "to")])
-any(duplicated_rows_r14)  # should be FALSE
+any(duplicated_rows_r14) 
 length(unique(V(re14)$name))
 re14 <- attify(re14, att2014)
 vertex_attr_names(re14)
@@ -765,20 +751,19 @@ write.csv(centrality_rf14, "../data/cleaned/network_metrics_reproducible2014.csv
 ```{r}
 y15 <- "X2015"   
 r_y15 <- r[, c("iso_o", "iso_d", y15)]
-# Filter out edges with zero trade
 r_y15 <- subset(r_y15, r_y15[[y15]] > 0)
 att2015 <- read.csv("../data/cleaned/attribute2015.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re15 <- graph_from_data_frame(d = r_y15, directed = TRUE)
 E(re15)$weight <- r_y15[[y15]]
 is_directed(re15) 
 length(E(re15)) == length(E(re15)$weight)
-length(unique(V(re15)$name)) == gorder(re15)  # should be TRUE
+length(unique(V(re15)$name)) == gorder(re15)  
 is.character(V(re15)$name) 
-any(is.na(E(re15)$weight))      # should be FALSE
-any(!is.finite(E(re15)$weight)) # should be FALSE
+any(is.na(E(re15)$weight))      
+any(!is.finite(E(re15)$weight)) 
 edge_list_r15 <- as_data_frame(re15, what = "edges")
 duplicated_rows_r15 <- duplicated(edge_list_r15[, c("from", "to")])
-any(duplicated_rows_r15)  # should be FALSE
+any(duplicated_rows_r15)  
 length(unique(V(re15)$name))
 re15 <- attify(re15, att2015)
 vertex_attr_names(re15)
@@ -812,20 +797,19 @@ write.csv(centrality_rf15, "../data/cleaned/network_metrics_reproducible2015.csv
 ```{r}
 y16 <- "X2016"   
 r_y16 <- r[, c("iso_o", "iso_d", y16)]
-# Filter out edges with zero trade
 r_y16 <- subset(r_y16, r_y16[[y16]] > 0)
 att2016 <- read.csv("../data/cleaned/attribute2016.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re16 <- graph_from_data_frame(d = r_y16, directed = TRUE)
 E(re16)$weight <- r_y16[[y16]]
 is_directed(re16) 
 length(E(re16)) == length(E(re16)$weight)
-length(unique(V(re16)$name)) == gorder(re16)  # should be TRUE
+length(unique(V(re16)$name)) == gorder(re16)  
 is.character(V(re16)$name) 
-any(is.na(E(re16)$weight))      # should be FALSE
-any(!is.finite(E(re16)$weight)) # should be FALSE
+any(is.na(E(re16)$weight))      
+any(!is.finite(E(re16)$weight)) 
 edge_list_r16 <- as_data_frame(re16, what = "edges")
 duplicated_rows_r16 <- duplicated(edge_list_r16[, c("from", "to")])
-any(duplicated_rows_r16)  # should be FALSE
+any(duplicated_rows_r16)  
 length(unique(V(re16)$name))
 re16 <- attify(re16, att2016)
 vertex_attr_names(re16)
@@ -858,20 +842,19 @@ write.csv(centrality_rf16, "../data/cleaned/network_metrics_reproducible2016.csv
 ```{r}
 y17 <- "X2017"   
 r_y17 <- r[, c("iso_o", "iso_d", y17)]
-# Filter out edges with zero trade
 r_y17 <- subset(r_y17, r_y17[[y17]] > 0)
 att2017 <- read.csv("../data/cleaned/attribute2017.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re17 <- graph_from_data_frame(d = r_y17, directed = TRUE)
 E(re17)$weight <- r_y17[[y17]]
 is_directed(re17) 
 length(E(re17)) == length(E(re17)$weight)
-length(unique(V(re17)$name)) == gorder(re17)  # should be TRUE
+length(unique(V(re17)$name)) == gorder(re17)  
 is.character(V(re17)$name) 
-any(is.na(E(re17)$weight))      # should be FALSE
-any(!is.finite(E(re17)$weight)) # should be FALSE
+any(is.na(E(re17)$weight))      
+any(!is.finite(E(re17)$weight)) 
 edge_list_r17 <- as_data_frame(re17, what = "edges")
 duplicated_rows_r17 <- duplicated(edge_list_r17[, c("from", "to")])
-any(duplicated_rows_r17)  # should be FALSE
+any(duplicated_rows_r17)  
 length(unique(V(re17)$name))
 re17 <- attify(re17, att2017)
 vertex_attr_names(re17)
@@ -905,20 +888,19 @@ write.csv(centrality_rf17, "../data/cleaned/network_metrics_reproducible2017.csv
 ```{r}
 y18 <- "X2018"   
 r_y18 <- r[, c("iso_o", "iso_d", y18)]
-# Filter out edges with zero trade
 r_y18 <- subset(r_y18, r_y18[[y18]] > 0)
 att2018 <- read.csv("../data/cleaned/attribute2018.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re18 <- graph_from_data_frame(d = r_y18, directed = TRUE)
 E(re18)$weight <- r_y18[[y18]]
 is_directed(re18) 
 length(E(re18)) == length(E(re18)$weight)
-length(unique(V(re18)$name)) == gorder(re18)  # should be TRUE
+length(unique(V(re18)$name)) == gorder(re18)  
 is.character(V(re18)$name) 
-any(is.na(E(re18)$weight))      # should be FALSE
-any(!is.finite(E(re18)$weight)) # should be FALSE
+any(is.na(E(re18)$weight))      
+any(!is.finite(E(re18)$weight)) 
 edge_list_r18 <- as_data_frame(re18, what = "edges")
 duplicated_rows_r18 <- duplicated(edge_list_r18[, c("from", "to")])
-any(duplicated_rows_r18)  # should be FALSE
+any(duplicated_rows_r18)  
 length(unique(V(re18)$name))
 re18 <- attify(re18, att2018)
 vertex_attr_names(re18)
@@ -952,20 +934,19 @@ write.csv(centrality_rf18, "../data/cleaned/network_metrics_reproducible2018.csv
 ```{r}
 y19 <- "X2019"   
 r_y19 <- r[, c("iso_o", "iso_d", y19)]
-# Filter out edges with zero trade
 r_y19 <- subset(r_y19, r_y19[[y19]] > 0)
 att2019 <- read.csv("../data/cleaned/attribute2019.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re19 <- graph_from_data_frame(d = r_y19, directed = TRUE)
 E(re19)$weight <- r_y19[[y19]]
 is_directed(re19) 
 length(E(re19)) == length(E(re19)$weight)
-length(unique(V(re19)$name)) == gorder(re19)  # should be TRUE
+length(unique(V(re19)$name)) == gorder(re19)  
 is.character(V(re19)$name) 
-any(is.na(E(re19)$weight))      # should be FALSE
-any(!is.finite(E(re19)$weight)) # should be FALSE
+any(is.na(E(re19)$weight))     
+any(!is.finite(E(re19)$weight)) 
 edge_list_r19 <- as_data_frame(re19, what = "edges")
 duplicated_rows_r19 <- duplicated(edge_list_r19[, c("from", "to")])
-any(duplicated_rows_r19)  # should be FALSE
+any(duplicated_rows_r19)  
 length(unique(V(re19)$name))
 re19 <- attify(re19, att2019)
 vertex_attr_names(re19)
@@ -999,20 +980,19 @@ write.csv(centrality_rf19, "../data/cleaned/network_metrics_reproducible2019.csv
 ```{r}
 y20 <- "X2020"   
 r_y20 <- r[, c("iso_o", "iso_d", y20)]
-# Filter out edges with zero trade
 r_y20 <- subset(r_y20, r_y20[[y20]] > 0)
 att2020 <- read.csv("../data/cleaned/attribute2020.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re20 <- graph_from_data_frame(d = r_y20, directed = TRUE)
 E(re20)$weight <- r_y20[[y20]]
 is_directed(re20) 
 length(E(re20)) == length(E(re20)$weight)
-length(unique(V(re20)$name)) == gorder(re20)  # should be TRUE
+length(unique(V(re20)$name)) == gorder(re20)  
 is.character(V(re20)$name) 
-any(is.na(E(re20)$weight))      # should be FALSE
-any(!is.finite(E(re20)$weight)) # should be FALSE
+any(is.na(E(re20)$weight))      
+any(!is.finite(E(re20)$weight))
 edge_list_r19 <- as_data_frame(re20, what = "edges")
 duplicated_rows_r19 <- duplicated(edge_list_r19[, c("from", "to")])
-any(duplicated_rows_r19)  # should be FALSE
+any(duplicated_rows_r19)  
 length(unique(V(re20)$name))
 re20 <- attify(re20, att2020)
 vertex_attr_names(re20)
@@ -1047,20 +1027,19 @@ write.csv(centrality_rf20, "../data/cleaned/network_metrics_reproducible2020.csv
 ```{r}
 y21 <- "X2021"   
 r_y21 <- r[, c("iso_o", "iso_d", y21)]
-# Filter out edges with zero trade
 r_y21 <- subset(r_y21, r_y21[[y21]] > 0)
 att2021 <- read.csv("../data/cleaned/attribute2021.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re21 <- graph_from_data_frame(d = r_y21, directed = TRUE)
 E(re21)$weight <- r_y21[[y21]]
 is_directed(re21) 
 length(E(re21)) == length(E(re21)$weight)
-length(unique(V(re21)$name)) == gorder(re21)  # should be TRUE
+length(unique(V(re21)$name)) == gorder(re21) 
 is.character(V(re21)$name) 
-any(is.na(E(re21)$weight))      # should be FALSE
-any(!is.finite(E(re21)$weight)) # should be FALSE
+any(is.na(E(re21)$weight))      
+any(!is.finite(E(re21)$weight)) 
 edge_list_r21 <- as_data_frame(re21, what = "edges")
 duplicated_rows_r21 <- duplicated(edge_list_r21[, c("from", "to")])
-any(duplicated_rows_r21)  # should be FALSE
+any(duplicated_rows_r21)  
 length(unique(V(re21)$name))
 re21 <- attify(re21, att2021)
 vertex_attr_names(re21)
@@ -1094,20 +1073,19 @@ write.csv(centrality_rf21, "../data/cleaned/network_metrics_reproducible2021.csv
 ```{r}
 y22 <- "X2022"   
 r_y22 <- r[, c("iso_o", "iso_d", y22)]
-# Filter out edges with zero trade
 r_y22 <- subset(r_y22, r_y22[[y22]] > 0)
 att2022 <- read.csv("../data/cleaned/attribute2022.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re22 <- graph_from_data_frame(d = r_y22, directed = TRUE)
 E(re22)$weight <- r_y22[[y22]]
 is_directed(re22) 
 length(E(re22)) == length(E(re22)$weight)
-length(unique(V(re22)$name)) == gorder(re22)  # should be TRUE
+length(unique(V(re22)$name)) == gorder(re22) 
 is.character(V(re22)$name) 
-any(is.na(E(re22)$weight))      # should be FALSE
-any(!is.finite(E(re22)$weight)) # should be FALSE
+any(is.na(E(re22)$weight))      
+any(!is.finite(E(re22)$weight)) 
 edge_list_r22 <- as_data_frame(re22, what = "edges")
 duplicated_rows_r22 <- duplicated(edge_list_r22[, c("from", "to")])
-any(duplicated_rows_r22)  # should be FALSE
+any(duplicated_rows_r22)  
 length(unique(V(re22)$name))
 re22 <- attify(re22, att2022)
 vertex_attr_names(re22)
@@ -1142,20 +1120,19 @@ write.csv(centrality_rf22, "../data/cleaned/network_metrics_reproducible2022.csv
 ```{r}
 y23 <- "X2023"   
 r_y23 <- r[, c("iso_o", "iso_d", y23)]
-# Filter out edges with zero trade
 r_y23 <- subset(r_y23, r_y23[[y23]] > 0)
 att2023 <- read.csv("../data/cleaned/attribute2023.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
 re23 <- graph_from_data_frame(d = r_y23, directed = TRUE)
 E(re23)$weight <- r_y23[[y23]]
 is_directed(re23) 
 length(E(re23)) == length(E(re23)$weight)
-length(unique(V(re23)$name)) == gorder(re23)  # should be TRUE
+length(unique(V(re23)$name)) == gorder(re23)  
 is.character(V(re23)$name) 
-any(is.na(E(re23)$weight))      # should be FALSE
-any(!is.finite(E(re23)$weight)) # should be FALSE
+any(is.na(E(re23)$weight))     
+any(!is.finite(E(re23)$weight)) 
 edge_list_r23 <- as_data_frame(re23, what = "edges")
 duplicated_rows_r23 <- duplicated(edge_list_r23[, c("from", "to")])
-any(duplicated_rows_r23)  # should be FALSE
+any(duplicated_rows_r23)  
 length(unique(V(re23)$name))
 re23 <- attify(re23, att2023)
 vertex_attr_names(re23)
