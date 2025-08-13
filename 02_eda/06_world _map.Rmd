@@ -16,6 +16,7 @@ library(rworldmap)
 library(dplyr)
 library(sf)
 library(tidyverse) 
+library(patchwork)
 ```
 
 # Getting the world map data with ISO# codes and extracting country boundaries with st_as_if() function
@@ -49,163 +50,113 @@ merged23 <- merge(world_map_sf, att2023, by.x= "id", by.y = "iso_o", all.x = TRU
 table(is.na(merged00$development))
 table(is.na(merged23$development))
 ```
-
+# Export
 ```{r}
-ggplot(data = merged_df) +
-  geom_sf(aes(fill = factor(development)), color = "black") +
-  scale_fill_manual(
-    values = c("1" = "brown", "0" = "lightblue"),
-    na.value = "white",
-    name = "Core-Periphery"
-  ) +
-  labs(
-    title = "Core-Periphery Visualization on World Service Trade Map"
-  ) +
-#  coord_sf(expand = FALSE) +
-  theme_minimal() +
-  theme(
-    legend.position = "right",
-  #  panel.grid.major = element_line(color = "gray80"),
-  #  axis.text = element_text(size = 10),
-  #  axis.title = element_text(size = 12)
-  )
-
-```
-# unique 2000 (outdegree)
-```{r}
-ggplot(data = merged00) +
+p1 <- ggplot(merged00) +
   geom_sf(aes(fill = outdegree_unique.degree)) +
-  scale_fill_continuous(
-    low = "white",
-    high = "#000080",
-    name = "Weighted outdegree centrality",
-    na.value = "white"
-  ) +
-  labs(
-    title = "Exporters on unique cultural products"
-  ) +
-#  coord_sf(expand = FALSE) +
-  theme_minimal() +
-  theme(
-    legend.position = "bottom",
-  #  panel.grid.major = element_line(color = "gray80"),
-  #  axis.text = element_text(size = 10),
-  #  axis.title = element_text(size = 12)
-  )
-```
-
-
-
-# unique 2023 (outdegree)
-```{r}
-ggplot(data = merged23) +
+  scale_fill_continuous(low = "white", high = "#000080", name = "WOC", na.value = "white") +
+  ggtitle("Export of unique cultural products 2000") + theme(plot.title = element_text(size = 10, face = "bold"))
+  
+p2 <- ggplot(merged23) +
   geom_sf(aes(fill = outdegree_unique.degree)) +
-  scale_fill_continuous(
-    low = "white",
-    high = "#000080",
-    name = "Weighted outdegree centrality",
-    na.value = "white"
-  ) +
-  labs(
-    title = "Exporters on unique cultural products"
-  ) +
-#  coord_sf(expand = FALSE) +
-  theme_minimal() +
-  theme(
-    legend.position = "bottom",
-  #  panel.grid.major = element_line(color = "gray80"),
-  #  axis.text = element_text(size = 10),
-  #  axis.title = element_text(size = 12)
-  )
-```
-# reprp 2000 (outdegree)
-```{r}
-ggplot(data = merged00) +
+  scale_fill_continuous(low = "white", high = "#000080", name = "WOC", na.value = "white") +
+  ggtitle("Export of unique cultural products 2023") + theme(plot.title = element_text(size = 10, face = "bold"))
+  
+p3 <- ggplot(merged00) +
   geom_sf(aes(fill = outdegree_repro.degree)) +
-  scale_fill_continuous(
-    low = "white",
-    high = "#4daf4a",
-    name = "Weighted outdegree centrality",
-    na.value = "white"
-  ) +
-  labs(
-    title = "Exporters on reproducible cultural products"
-  ) +
-#  coord_sf(expand = FALSE) +
-  theme_minimal() +
-  theme(
-    legend.position = "bottom")
-```
-# reprp 2023 (outdegree)
-```{r}
-ggplot(data = merged23) +
+  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WOC", na.value = "white") +
+  ggtitle("Export of reproducible cultural products 2000") + theme(plot.title = element_text(size = 10, face = "bold"))
+  
+p4 <- ggplot(merged23) +
   geom_sf(aes(fill = outdegree_repro.degree)) +
-  scale_fill_continuous(
-    low = "white",
-    high = "#4daf4a",
-    name = "Weighted outdegree centrality",
-    na.value = "white"
-  ) +
-  labs(
-    title = "Exporters on reproducible cultural products"
-  ) +
-#  coord_sf(expand = FALSE) +
-  theme_minimal() +
-  theme(
-    legend.position = "bottom")
+  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WOC", na.value = "white") +
+  ggtitle("Export of reproducible cultural products 2023") + theme(plot.title = element_text(size = 10, face = "bold"))
+  
+p5 <- ggplot(merged00) +
+  geom_sf(aes(fill = outdegree_total.degree)) +
+  scale_fill_gradient(low = "white", high = "#a65628", name = "WOC", na.value = "white") +
+  ggtitle("Export of non-cultural products 2000") + theme(plot.title = element_text(size = 10, face = "bold"))
+  
+p6 <- ggplot(merged23) +
+  geom_sf(aes(fill = outdegree_total.degree)) +
+  scale_fill_gradient(low = "white", high = "#a65628", name = "WOC", na.value = "white") +
+  ggtitle("Export of non-cultural products 2023") + theme(plot.title = element_text(size = 10, face = "bold"))
 ```
-
-
-# non-cultural product 2000 (outdegree)
 
 ```{r}
-ggplot(data = merged00) +
-  geom_sf(aes(fill = outdegree_total.degree)) +
-  scale_fill_continuous(
-    low = "white",
-    high = "#a65628",
-    name = "Weighted outdegree centrality",
-    na.value = "white"
-  ) +
-  labs(
-    title = "Exporters on reproducible cultural products"
-  ) +
-#  coord_sf(expand = FALSE) +
-  theme_minimal() +
+export <- (p1 | p2) / (p3 | p4) / (p5 | p6) +
+  plot_layout(guides = "collect", ncol = 1, heights = c(1, 1, 1)) &
   theme(
-    legend.position = "bottom")
+    plot.margin = margin(0, 1.5, 0, 1),
+    panel.spacing = unit(0, "lines"),
+    legend.key.size = unit(0.2, "cm"),
+    legend.text = element_text(size = 5),
+    legend.title = element_text(size = 7),
+    legend.position = "right")
+
 ```
 
-# non-cultural product 2023 (outdegree)
 ```{r}
-ggplot(data = merged23) +
-  geom_sf(aes(fill = outdegree_total.degree)) +
-  scale_fill_continuous(
-    low = "white",
-    high = "#a65628",
-    name = "Weighted outdegree centrality",
-    na.value = "white"
-  ) +
-  labs(
-    title = "Exporters on reproducible cultural products"
-  ) +
-#  coord_sf(expand = FALSE) +
-  theme_minimal() +
-  theme(
-    legend.position = "bottom")
+export
+```
+
+```{r}
+ggsave("../results/Fig2.tiff", plot = export, device = "tiff", width = 9, height = 9, dpi = 800, bg = "white")
 ```
 
 
+# Import
+```{r}
+q1 <- ggplot(merged00) +
+  geom_sf(aes(fill = indegree_unique.degree)) +
+  scale_fill_continuous(low = "white", high = "#000080", name = "WOC", na.value = "white") +
+  ggtitle("Import of unique cultural products 2000") + theme(plot.title = element_text(size = 10, face = "bold"))
+  
+q2 <- ggplot(merged23) +
+  geom_sf(aes(fill = indegree_unique.degree)) +
+  scale_fill_continuous(low = "white", high = "#000080", name = "WOC", na.value = "white") +
+  ggtitle("Import of unique cultural products 2023") + theme(plot.title = element_text(size = 10, face = "bold"))
+  
+q3 <- ggplot(merged00) +
+  geom_sf(aes(fill = indegree_repro.degree)) +
+  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WOC", na.value = "white") +
+  ggtitle("Import of reproducible cultural products 2000") + theme(plot.title = element_text(size = 10, face = "bold"))
+  
+q4 <- ggplot(merged23) +
+  geom_sf(aes(fill = indegree_repro.degree)) +
+  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WOC", na.value = "white") +
+  ggtitle("Import of reproducible cultural products 2023") + theme(plot.title = element_text(size = 10, face = "bold"))
+  
+q5 <- ggplot(merged00) +
+  geom_sf(aes(fill = indegree_total.degree)) +
+  scale_fill_gradient(low = "white", high = "#a65628", name = "WOC", na.value = "white") +
+  ggtitle("Import of non-cultural products 2000") + theme(plot.title = element_text(size = 10, face = "bold"))
+  
+q6 <- ggplot(merged23) +
+  geom_sf(aes(fill = indegree_total.degree)) +
+  scale_fill_gradient(low = "white", high = "#a65628", name = "WOC", na.value = "white") +
+  ggtitle("Inport of non-cultural products 2023") + theme(plot.title = element_text(size = 10, face = "bold"))
+```
 
+```{r}
+import <- (q1 | q2) / (q3 | q4) / (q5 | q6) +
+  plot_layout(guides = "collect", ncol = 1, heights = c(1, 1, 1)) &
+  theme(
+    plot.margin = margin(0, 1.5, 0, 1),
+    panel.spacing = unit(0, "lines"),
+    legend.key.size = unit(0.2, "cm"),
+    legend.text = element_text(size = 5),
+    legend.title = element_text(size = 7),
+    legend.position = "right")
+```
 
+```{r}
+import
+```
 
-
-
-
-
-
-
-
+```{r}
+ggsave("../results/Fig3.tiff", plot = import, device = "tiff", width = 9, height = 9, dpi = 800, bg = "white")
+```
 
 
 
