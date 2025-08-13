@@ -1,0 +1,218 @@
+---
+title: "world_map"
+author: "Author"
+date: "2025-08-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(ggplot2)
+library(rworldmap)
+library(dplyr)
+library(sf)
+library(tidyverse) 
+```
+
+# Getting the world map data with ISO# codes and extracting country boundaries with st_as_if() function
+```{r}
+att2000 <- read.csv("../data/cleaned/attribute2000.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+att2023 <- read.csv("../data/cleaned/attribute2023.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+world_map <- getMap(resolution = "low")
+world_map_sf <- st_as_sf(world_map)
+```
+
+```{r}
+colnames(world_map_sf)
+```
+
+#### Ensuring both dataframes have same ids to merge on and both column values are characters
+```{r}
+world_map_sf$id <- as.character(world_map_sf$ISO3)
+att2000$iso_o <- as.character(att2000$iso_o)
+att2023$iso_o <- as.character(att2023$iso_o)
+head(world_map_sf$id)
+head(att2000$iso_o)
+head(att2023$iso_o)
+```
+
+```{r}
+merged00 <- merge(world_map_sf, att2000, by.x= "id", by.y = "iso_o", all.x = TRUE)
+merged23 <- merge(world_map_sf, att2023, by.x= "id", by.y = "iso_o", all.x = TRUE)
+```
+
+```{r}
+table(is.na(merged00$development))
+table(is.na(merged23$development))
+```
+
+```{r}
+ggplot(data = merged_df) +
+  geom_sf(aes(fill = factor(development)), color = "black") +
+  scale_fill_manual(
+    values = c("1" = "brown", "0" = "lightblue"),
+    na.value = "white",
+    name = "Core-Periphery"
+  ) +
+  labs(
+    title = "Core-Periphery Visualization on World Service Trade Map"
+  ) +
+#  coord_sf(expand = FALSE) +
+  theme_minimal() +
+  theme(
+    legend.position = "right",
+  #  panel.grid.major = element_line(color = "gray80"),
+  #  axis.text = element_text(size = 10),
+  #  axis.title = element_text(size = 12)
+  )
+
+```
+# unique 2000 (outdegree)
+```{r}
+ggplot(data = merged00) +
+  geom_sf(aes(fill = outdegree_unique.degree)) +
+  scale_fill_continuous(
+    low = "white",
+    high = "#000080",
+    name = "Weighted outdegree centrality",
+    na.value = "white"
+  ) +
+  labs(
+    title = "Exporters on unique cultural products"
+  ) +
+#  coord_sf(expand = FALSE) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+  #  panel.grid.major = element_line(color = "gray80"),
+  #  axis.text = element_text(size = 10),
+  #  axis.title = element_text(size = 12)
+  )
+```
+
+
+
+# unique 2023 (outdegree)
+```{r}
+ggplot(data = merged23) +
+  geom_sf(aes(fill = outdegree_unique.degree)) +
+  scale_fill_continuous(
+    low = "white",
+    high = "#000080",
+    name = "Weighted outdegree centrality",
+    na.value = "white"
+  ) +
+  labs(
+    title = "Exporters on unique cultural products"
+  ) +
+#  coord_sf(expand = FALSE) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+  #  panel.grid.major = element_line(color = "gray80"),
+  #  axis.text = element_text(size = 10),
+  #  axis.title = element_text(size = 12)
+  )
+```
+# reprp 2000 (outdegree)
+```{r}
+ggplot(data = merged00) +
+  geom_sf(aes(fill = outdegree_repro.degree)) +
+  scale_fill_continuous(
+    low = "white",
+    high = "#4daf4a",
+    name = "Weighted outdegree centrality",
+    na.value = "white"
+  ) +
+  labs(
+    title = "Exporters on reproducible cultural products"
+  ) +
+#  coord_sf(expand = FALSE) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom")
+```
+# reprp 2023 (outdegree)
+```{r}
+ggplot(data = merged23) +
+  geom_sf(aes(fill = outdegree_repro.degree)) +
+  scale_fill_continuous(
+    low = "white",
+    high = "#4daf4a",
+    name = "Weighted outdegree centrality",
+    na.value = "white"
+  ) +
+  labs(
+    title = "Exporters on reproducible cultural products"
+  ) +
+#  coord_sf(expand = FALSE) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom")
+```
+
+
+# non-cultural product 2000 (outdegree)
+
+```{r}
+ggplot(data = merged00) +
+  geom_sf(aes(fill = outdegree_total.degree)) +
+  scale_fill_continuous(
+    low = "white",
+    high = "#a65628",
+    name = "Weighted outdegree centrality",
+    na.value = "white"
+  ) +
+  labs(
+    title = "Exporters on reproducible cultural products"
+  ) +
+#  coord_sf(expand = FALSE) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom")
+```
+
+# non-cultural product 2023 (outdegree)
+```{r}
+ggplot(data = merged23) +
+  geom_sf(aes(fill = outdegree_total.degree)) +
+  scale_fill_continuous(
+    low = "white",
+    high = "#a65628",
+    name = "Weighted outdegree centrality",
+    na.value = "white"
+  ) +
+  labs(
+    title = "Exporters on reproducible cultural products"
+  ) +
+#  coord_sf(expand = FALSE) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
