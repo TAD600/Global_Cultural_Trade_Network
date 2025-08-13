@@ -1,1 +1,2 @@
 Fig2.tiff filter=lfs diff=lfs merge=lfs -text
+Fig3.tiff filter=lfs diff=lfs merge=lfs -text
