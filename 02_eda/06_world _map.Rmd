@@ -54,33 +54,33 @@ table(is.na(merged23$development))
 ```{r}
 p1 <- ggplot(merged00) +
   geom_sf(aes(fill = outdegree_unique.degree)) +
-  scale_fill_continuous(low = "white", high = "#000080", name = "WOC", na.value = "white") +
-  ggtitle("Export of unique cultural products 2000") + theme(plot.title = element_text(size = 10, face = "bold"))
+  scale_fill_continuous(low = "white", high = "#000080", name = "WOC(unique) 2000", na.value = "white") +
+  ggtitle("Exporters of unique cultural products 2000") + theme(plot.title = element_text(size = 11, face = "bold"))
   
 p2 <- ggplot(merged23) +
   geom_sf(aes(fill = outdegree_unique.degree)) +
-  scale_fill_continuous(low = "white", high = "#000080", name = "WOC", na.value = "white") +
-  ggtitle("Export of unique cultural products 2023") + theme(plot.title = element_text(size = 10, face = "bold"))
+  scale_fill_continuous(low = "white", high = "#000080", name = "WOC(unique) 2020", na.value = "white") +
+  ggtitle("Exporters of unique cultural products 2023") + theme(plot.title = element_text(size = 11, face = "bold"))
   
 p3 <- ggplot(merged00) +
   geom_sf(aes(fill = outdegree_repro.degree)) +
-  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WOC", na.value = "white") +
-  ggtitle("Export of reproducible cultural products 2000") + theme(plot.title = element_text(size = 10, face = "bold"))
+  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WOC(reproducible) 2000", na.value = "white") +
+  ggtitle("Exporters of reproducible cultural products 2000") + theme(plot.title = element_text(size = 11, face = "bold"))
   
 p4 <- ggplot(merged23) +
   geom_sf(aes(fill = outdegree_repro.degree)) +
-  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WOC", na.value = "white") +
-  ggtitle("Export of reproducible cultural products 2023") + theme(plot.title = element_text(size = 10, face = "bold"))
+  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WOC(reproducible) 2020", na.value = "white") +
+  ggtitle("Exporters of reproducible cultural products 2023") + theme(plot.title = element_text(size = 11, face = "bold"))
   
 p5 <- ggplot(merged00) +
   geom_sf(aes(fill = outdegree_total.degree)) +
-  scale_fill_gradient(low = "white", high = "#a65628", name = "WOC", na.value = "white") +
-  ggtitle("Export of non-cultural products 2000") + theme(plot.title = element_text(size = 10, face = "bold"))
+  scale_fill_gradient(low = "white", high = "#a65628", name = "WOC(non-cultural) 2000", na.value = "white") +
+  ggtitle("Exporters of non-cultural products 2000") + theme(plot.title = element_text(size = 11, face = "bold"))
   
 p6 <- ggplot(merged23) +
   geom_sf(aes(fill = outdegree_total.degree)) +
-  scale_fill_gradient(low = "white", high = "#a65628", name = "WOC", na.value = "white") +
-  ggtitle("Export of non-cultural products 2023") + theme(plot.title = element_text(size = 10, face = "bold"))
+  scale_fill_gradient(low = "white", high = "#a65628", name = "WOC(non-cultural) 2020", na.value = "white") +
+  ggtitle("Exporters of non-cultural products 2023") + theme(plot.title = element_text(size = 11, face = "bold"))
 ```
 
 ```{r}
@@ -90,8 +90,8 @@ export <- (p1 | p2) / (p3 | p4) / (p5 | p6) +
     plot.margin = margin(0, 1.5, 0, 1),
     panel.spacing = unit(0, "lines"),
     legend.key.size = unit(0.2, "cm"),
-    legend.text = element_text(size = 5),
-    legend.title = element_text(size = 7),
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 8),
     legend.position = "right")
 
 ```
@@ -101,41 +101,42 @@ export
 ```
 
 ```{r}
-ggsave("../results/Fig2.tiff", plot = export, device = "tiff", width = 9, height = 9, dpi = 800, bg = "white")
+ggsave("../results/Fig2.tiff", plot = export, device = "tiff", width = 12, height = 9, dpi = 800, bg = "white")
 ```
+
 
 
 # Import
 ```{r}
 q1 <- ggplot(merged00) +
   geom_sf(aes(fill = indegree_unique.degree)) +
-  scale_fill_continuous(low = "white", high = "#000080", name = "WOC", na.value = "white") +
-  ggtitle("Import of unique cultural products 2000") + theme(plot.title = element_text(size = 10, face = "bold"))
+  scale_fill_continuous(low = "white", high = "#000080", name = "WIC(unique) 2000", na.value = "white") +
+  ggtitle("Importers of unique cultural products 2000") + theme(plot.title = element_text(size = 11, face = "bold"))
   
 q2 <- ggplot(merged23) +
   geom_sf(aes(fill = indegree_unique.degree)) +
-  scale_fill_continuous(low = "white", high = "#000080", name = "WOC", na.value = "white") +
-  ggtitle("Import of unique cultural products 2023") + theme(plot.title = element_text(size = 10, face = "bold"))
+  scale_fill_continuous(low = "white", high = "#000080", name = "WIC(unique) 2020", na.value = "white") +
+  ggtitle("Importers of unique cultural products 2023") + theme(plot.title = element_text(size = 11, face = "bold"))
   
 q3 <- ggplot(merged00) +
   geom_sf(aes(fill = indegree_repro.degree)) +
-  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WOC", na.value = "white") +
-  ggtitle("Import of reproducible cultural products 2000") + theme(plot.title = element_text(size = 10, face = "bold"))
+  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WIC(reproducible) 2000", na.value = "white") +
+  ggtitle("Importers of reproducible cultural products 2000") + theme(plot.title = element_text(size = 11, face = "bold"))
   
 q4 <- ggplot(merged23) +
   geom_sf(aes(fill = indegree_repro.degree)) +
-  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WOC", na.value = "white") +
-  ggtitle("Import of reproducible cultural products 2023") + theme(plot.title = element_text(size = 10, face = "bold"))
+  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WIC(reproducible) 2020", na.value = "white") +
+  ggtitle("Importers of reproducible cultural products 2023") + theme(plot.title = element_text(size = 11, face = "bold"))
   
 q5 <- ggplot(merged00) +
   geom_sf(aes(fill = indegree_total.degree)) +
-  scale_fill_gradient(low = "white", high = "#a65628", name = "WOC", na.value = "white") +
-  ggtitle("Import of non-cultural products 2000") + theme(plot.title = element_text(size = 10, face = "bold"))
+  scale_fill_gradient(low = "white", high = "#a65628", name = "WIC(non-cultural) 2000", na.value = "white") +
+  ggtitle("Importers of non-cultural products 2000") + theme(plot.title = element_text(size = 11, face = "bold"))
   
 q6 <- ggplot(merged23) +
   geom_sf(aes(fill = indegree_total.degree)) +
-  scale_fill_gradient(low = "white", high = "#a65628", name = "WOC", na.value = "white") +
-  ggtitle("Inport of non-cultural products 2023") + theme(plot.title = element_text(size = 10, face = "bold"))
+  scale_fill_gradient(low = "white", high = "#a65628", name = "WIC(non-cultural) 2020", na.value = "white") +
+  ggtitle("Inporters of non-cultural products 2023") + theme(plot.title = element_text(size = 11, face = "bold"))
 ```
 
 ```{r}
@@ -145,8 +146,8 @@ import <- (q1 | q2) / (q3 | q4) / (q5 | q6) +
     plot.margin = margin(0, 1.5, 0, 1),
     panel.spacing = unit(0, "lines"),
     legend.key.size = unit(0.2, "cm"),
-    legend.text = element_text(size = 5),
-    legend.title = element_text(size = 7),
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 8),
     legend.position = "right")
 ```
 
@@ -155,7 +156,7 @@ import
 ```
 
 ```{r}
-ggsave("../results/Fig3.tiff", plot = import, device = "tiff", width = 9, height = 9, dpi = 800, bg = "white")
+ggsave("../results/Fig3.tiff", plot = import, device = "tiff", width = 12, height = 9, dpi = 800, bg = "white")
 ```
 
 
