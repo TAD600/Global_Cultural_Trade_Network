@@ -731,8 +731,6 @@ class(net_dynamic_hyst_u)
 
 
 
-
-
 # Estimating STERGM
 Started: 28 July, 2025 at 8:19 PM
 Ended: 29 July, 2025 at 5AM (approximately)
@@ -772,7 +770,7 @@ Ended: 29 July, 2025 at 5AM (approximately)
 
 ```{r}
 #saveRDS(unique_stgm, "../results/unique_stgm1.rds")
-unique_stgm <- readRDS("../results/unique_stgm.rds")
+unique_stgm <- readRDS("../results/unique_stgm1.rds")
 ```
 
 
@@ -850,134 +848,4 @@ for (stat in selected_stats) {
 dev.off()
 
 ```
-
-
-## With Accumulated consumption
-
-Start: 2 August, at 11;06PM
-End: 3 August, at 11:57PM
-```{r}
-#Reference: https://www.rdocumentation.org/packages/ergm/versions/4.8.1/topics/edgecov-ergmTerm
-# set.seed(312)
-# 
-# unique_stgm_hyst <- tergm(list(net_un00, net_un01, net_un02, net_un03, net_un04, net_un05, net_un06, net_un07, net_un08, net_un09, net_un10, net_un11, net_un12, net_un13, net_un14, net_un15, net_un16, net_un17, net_un18, net_un19, net_un20, net_un21, net_un22, net_un23) ~ 
-#                                               Form(~nodecov("D_log_gdp_pct") 
-#                                                    + absdiff("D_log_gdp_pct")
-#                                                    + nodemix("development")
-#                                                    + edgecov(net_dynamic_hyst_u)
-#                                                    + edgecov(net_dynamic_rta)
-#                                                    + nodematch("landlocked")
-#                                                    + edgecov(dist_net, "log_dist")
-#                                                    + edgecov(contig_mat)
-#                                                    + edgecov(colony)
-#                                                    + edgecov(col_mat)
-#                                                    + edgecov(lang_mat)
-#                                                    + mutual) +
-#                                            Persist(~nodecov("D_log_gdp_pct") 
-#                                                    + absdiff("D_log_gdp_pct")
-#                                                    + nodemix("development")
-#                                                    + edgecov(net_dynamic_hyst_u)
-#                                                    + edgecov(net_dynamic_rta)
-#                                                    + nodematch("landlocked")
-#                                                    + edgecov(dist_net, "log_dist")
-#                                                    + edgecov(contig_mat)
-#                                                    + edgecov(colony)
-#                                                    + edgecov(col_mat)
-#                                                    + edgecov(lang_mat)
-#                                                    + mutual), 
-#                                                    estimate = "CMLE", times = c(1:24))
-```
-
-```{r}
-#saveRDS(unique_stgm_hyst, "../results/unique_stgm2.rds")
-unique_stgm_hyst <- readRDS("../results/unique_stgm2.rds")
-```
-
-```{r}
-print(summary(unique_stgm_hyst))
-```
-
-```{r}
-pvals_u_h <- summary(unique_stgm_hyst)$coefficients[, "Pr(>|z|)"]
-or_u_h <- exp(coef(unique_stgm_hyst))
-ste_h <- sqrt(diag(unique_stgm_hyst$covar))
-lci_h <- exp(coef(unique_stgm_hyst) - 1.96 * ste_h) 
-uci_h <- exp(coef(unique_stgm_hyst) + 1.96 * ste_h)  
-oddsratios_h <- cbind(coef(unique_stgm_hyst), round(lci_h, digits = 4), round(or_u_h, digits = 4), round(uci_h, digits = 4), pvals_u_h)
-dataframe_u_h =as.data.frame(oddsratios_h)
-dataframe_u_h$model_terms <- rownames(dataframe_u_h)
-rownames(dataframe_u_h) <- NULL
-colnames(dataframe_u_h) <- c('Estimate_u','lCI_u', 'OR_u','uCI_u', 'pvals_u', 'model_terms')
-```
-
-```{r}
-#write.csv(dataframe_u_h, "../results/unique_stgm2_results.csv")
-```
-
-```{r}
-dataframe_u_h
-```
-
-
-
-```{r}
-mcmc.diagnostics(unique_stgm_hyst)
-```
-Start: 12:12PM 5
-
-
-Start: 3 August at 9:08PM
-End: 3 August at 10:30PM
-```{r}
-#goftest_hyst <- gof(unique_stgm_hyst)
-#plot(goftest_hyst)
-#saveRDS(goftest_hyst, "../results/goftest_model2_u.rds")
-goftest_hyst <- readRDS("../results/goftest_model2_u.rds")
-```
-
-
-```{r}
-
-# selected_stats_2 <- c("odegree", "idegree", "espart", "distance")
-# 
-# for (stat in selected_stats_2) {
-#   cat("Trying to plot:", stat, "\n")
-#   tryCatch({
-#     plot(goftest_hyst, which = stat, main = paste("Model 2:", stat))
-#   }, error = function(e) {
-#     message("Error with stat:", stat)
-#     message(e$message)
-#   })
-# }
-# 
-
-```
-
-```{r}
-#class(goftest_hyst)
-#str(goftest_hyst$obs.odeg)
-```
-
-```{r}
-#Reference: https://www.datamentor.io/r-programming/saving-plot#:~:text=Save%20as%20tiff%20Image,filename%20%3D%20%22saving_plot3%22)%20.
-
-all_stats_2 <- c("odegree", "idegree", "espartners", "distance", "model")
-
-selected_stats_2 <- all_stats_2[2:5]
-
-
-tiff(file = "../results/goftest_model2_u.tiff",
-     width = 12, height = 3, units = "in", res = 100)
-
-par(mfrow = c(1, 4),
-    mar = c(5, 5, 5, 1),
-    oma = c(0.2, 1, 0.2, 1))
-
-for (stat in selected_stats_2) {
-  plot(goftest_hyst, which = stat, main = "Model 2", cex.lab = 1.5)
-}
-
-dev.off()
-```
-
 

@@ -662,11 +662,11 @@ End: 28 july, 2025 at 2:20PM
 
 ```{r}
 #summary(repro_stgm)
-#saveRDS(repro_stgm, "../results/reproducible_stgm3.rds")
+#saveRDS(repro_stgm, "../results/reproducible_stgm2.rds")
 ```
 
 ```{r}
-repro_stgm <- readRDS("../results/reproducible_stgm3.rds")
+repro_stgm <- readRDS("../results/reproducible_stgm2.rds")
 ```
 
 
@@ -685,7 +685,7 @@ colnames(dataframe_r1) <- c('Estimates_r','lCI_r', 'odds_r','uCI_r', 'pvals_r', 
 ```
 
 ```{r}
-#write.csv(dataframe_r1, "../results/reproducible_stgm3_results.csv")
+#write.csv(dataframe_r1, "../results/reproducible_stgm2_results.csv")
 ```
 
 
@@ -706,8 +706,8 @@ mcmc.diagnostics(repro_stgm)
 ```{r}
 # goftest_r <- gof(repro_stgm)
 # plot(goftest_r)
-# saveRDS(goftest_r, "../results/goftest_model3_r.rds")
-goftest_r <- readRDS("../results/goftest_model3_r.rds")
+# saveRDS(goftest_r, "../results/goftest_model2_r.rds")
+goftest_r <- readRDS("../results/goftest_model2_r.rds")
 ```
 
 
@@ -718,7 +718,7 @@ all_stats_3 <- c("odegree", "idegree", "espartners", "distance", "model")
 # 2 to 5
 selected_stats_3 <- all_stats_3[2:5]
 
-tiff(file = "../results/goftest_model3_r.tiff",
+tiff(file = "../results/goftest_model2_r.tiff",
      width = 12, height = 3, units = "in", res = 100)
 
 
@@ -728,116 +728,10 @@ par(mfrow = c(1, 4),
 
 
 for (stat in selected_stats_3) {
-  plot(goftest_r, which = stat, main = "Model 3", cex.lab = 1.5)
+  plot(goftest_r, which = stat, main = "Model 2", cex.lab = 1.5)
 }
 
 dev.off()
 
 ```
-
-## Hysteresis Effect
-Start: 31 July at 8:48PM
-End: 2 July 6:44AM
-```{r}
-# set.seed(312)
-# 
-# repro_stgm_hyst <- tergm(list(net_re00, net_re01, net_re02, net_re03, net_re04, net_re05, net_re06, net_re07, net_re08, net_re09, net_re10, net_re11, net_re12, net_re13, net_re14, net_re15, net_re16, net_re17, net_re18, net_re19, net_re20, net_re21, net_re22, net_re23)~  
-#                                               Form(~ nodecov("D_log_gdp_pct") 
-#                                                    + absdiff("D_log_gdp_pct")
-#                                                    + nodemix("development")
-#                                                    + edgecov(net_dynamic_hyst_r)
-#                                                    + edgecov(net_dynamic_rta)
-#                                                    + nodematch("landlocked")
-#                                                    + edgecov(dist_net, "log_dist")
-#                                                    + edgecov(contig_mat)
-#                                                    + edgecov(colony)
-#                                                    + edgecov(col_mat)
-#                                                    + edgecov(lang_mat)
-#                                                    + mutual) +
-#                                            Persist(~ nodecov("D_log_gdp_pct") 
-#                                                    + absdiff("D_log_gdp_pct")
-#                                                    + nodemix("development")
-#                                                    + edgecov(net_dynamic_hyst_r)
-#                                                    + edgecov(net_dynamic_rta)
-#                                                    + nodematch("landlocked")
-#                                                    + edgecov(dist_net, "log_dist")
-#                                                    + edgecov(contig_mat)
-#                                                    + edgecov(colony)
-#                                                    + edgecov(col_mat)
-#                                                    + edgecov(lang_mat)
-#                                                    + mutual), estimate = "CMLE", times = c(1:24))
-# 
-# summary(repro_stgm_hyst)
-```
-
-```{r}
-#saveRDS(repro_stgm_hyst, "../results/reproducible_stgm4.rds")
-repro_stgm_hyst <- readRDS("../results/reproducible_stgm4.rds")
-```
-
-```{r}
-or_r_h <- exp(coef(repro_stgm_hyst))
-pvals_r_h <- summary(repro_stgm_hyst)$coefficients[, "Pr(>|z|)"]
-ste_r_h <- sqrt(diag(repro_stgm_hyst$covar))
-lci_r_h <- exp(coef(repro_stgm_hyst) - 1.96 * ste_r_h) # the lower bound of the 95% confidence interval (see https://en.wikipedia.org/wiki/1.96)
-uci_r_h <- exp(coef(repro_stgm_hyst) + 1.96 * ste_r_h) # the upper bound of the 95% confidence interval (see https://en.wikipedia.org/wiki/1.96)
-
-oddsratios_r_h <- cbind(coef(repro_stgm_hyst), round(lci_r_h, digits = 4), round(or_r_h, digits = 4), round(uci_r_h, digits = 4), pvals_r_h)
-dataframe_r_h = as.data.frame(oddsratios_r_h)
-dataframe_r_h$model_terms <- rownames(dataframe_r_h)
-rownames(dataframe_r_h) <- NULL
-colnames(dataframe_r_h) <- c('Estimates_r_h','lCI_r_h', 'odds_r_h','uCI_r_h', 'pvals_r_h', 'model_terms_h')
-```
-
-```{r}
-#write.csv(dataframe_r_h, "../results/reproducible_stgm4_results.csv")
-```
-
-```{r}
-mcmc.diagnostics(repro_stgm_hyst)
-```
-
-Start: 2 August, 2005 at 7:18AM
-End: 2 August, 2005 almost 6 hours
-```{r}
-# goftest_r_hyst <- gof(repro_stgm_hyst) 
-# plot(goftest_r_hyst)
-# saveRDS(goftest_r_hyst, "../results/goftest_model4_r.rds")
-
-goftest_r_hyst <- readRDS("../results/goftest_model4_r.rds")
-```
-
-
-```{r}
-all_stats_4 <- c("odegree", "idegree", "espartners", "distance", "model")
-
-# 2 to 5
-selected_stats_4 <- all_stats_4[2:5]
-
-tiff(file = "../results/goftest_model4_r.tiff",
-     width = 12, height = 3, units = "in", res = 100)
-
-
-par(mfrow = c(1, 4),
-    mar = c(5, 5, 5, 1),
-    oma = c(0.2, 1, 0.2, 1))
-
-
-for (stat in selected_stats_4) {
-  plot(goftest_r_hyst, which = stat, main = "Model 4", cex.lab = 1.5)
-}
-
-dev.off()
-```
-
-
-
-
-
-
-
-
-
-
-
 
