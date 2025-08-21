@@ -1,0 +1,18 @@
+---
+title: "Exploratory Analysis"
+author: "Author"
+date: "2025-08-21"
+output: html_document
+---
+
+01_centrality_unique.Rmd: Calculates centrality of the unique cultural goods trade network for 24 years consecutively and saves the network metric files to `cleaned` sub-folder of data folder.
+
+02_centrality_reproducible.Rmd: Calculates centrality of the reproducible cultural goods trade network for 24 years consecutively and saves the network metric files to `cleaned` sub-folder of data folder.
+
+01_centrality_unique.Rmd: Calculates centrality of the non-cultural goods trade network for 24 years consecutively and saves the network metric files to `cleaned` sub-folder of data folder.
+
+04_line_plots.ipynb: Notebook producing figure 1. 
+
+05_data_pruning_&_summary_statistics.ipynb: Notebook for data pruning and measuring summary statistics. 
+
+06_world_map.Rmd: Producing Figure 2 and 3. 
