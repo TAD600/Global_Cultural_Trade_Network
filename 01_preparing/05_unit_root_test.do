@@ -1,4 +1,4 @@
-import delimited "C:\Users\Lenovo\Desktop\cultural goods trade\1st_paper\Global_Cultural_Trade_Network\data\cleaned\attributes2000_2023.csv"
+import delimited "D:\project2025\Cultural_trade_2025\Global_Cultural_Trade_Network\data\cleaned\attributes2000_2023.csv"
 
 // missing values in GDP per caita
 mdesc gdp gdp_pct population
@@ -31,4 +31,4 @@ xtunitroot ips population, trend lags(aic)
 **Log GDP and log GDP per capita are I(1)
 **Log population is I(0)
 
-export delimited using "C:\Users\Lenovo\Desktop\cultural goods trade\1st_paper\Global_Cultural_Trade_Network\data\cleaned\attributes2000_2023.csv", replace
+export delimited using "D:\project2025\Cultural_trade_2025\Global_Cultural_Trade_Network\data\cleaned\attributes2000_2023.csv", replace
