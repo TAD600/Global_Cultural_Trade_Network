@@ -13,6 +13,6 @@ output: html_document
 
 04_line_plots.ipynb: Notebook producing figure 1. 
 
-05_data_pruning_&_summary_statistics.ipynb: Notebook for data pruning and measuring summary statistics. 
+05_data_pruning_&_summary_statistics.ipynb: Notebook for data pruning and measuring summary statistics. It also generated edgelists for residuals calculated with hysteresis effects of unque, reproducible and non-cultural goods trade.
 
 06_world_map.Rmd: Producing Figure 2 and 3. 
