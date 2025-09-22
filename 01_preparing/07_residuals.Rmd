@@ -1,0 +1,76 @@
+---
+title: "Residuals"
+author: "Author"
+date: "2025-09-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# This file calculates residuals for unique, reproducible and non-cultural trade and adds the residuals as columns to the 'trade.csv' data file. 
+
+
+```{r}
+trade <- read.csv("../data/cleaned/trade.csv",stringsAsFactors = FALSE)
+```
+
+```{r}
+# Non- cultural trade
+residual_t <- resid(lm(as.numeric(trade$hysteresis_total) ~ as.numeric(trade$total_tr)))
+trade$residual_t <- residual_t
+# reproducible cultural trade
+residual_r <- resid(lm(as.numeric(trade$hysteresis_repro) ~ as.numeric(trade$reproducible_cultural_tr)))
+trade$residual_r <- residual_r
+# unique cultural trade
+residual_u <- resid(lm(as.numeric(trade$hysteresis_unique) ~ as.numeric(trade$unique_cultural_tr)))
+trade$residual_u <- residual_u
+```
+
+
+
+```{r}
+plot(density(trade$residual_u))
+plot(density(trade$residual_r))
+plot(density(trade$residual_t))
+```
+
+
+```{r}
+qqnorm(trade$residual_u)
+qqline(trade$residual_u) 
+```
+
+```{r}
+qqnorm(trade$residual_r)
+qqline(trade$residual_r) 
+```
+
+
+
+```{r}
+qqnorm(trade$residual_t)
+qqline(trade$residual_t) 
+```
+
+```{r}
+write.csv(trade, "../data/cleaned/trade.csv")
+```
+
+
+
+```{r}
+#model <- lm(hysteresis_total ~ total_tr, data = trade)
+#residuals_data <- resid(model)
+#head(residuals_data)
+#plot(density(residuals_data))
+
+#plot(fitted(model), residuals_data)
+#abline(0,0)
+
+#qqnorm( residuals_data)
+#qqline( residuals_data) 
+```
+
+
