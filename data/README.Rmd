@@ -37,6 +37,7 @@ Due to huge size of the datasets, I am not pushing those to github. The 'Prepari
 `nodal_fixed.csv`: This is cleaned dataset produced from geo_cepii data, which has node level time invariant factors like landlockedness, primary language, continent, longitude, latitue etc. 
 `fixed.csv`: This file is produced from above 2 files nestedly indexing on the country pairs and records all time invariants factors for both dyadic and nodal level. This will be used in the gravity equation estimation. 
 `rta_long.csv`: This is the dyad level RTA dataset in the long format.
+`trade.csv`: This long format trade data has three trade volume columns, three hysteresis columns and three residual columns for unique, reproducible and non-cultural trade. 
 
 `unique_edgelist.csv`: This is an edgelist created from `unique2000_2023.csv`.
 `reproducible_edgelist.csv`: This is an edgelist created from `reproducible2000_2023.csv`.
