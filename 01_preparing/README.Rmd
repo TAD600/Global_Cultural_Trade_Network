@@ -11,11 +11,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # This folder has the following notebooks. Each has codes to reproduce the data preparation process step-by-step and saves the cleaned data in the 'cleaned' subfolder within the 'data' folder. 
 
-`01_preparing_trade_data.ipynb`: Loads trade data from the OECD BIMTS bulk data files at 2 digit HS code level. Cleans and prepares data on total merchandise trade, unique cultural goods trade and reproducible cultural trade (books, cinema and tapes).
+`01_preparing_trade_data.ipynb`: Loads trade data from the OECD BIMTS bulk data files at 2 digit HS code level. Cleans and prepares data on non-cultural merchandise trade, unique cultural goods trade and reproducible cultural trade (books, cinema and tapes).
 
-`02_preparing_fixed_data.ipynb`: Preprocesses and cleans the raw data from cepii containing node level and dyad level fixed factors. Uses IMF data to add dummy variable `development` with the fixed factor data. 
+`02_preparing_fixed_data.ipynb`: Preprocesses and cleans the raw data from CEPII containing node level and dyad level fixed factors. Uses IMF data to add dummy variable `development` with the fixed factor data. 
 
-`03_preparing_edgelists_for_SNA.ipynb`: Prepares edgelists for unique and reproducible cultural products, non-cultural product trade and respective hysteresis effects
+`03_preparing_edgelists_for_SNA.ipynb`: Prepares edgelists for unique and reproducible cultural products, non-cultural product trade and respective hysteresis effects.
 Also, prepares edgelists for dyad level fixed variables distance, common language, colonizer, common colonizer, and contiguity. 
 Loads the Mario Larch's Regional Trade Agreements Database from here, `https://www.ewf.uni-bayreuth.de/en/research/RTA-data/index.html`
 It then prepares an edgelist for binary values of bilateral RTA over time. It produces total 11 edgelists.
@@ -24,11 +24,10 @@ It then prepares an edgelist for binary values of bilateral RTA over time. It pr
 
 `05_unit_root_test.do`: Stata do file that runs IPS tests and adds first differences values of non-stationary variables to `attributes2000_2023.csv` dataset.
 
-`06_preparing_panel_data_&_removing_countries.ipynb` : Loads all seven edgelists and the 'node attribute' data prepared in the previous notebook, finds out the countries those are not present in the attribute data and removes those from all edgelists and replaces the earlier instances of the edgelist csv files. 
+`06_preparing_panel_data_&_removing_countries.ipynb` : Loads all eleven edgelists and the 'node attribute' data prepared in the previous notebook, finds out the countries those are not present in the attribute data and removes those from all edgelists and replaces the earlier instances of the edgelist csv files. 
 
 Then it loads three long format trade datasets and the fixed dataset produced in the second notebook, merges all of these to produce a complete panel data for gravity model estimation. 
 Finally, it adds the lag values of time varying variables and development dummy to the attributeYEAR datasets. 
 
-`07_residuals.Rmd`: This R markdown file runs three linear regressions (regressing hysteresis effect on trade volume) to find out residuals and adds three residual columns to the `trade.csv` dataset. 
 
 
