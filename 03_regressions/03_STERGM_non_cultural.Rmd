@@ -20,9 +20,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 1. Loading `network`, `igraph`, `intergraph` and `reshape2` packages
 2. Making the distance network as a network object with edge weights as distances
-3. Making three adjacency matrices with binary values for common colonizer, common language, and contiguity
+3. Making four adjacency matrices with binary values for common colonizer, colonizer, common language, and contiguity
 4. Defining a function to add node attributes to the networks
-5. Loading the edgelist of total goods trade, and making 24 network objects for 24 consecutive years following the steps,     + Keeping only the pairs with positive weights
+5. Loading the edgelist of non-cultural goods trade, and making 24 network objects for 24 consecutive years following the steps,     
+    + Keeping only the pairs with positive weights
     + Subsetting the dataframe with only 'iso_o' and 'iso_d' column
     + Making an igraph object and assigning node attributes from the function created in the third step
     + Sanity checking (is the node names character objects, is the number of node names equal to the number of nodes, the  names of the node attributes etc.)
@@ -30,9 +31,11 @@ knitr::opts_chunk$set(echo = TRUE)
 6. Detaching the igraph package and loading `sna` and `tergm` packages
 7. Converting all 24 igraph objects to network objects
 8. Checking the node attributes for all of the networks
-9. Running STERGM 
-10. Calculating odds ratios, standard errors, and confidence intervals
-11. Plotting goodness of fit and MCMC statistics
+9. Making RTA adjacency matrices for all 24 years and converting it to a networkDynamic object. 
+10. Making Hysteresis adjacency matrices for all 24 years and converting it to a networkDynamic object.
+11. Running STERGM, calculating odds ratios, standard errors, and confidence intervals, and plotting goodness of fit and MCMC statistics
+12. Running STERGM with hysteresis effect, calculating odds ratios, standard errors, and confidence intervals, and plotting goodness of fit and MCMC statistics 
+
 
 ```{r}
 library(network)
@@ -565,107 +568,16 @@ library(networkDynamic)
 ```
 
 
-#Hysteresis Effect
-I am hashing the following chunk of codes that create a network dynamic object for hysteresis effect of total goods trade, which takes about `five` hours to run. For faster reproducibility, I have saved it in 'results' folder and am loading it from there in the following code block along with 'RTA' network dynamic object. 
-
-```{r}
-# hyst_total <- read.csv("../data/cleaned/edgelist_total_hyst.csv",stringsAsFactors = FALSE)
-# 
-# hyst_total_n0 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n0, "X2000", hyst_total$X2000)
-# 
-# hyst_total_n1 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n1, "X2001", hyst_total$X2001)
-# 
-# hyst_total_n2 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n2, "X2002", hyst_total$X2002)
-# 
-# hyst_total_n3 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n3, "X2003", hyst_total$X2003)
-# 
-# hyst_total_n4 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n4, "X2004", hyst_total$X2004)
-# 
-# hyst_total_n5 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n5, "X2005", hyst_total$X2005)
-# 
-# hyst_total_n6 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n6, "X2006", hyst_total$X2006)
-# 
-# hyst_total_n7 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n7, "X2007", hyst_total$X2007)
-# 
-# hyst_total_n8 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n8, "X2008", hyst_total$X2008)
-# 
-# hyst_total_n9 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n9, "X2009", hyst_total$X2009)
-# 
-# hyst_total_n10 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n10, "X2010", hyst_total$X2010)
-# 
-# hyst_total_n11 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n11, "X2011", hyst_total$X2011)
-# 
-# hyst_total_n12 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n12, "X2012", hyst_total$X2012)
-# 
-# hyst_total_n13 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n13, "X2013", hyst_total$X2013)
-# 
-# hyst_total_n14 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n14, "X2014", hyst_total$X2014)
-# 
-# hyst_total_n15 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n15, "X2015", hyst_total$X2015)
-# 
-# hyst_total_n16 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n16, "X2016", hyst_total$X2016)
-# 
-# hyst_total_n17 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n17, "X2017", hyst_total$X2017)
-# 
-# hyst_total_n18 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n18, "X2018", hyst_total$X2018)
-# 
-# hyst_total_n19 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n19, "X2019", hyst_total$X2019)
-# 
-# hyst_total_n20 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n20, "X2020", hyst_total$X2020)
-# 
-# hyst_total_n21 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n21, "X2021", hyst_total$X2021)
-# 
-# hyst_total_n22 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n22, "X2022", hyst_total$X2022)
-# 
-# hyst_total_n23 <- network(hyst_total[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_total_n23, "X2023", hyst_total$X2023)
-# 
-# #get.edge.value(hyst_total_n23, "X2023")
-# #class(hyst_total_n23)
-# 
-# net_dynamic_hyst_t <- networkDynamic(network.list = list(hyst_total_n0, hyst_total_n1, hyst_total_n2, hyst_total_n3, hyst_total_n4, hyst_total_n5, hyst_total_n6, hyst_total_n7, hyst_total_n8, hyst_total_n9, hyst_total_n10, hyst_total_n11, hyst_total_n12, hyst_total_n13, hyst_total_n14, hyst_total_n15, hyst_total_n16, hyst_total_n17, hyst_total_n18, hyst_total_n19, hyst_total_n20, hyst_total_n21, hyst_total_n22, hyst_total_n23),  verbose = TRUE)
-# 
-# class(net_dynamic_hyst_t)
-# 
-# saveRDS(net_dynamic_hyst_t, file = "../results/net_dynamic_hyst_t.rds")
-```
-
 ```{r}
 net_dynamic_rta <- readRDS("../results/net_dynamic_rta.rds")
-net_dynamic_hyst_t <- readRDS("../results/net_dynamic_hyst_t.rds")
 ```
-
-
-
 
 # Estimating STERGM
 25 July, 2025 
 Started at 03:00PM
 26 July 
 Ended at 11PM
+
 ```{r}
 #Reference: https://www.rdocumentation.org/packages/ergm/versions/4.8.1/topics/edgecov-ergmTerm
 # set.seed(321)
@@ -674,7 +586,6 @@ Ended at 11PM
 #                                        Form(~edges + nodecov("D_log_gdp_pct") 
 #                                                    + absdiff("D_log_gdp_pct")
 #                                                    + nodemix("development")
-#                                                  #  + edgecov(net_dynamic_hyst_t)
 #                                                    + edgecov(net_dynamic_rta)
 #                                                    + nodematch("landlocked")
 #                                                    + edgecov(dist_net, "log_dist")
@@ -708,15 +619,13 @@ Ended at 11PM
 total_stgm <- readRDS("../results/total_stgm3.rds")
 ```
 
-
-
 ```{r}
 pvals_t <- summary(total_stgm)$coefficients[, "Pr(>|z|)"]
 or_t <- exp(coef(total_stgm))
 ste2 <- sqrt(diag(total_stgm$covar))
 lci2 <- exp(coef(total_stgm) - 1.96 * ste2) # the lower bound of the 95% confidence interval (see https://en.wikipedia.org/wiki/1.96)
 uci2 <- exp(coef(total_stgm) + 1.96 * ste2) # the upper bound of the 95% confidence interval (see https://en.wikipedia.org/wiki/1.96)
-oddsratios2 <- cbind(round(coef(total_stgm)), round(lci2, digits = 4), round(or_t, digits = 4), round(uci2, digits = 4), pvals_t)
+oddsratios2 <- cbind(summary(total_stgm)$coefficients, round(lci2, digits = 4), round(or_t, digits = 4), round(uci2, digits = 4), pvals_t)
 dataframe_t1 = as.data.frame(oddsratios2)
 dataframe_t1$model_terms <- rownames(dataframe_t1)
 rownames(dataframe_t1) <- NULL
@@ -724,7 +633,7 @@ colnames(dataframe_t1) <- c('est_t','lci_t', 'odds_t','uci_t', 'pvals_t', 'model
 ```
 
 ```{r}
-#write.csv(dataframe_t1, "../results/total_stgm3_results.csv")
+write.csv(dataframe_t1, "../results/total_stgm3_results.csv")
 ```
 
 ```{r}
@@ -784,4 +693,14 @@ for (stat in selected_stats) {
 
 dev.off()
 ```
+
+
+
+
+
+
+
+
+
+
 

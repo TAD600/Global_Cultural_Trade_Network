@@ -14,12 +14,12 @@ knitr::opts_chunk$set(echo = TRUE)
 #pacman::p_unload(pacman::p_loaded(), character.only = TRUE) 
 ```
 # Steps of STERGM:
-
 1. Loading `network`, `igraph`, `intergraph` and `reshape2` packages
 2. Making the distance network as a network object with edge weights as distances
-3. Making three adjacency matrices with binary values for common colonizer, common language, and contiguity
+3. Making four adjacency matrices with binary values for common colonizer, colonizer, common language, and contiguity
 4. Defining a function to add node attributes to the networks
-5. Loading the edgelist of unique cultural goods, and making 24 network objects for 24 consecutive years following the steps,     + Keeping only the pairs with positive weights
+5. Loading the edgelist of unique cultural goods trade, and making 24 network objects for 24 consecutive years following the steps,     
+    + Keeping only the pairs with positive weights
     + Subsetting the dataframe with only 'iso_o' and 'iso_d' column
     + Making an igraph object and assigning node attributes from the function created in the third step
     + Sanity checking (is the node names character objects, is the number of node names equal to the number of nodes, the  names of the node attributes etc.)
@@ -27,9 +27,10 @@ knitr::opts_chunk$set(echo = TRUE)
 6. Detaching the igraph package and loading `sna` and `tergm` packages
 7. Converting all 24 igraph objects to network objects
 8. Checking the node attributes for all of the networks
-9. Running STERGM 
-10. Calculating odds ratios, standard errors, and confidence intervals
-11. Plotting goodness of fit and MCMC statistics
+9. Making RTA adjacency matrices for all 24 years and converting it to a networkDynamic object. 
+10. Making Hysteresis adjacency matrices for all 24 years and converting it to a networkDynamic object.
+11. Running STERGM, calculating odds ratios, standard errors, and confidence intervals, and plotting goodness of fit and MCMC statistics
+12. Running STERGM with hysteresis effect, calculating odds ratios, standard errors, and confidence intervals, and plotting goodness of fit and MCMC statistics 
 
 ```{r}
 library(network)
@@ -617,102 +618,15 @@ The following chunks of code creates network dynamic object for RTA over time wh
 #saveRDS(net_dynamic_rta, file = "../results/net_dynamic_rta.rds")
 ```
 
-#Hysteresis Effect
-I am hashing the following chunk of codes that create a network dynamic object for hysteresis effect of unique cultural goods trade, which takes more than an hour to run. For faster reproducibility, I have saved it in 'results' folder and am loading it from there in the following code block along with 'RTA' network dynamic object. 
-```{r}
-#hyst_unique <- read.csv("../data/cleaned/edgelist_unique_hyst.csv",stringsAsFactors = FALSE)
-
-#hyst_unique_n0 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n0, "X2000", hyst_unique$X2000)
-# 
-# #hyst_unique_n1 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n1, "X2001", hyst_unique$X2001)
-# 
-# #hyst_unique_n2 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n2, "X2002", hyst_unique$X2002)
-# 
-# #hyst_unique_n3 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n3, "X2003", hyst_unique$X2003)
-# 
-# #hyst_unique_n4 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n4, "X2004", hyst_unique$X2004)
-# 
-# #hyst_unique_n5 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n5, "X2005", hyst_unique$X2005)
-# 
-# #hyst_unique_n6 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n6, "X2006", hyst_unique$X2006)
-# 
-# #hyst_unique_n7 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n7, "X2007", hyst_unique$X2007)
-# 
-# #hyst_unique_n8 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n8, "X2008", hyst_unique$X2008)
-# 
-# #hyst_unique_n9 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n9, "X2009", hyst_unique$X2009)
-# 
-# #hyst_unique_n10 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n10, "X2010", hyst_unique$X2010)
-# 
-# #hyst_unique_n11 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n11, "X2011", hyst_unique$X2011)
-# 
-# #hyst_unique_n12 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n12, "X2012", hyst_unique$X2012)
-# 
-# hyst_unique_n13 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n13, "X2013", hyst_unique$X2013)
-# 
-# hyst_unique_n14 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n14, "X2014", hyst_unique$X2014)
-# 
-# hyst_unique_n15 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n15, "X2015", hyst_unique$X2015)
-# 
-# hyst_unique_n16 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n16, "X2016", hyst_unique$X2016)
-# 
-# hyst_unique_n17 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n17, "X2017", hyst_unique$X2017)
-# 
-# hyst_unique_n18 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n18, "X2018", hyst_unique$X2018)
-# 
-# hyst_unique_n19 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n19, "X2019", hyst_unique$X2019)
-# 
-# hyst_unique_n20 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n20, "X2020", hyst_unique$X2020)
-# 
-# hyst_unique_n21 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n21, "X2021", hyst_unique$X2021)
-# 
-# hyst_unique_n22 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n22, "X2022", hyst_unique$X2022)
-# 
-# hyst_unique_n23 <- network(hyst_unique[, c("iso_o", "iso_d")], directed = TRUE, matrix.type = "edgelist", loops = FALSE)
-# set.edge.value(hyst_unique_n23, "X2023", hyst_unique$X2023)
-# 
-# #get.edge.value(hyst_unique_n23, "X2023"))
-# class(hyst_unique_n23)
-
-#net_dynamic_hyst_u <- networkDynamic(network.list = list(hyst_unique_n0, hyst_unique_n1, hyst_unique_n2, hyst_unique_n3, hyst_unique_n4, hyst_unique_n5, hyst_unique_n6, hyst_unique_n7, hyst_unique_n8, hyst_unique_n9, hyst_unique_n10, hyst_unique_n11, hyst_unique_n12, hyst_unique_n13, hyst_unique_n14, hyst_unique_n15,hyst_unique_n16 ,hyst_unique_n17, hyst_unique_n18, hyst_unique_n19, hyst_unique_n20, hyst_unique_n21, hyst_unique_n22, hyst_unique_n23),  verbose = TRUE)
-
-#saveRDS(net_dynamic_hyst_u, file = "../results/net_dynamic_hyst_u.rds")
-
-```
 
 ```{r}
 net_dynamic_rta <- readRDS("../results/net_dynamic_rta.rds")
-net_dynamic_hyst_u <- readRDS("../results/net_dynamic_hyst_u.rds")
 ```
 
 
 ```{r}
-class(net_dynamic_hyst_u)
+class(net_dynamic_rta)
 ```
-
 
 
 ```{r}
@@ -721,13 +635,15 @@ class(net_dynamic_hyst_u)
 
 
 ```{r}
-#dim(rta0)
-#dim(colony)
-#network.size(nrta0)
-#network.size(net_un00)
-#network.size(dist_net)
-#network.size(colony)
+# dim(rta0)
+# dim(colony)
+# network.size(nrta0)
+# network.size(net_un00)
+# network.size(dist_net)
+# network.size(colony)
 ```
+
+
 
 
 
@@ -771,6 +687,9 @@ Ended: 29 July, 2025 at 5AM (approximately)
 ```{r}
 #saveRDS(unique_stgm, "../results/unique_stgm1.rds")
 unique_stgm <- readRDS("../results/unique_stgm1.rds")
+```
+```{r}
+summary(unique_stgm)
 ```
 
 
