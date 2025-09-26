@@ -11,4 +11,4 @@ output: html_document
 
 03_STERGM_non_cultural_goods.Rmd: Estimates STERGM model 3. 
 
-04_PPML.do: Stata do file to run the PPML regressions.
+04_PPML.Rmd: Estimates three different PPML regressions.

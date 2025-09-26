@@ -1,0 +1,105 @@
+---
+title: "PPML"
+author: "Author"
+date: "2025-06-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(fixest)
+library(tidyverse)
+library(dplyr)
+```
+
+
+```{r}
+panel <- read.csv("../data/cleaned/panel_complete.csv",stringsAsFactors = FALSE)
+```
+
+```{r}
+head(panel)
+```
+
+```{r}
+#panel$dyad_id <- paste(panel$iso_o, panel$iso_d, sep = "_")
+#write.csv(panel, "../data/cleaned/panel_complete.csv")
+```
+
+```{r}
+panel$landlock_matched <- ifelse(panel$landlocked == 1 & panel$landlocked_d == 1, 1, 0)
+                            
+```
+
+```{r}
+print(table(panel$landlock_matched))
+print(table(panel$landlocked))
+print(table(panel$landlocked_d))
+```
+```{r}
+panel$dev <- ifelse(panel$development == 0 & panel$development_d == 0, 1, 
+                    ifelse(panel$development == 1 & panel$development_d == 0, 2,
+                           ifelse(panel$development == 0 & panel$development_d == 1, 3,
+                                  ifelse(panel$development == 1 & panel$development_d == 1, 4,0))))
+```
+
+```{r}
+print(table(panel$dev))
+```
+
+# Unique
+```{r}
+u_panel = fepois(unique_cultural_tr ~ log_gdp_pct + log_gdp_pct_d + hysteresis_unique + rta + contig + comlang_off + colony + comcol+ log_dist + landlock_matched + as.factor(dev) | TIME_PERIOD, panel)
+```
+
+```{r}
+summary(u_panel, cluster = list(panel$dyad_id))
+```
+
+
+
+
+# Reproducible
+```{r}
+r_panel = fepois(reproducible_cultural_tr ~ log_gdp_pct + log_gdp_pct_d + hysteresis_repro + rta + contig + comlang_off + colony + comcol+ log_dist + landlock_matched + as.factor(dev) | TIME_PERIOD, panel)
+```
+
+```{r}
+summary(r_panel, cluster = list(panel$dyad_id))
+```
+
+# Total goods
+
+```{r}
+t_panel = fepois(total_tr ~ log_gdp_pct + log_gdp_pct_d + hysteresis_total + rta + contig + comlang_off + colony + comcol+ log_dist + landlock_matched +as.factor(dev) | TIME_PERIOD, panel)
+```
+
+```{r}
+summary(t_panel, cluster = list(panel$dyad_id))
+```
+
+```{r}
+# 
+# coefplot(u_panel,
+#          coefficients = c("hysteresis_unique", "log_gdp_pct", "log_gdp_pct_d", "log_dist", "contig", "comlang_off", "colony", "landlocked", "landlocked_d", "development", "development_d"),
+#          decreasing = TRUE,
+#          main = "Gravity Model Coefficients",
+#          xlab = "Coefficient Value",
+#          ylab = "Variables",
+#          col = "blue",
+#          ci.col = "red",
+#          ylim = c(-1, 2))
+```
+
+
+
+
+
+
+
+
+
+

@@ -13,7 +13,7 @@ flowchart TD
     F -->|runs STERGMs, PPML regressions|H[\results/]
     H -->|stores and displays results|I((End))
 ```
-I used Python packages ‘numpy’, ‘pandas’, and ‘matplotlib’ to prepare edge lists and to compute summary statistics. For calculating network centralities of weighted, directed networks, and for running STERGMs, I utilized the RStudio packages ‘igraph’, ‘wdnet’, 'network', 'intergraph', 'networkDynamic', 'sna' and ‘tergm’. Unit root testing, differencing of the non-stationary variables and PPML regressions were carried out in STATA version 18.5.
+I used Python packages ‘numpy’, ‘pandas’, and ‘matplotlib’ to prepare edge lists and to compute summary statistics. For calculating network centralities of weighted, directed networks, and for running STERGMs, I utilized the RStudio packages ‘igraph’, ‘wdnet’, 'network', 'intergraph', 'networkDynamic', 'sna', ‘tergm’ and 'fixest'. Only unit root testing, and differencing of the non-stationary variables  were carried out in STATA version 18.5.
 
 **Caveat:** 
 1. STERGM commands take almost and sometimes more than 36 hours per model. Besides, after a model completes running, the gof() function calculating goodness of fit of the model takes about 10 hours per model. Therefore, I saved the network dynamic objects from RTA, model results and goodness of fit stats as `rds` files in the results subfolder. However, reading those files require running all the codes in the STERGM files, which takes 30 seconds on average per file. I commented out all computationally expensive code chunks and included readRDS codes after each. Now, running this complete repository takes about 15 minutes. 
