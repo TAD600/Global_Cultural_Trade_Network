@@ -1,0 +1,170 @@
+---
+title: "world_map"
+author: "Author"
+date: "2025-08-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(ggplot2)
+library(rworldmap)
+library(dplyr)
+library(sf)
+library(tidyverse) 
+library(patchwork)
+```
+
+# Getting the world map data with ISO# codes and extracting country boundaries with st_as_if() function
+```{r}
+att2000 <- read.csv("../data/cleaned/attribute2000.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+att2023 <- read.csv("../data/cleaned/attribute2023.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+world_map <- getMap(resolution = "low")
+world_map_sf <- st_as_sf(world_map)
+```
+
+```{r}
+colnames(world_map_sf)
+```
+
+#### Ensuring both dataframes have same ids to merge on and both column values are characters
+```{r}
+world_map_sf$id <- as.character(world_map_sf$ISO3)
+att2000$iso_o <- as.character(att2000$iso_o)
+att2023$iso_o <- as.character(att2023$iso_o)
+head(world_map_sf$id)
+head(att2000$iso_o)
+head(att2023$iso_o)
+```
+
+```{r}
+merged00 <- merge(world_map_sf, att2000, by.x= "id", by.y = "iso_o", all.x = TRUE)
+merged23 <- merge(world_map_sf, att2023, by.x= "id", by.y = "iso_o", all.x = TRUE)
+```
+
+```{r}
+table(is.na(merged00$development))
+table(is.na(merged23$development))
+```
+# Export
+```{r}
+p1 <- ggplot(merged00) +
+  geom_sf(aes(fill = outdegree_unique.degree)) +
+  scale_fill_continuous(low = "white", high = "#000080", name = "WOC(unique) 2000", na.value = "white") +
+  ggtitle("Exporters of unique cultural products 2000") + theme(plot.title = element_text(size = 11, face = "bold"))
+  
+p2 <- ggplot(merged23) +
+  geom_sf(aes(fill = outdegree_unique.degree)) +
+  scale_fill_continuous(low = "white", high = "#000080", name = "WOC(unique) 2020", na.value = "white") +
+  ggtitle("Exporters of unique cultural products 2023") + theme(plot.title = element_text(size = 11, face = "bold"))
+  
+p3 <- ggplot(merged00) +
+  geom_sf(aes(fill = outdegree_repro.degree)) +
+  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WOC(reproducible) 2000", na.value = "white") +
+  ggtitle("Exporters of reproducible cultural products 2000") + theme(plot.title = element_text(size = 11, face = "bold"))
+  
+p4 <- ggplot(merged23) +
+  geom_sf(aes(fill = outdegree_repro.degree)) +
+  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WOC(reproducible) 2020", na.value = "white") +
+  ggtitle("Exporters of reproducible cultural products 2023") + theme(plot.title = element_text(size = 11, face = "bold"))
+  
+p5 <- ggplot(merged00) +
+  geom_sf(aes(fill = outdegree_total.degree)) +
+  scale_fill_gradient(low = "white", high = "#a65628", name = "WOC(non-cultural) 2000", na.value = "white") +
+  ggtitle("Exporters of non-cultural products 2000") + theme(plot.title = element_text(size = 11, face = "bold"))
+  
+p6 <- ggplot(merged23) +
+  geom_sf(aes(fill = outdegree_total.degree)) +
+  scale_fill_gradient(low = "white", high = "#a65628", name = "WOC(non-cultural) 2020", na.value = "white") +
+  ggtitle("Exporters of non-cultural products 2023") + theme(plot.title = element_text(size = 11, face = "bold"))
+```
+
+```{r}
+export <- (p1 | p2) / (p3 | p4) / (p5 | p6) +
+  plot_layout(guides = "collect", ncol = 1, heights = c(1, 1, 1)) &
+  theme(
+    plot.margin = margin(0, 1.5, 0, 1),
+    panel.spacing = unit(0, "lines"),
+    legend.key.size = unit(0.2, "cm"),
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 8),
+    legend.position = "right")
+
+```
+
+```{r}
+export
+```
+
+```{r}
+ggsave("../results/Fig2.tiff", plot = export, device = "tiff", width = 12, height = 9, dpi = 800, bg = "white")
+```
+
+
+
+# Import
+```{r}
+q1 <- ggplot(merged00) +
+  geom_sf(aes(fill = indegree_unique.degree)) +
+  scale_fill_continuous(low = "white", high = "#000080", name = "WIC(unique) 2000", na.value = "white") +
+  ggtitle("Importers of unique cultural products 2000") + theme(plot.title = element_text(size = 11, face = "bold"))
+  
+q2 <- ggplot(merged23) +
+  geom_sf(aes(fill = indegree_unique.degree)) +
+  scale_fill_continuous(low = "white", high = "#000080", name = "WIC(unique) 2020", na.value = "white") +
+  ggtitle("Importers of unique cultural products 2023") + theme(plot.title = element_text(size = 11, face = "bold"))
+  
+q3 <- ggplot(merged00) +
+  geom_sf(aes(fill = indegree_repro.degree)) +
+  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WIC(reproducible) 2000", na.value = "white") +
+  ggtitle("Importers of reproducible cultural products 2000") + theme(plot.title = element_text(size = 11, face = "bold"))
+  
+q4 <- ggplot(merged23) +
+  geom_sf(aes(fill = indegree_repro.degree)) +
+  scale_fill_gradient(low = "white", high = "#4daf4a", name = "WIC(reproducible) 2020", na.value = "white") +
+  ggtitle("Importers of reproducible cultural products 2023") + theme(plot.title = element_text(size = 11, face = "bold"))
+  
+q5 <- ggplot(merged00) +
+  geom_sf(aes(fill = indegree_total.degree)) +
+  scale_fill_gradient(low = "white", high = "#a65628", name = "WIC(non-cultural) 2000", na.value = "white") +
+  ggtitle("Importers of non-cultural products 2000") + theme(plot.title = element_text(size = 11, face = "bold"))
+  
+q6 <- ggplot(merged23) +
+  geom_sf(aes(fill = indegree_total.degree)) +
+  scale_fill_gradient(low = "white", high = "#a65628", name = "WIC(non-cultural) 2020", na.value = "white") +
+  ggtitle("Inporters of non-cultural products 2023") + theme(plot.title = element_text(size = 11, face = "bold"))
+```
+
+```{r}
+import <- (q1 | q2) / (q3 | q4) / (q5 | q6) +
+  plot_layout(guides = "collect", ncol = 1, heights = c(1, 1, 1)) &
+  theme(
+    plot.margin = margin(0, 1.5, 0, 1),
+    panel.spacing = unit(0, "lines"),
+    legend.key.size = unit(0.2, "cm"),
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 8),
+    legend.position = "right")
+```
+
+```{r}
+import
+```
+
+```{r}
+ggsave("../results/Fig3.tiff", plot = import, device = "tiff", width = 12, height = 9, dpi = 800, bg = "white")
+```
+
+
+
+
+
+
+
+
+
+

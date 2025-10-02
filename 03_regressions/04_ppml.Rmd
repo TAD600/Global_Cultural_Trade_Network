@@ -25,19 +25,17 @@ head(panel)
 ```
 
 ```{r}
+9.936972 - 5.164386
 #panel$dyad_id <- paste(panel$iso_o, panel$iso_d, sep = "_")
 #write.csv(panel, "../data/cleaned/panel_complete.csv")
 ```
 
 ```{r}
 panel$landlock_matched <- ifelse(panel$landlocked == 1 & panel$landlocked_d == 1, 1, 0)
-                            
 ```
 
 ```{r}
 print(table(panel$landlock_matched))
-print(table(panel$landlocked))
-print(table(panel$landlocked_d))
 ```
 ```{r}
 panel$dev <- ifelse(panel$development == 0 & panel$development_d == 0, 1, 
@@ -49,14 +47,43 @@ panel$dev <- ifelse(panel$development == 0 & panel$development_d == 0, 1,
 ```{r}
 print(table(panel$dev))
 ```
+```{r}
+panel$gdp_pct_sum <- panel$log_gdp_pct + panel$log_gdp_pct_d
+```
+
+```{r}
+panel$gdp_pct_abs <- abs(panel$log_gdp_pct - panel$log_gdp_pct_d)
+```
+
+```{r}
+# Non- cultural trade
+residual_t <- resid(lm(as.numeric(panel$hysteresis_total) ~ as.numeric(panel$total_tr)))
+panel$residual_t <- residual_t
+```
+
+```{r}
+# reproducible cultural trade
+residual_r <- resid(lm(as.numeric(panel$hysteresis_repro) ~ as.numeric(panel$reproducible_cultural_tr)))
+panel$residual_r <- residual_r
+# unique cultural trade
+residual_u <- resid(lm(as.numeric(panel$hysteresis_unique) ~ as.numeric(panel$unique_cultural_tr)))
+panel$residual_u <- residual_u
+```
+
+
 
 # Unique
 ```{r}
-u_panel = fepois(unique_cultural_tr ~ log_gdp_pct + log_gdp_pct_d + hysteresis_unique + rta + contig + comlang_off + colony + comcol+ log_dist + landlock_matched + as.factor(dev) | TIME_PERIOD, panel)
+u_panel = fepois(unique_cultural_tr ~ gdp_pct_sum + gdp_pct_abs + rta + contig + comlang_off + colony + comcol+ log_dist + landlock_matched + as.factor(dev) | TIME_PERIOD, panel)
 ```
 
 ```{r}
 summary(u_panel, cluster = list(panel$dyad_id))
+```
+
+```{r}
+u_panel2 = fepois(unique_cultural_tr ~ gdp_pct_sum + gdp_pct_abs + hysteresis_unique + rta + contig + comlang_off + colony + comcol+ log_dist + landlock_matched + as.factor(dev) | TIME_PERIOD, panel)
+summary(u_panel2, cluster = list(panel$dyad_id))
 ```
 
 
@@ -64,22 +91,32 @@ summary(u_panel, cluster = list(panel$dyad_id))
 
 # Reproducible
 ```{r}
-r_panel = fepois(reproducible_cultural_tr ~ log_gdp_pct + log_gdp_pct_d + hysteresis_repro + rta + contig + comlang_off + colony + comcol+ log_dist + landlock_matched + as.factor(dev) | TIME_PERIOD, panel)
-```
-
-```{r}
+r_panel = fepois(reproducible_cultural_tr ~ gdp_pct_sum + gdp_pct_abs + rta + contig + comlang_off + colony + comcol+ log_dist + landlock_matched + as.factor(dev) | TIME_PERIOD, panel)
 summary(r_panel, cluster = list(panel$dyad_id))
 ```
 
-# Total goods
-
 ```{r}
-t_panel = fepois(total_tr ~ log_gdp_pct + log_gdp_pct_d + hysteresis_total + rta + contig + comlang_off + colony + comcol+ log_dist + landlock_matched +as.factor(dev) | TIME_PERIOD, panel)
+r_panel2 = fepois(reproducible_cultural_tr ~ gdp_pct_sum + gdp_pct_abs + hysteresis_repro + rta + contig + comlang_off + colony + comcol+ log_dist + landlock_matched + as.factor(dev) | TIME_PERIOD, panel)
+summary(r_panel2, cluster = list(panel$dyad_id))
 ```
 
+
+
+# Non-cultural goods
+
 ```{r}
+t_panel = fepois(total_tr ~ gdp_pct_sum + gdp_pct_abs + rta + contig + comlang_off + colony + comcol+ log_dist + landlock_matched + as.factor(dev) | TIME_PERIOD, panel)
 summary(t_panel, cluster = list(panel$dyad_id))
 ```
+
+```{r}
+t_panel2 = fepois(total_tr ~ gdp_pct_sum + gdp_pct_abs + hysteresis_total +rta + contig + comlang_off + colony + comcol+ log_dist + landlock_matched + as.factor(dev) | TIME_PERIOD, panel)
+summary(t_panel2, cluster = list(panel$dyad_id))
+```
+
+
+
+
 
 ```{r}
 # 
@@ -93,13 +130,4 @@ summary(t_panel, cluster = list(panel$dyad_id))
 #          ci.col = "red",
 #          ylim = c(-1, 2))
 ```
-
-
-
-
-
-
-
-
-
 

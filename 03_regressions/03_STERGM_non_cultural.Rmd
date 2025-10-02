@@ -93,18 +93,13 @@ attify <- function(n_net, attr_df){
   V(n_net)$iso_o <- V(n_net)$name
   idx <- match(V(n_net)$name, attr_df$iso_o)
   V(n_net)$country <- attr_df$Country[idx]
-  V(n_net)$D_log_gdp <- attr_df$D_log_gdp[idx]
   V(n_net)$D_log_gdp_pct <- attr_df$D_log_gdp_pct[idx]
-  V(n_net)$log_population <- attr_df$log_population[idx]
-  V(n_net)$log_trade_gdp_ratio <- attr_df$log_trade_gdp_ratio[idx]
   V(n_net)$landlocked <- attr_df$landlocked[idx]
   V(n_net)$continent <- attr_df$continent[idx]
-  V(n_net)$lat <- attr_df$lat[idx]
-  V(n_net)$lon <- attr_df$lon[idx]
+  V(n_net)$continent <- attr_df$continent[idx]
   V(n_net)$development <- attr_df$development[idx]
-  
-  return(n_net)
-}
+  V(n_net)$langoff_1 <- attr_df$langoff_1[idx]
+  return(n_net)}
 
 tot00 <- attify(tot00, att2000)
 vertex_attr_names(tot00)
@@ -618,6 +613,13 @@ Ended at 11PM
 ```{r}
 total_stgm <- readRDS("../results/total_stgm3.rds")
 ```
+
+
+```{r}
+summary(total_stgm)
+```
+
+
 
 ```{r}
 pvals_t <- summary(total_stgm)$coefficients[, "Pr(>|z|)"]

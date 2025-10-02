@@ -90,18 +90,15 @@ attify <- function(n_net, attr_df){
   V(n_net)$iso_o <- V(n_net)$name
   idx <- match(V(n_net)$name, attr_df$iso_o)
   V(n_net)$country <- attr_df$Country[idx]
-  V(n_net)$D_log_gdp <- attr_df$D_log_gdp[idx]
   V(n_net)$D_log_gdp_pct <- attr_df$D_log_gdp_pct[idx]
-  V(n_net)$log_population <- attr_df$log_population[idx]
-  V(n_net)$log_trade_gdp_ratio <- attr_df$log_trade_gdp_ratio[idx]
   V(n_net)$landlocked <- attr_df$landlocked[idx]
   V(n_net)$continent <- attr_df$continent[idx]
-  V(n_net)$lat <- attr_df$lat[idx]
-  V(n_net)$lon <- attr_df$lon[idx]
+  V(n_net)$continent <- attr_df$continent[idx]
   V(n_net)$development <- attr_df$development[idx]
-  
+  V(n_net)$langoff_1 <- attr_df$langoff_1[idx]
   return(n_net)
 }
+
 
 re00 <- attify(re00, att2000)
 vertex_attr_names(re00)
@@ -580,17 +577,13 @@ End: 28 july, 2025 at 2:20PM
 ```{r}
 #summary(repro_stgm)
 #saveRDS(repro_stgm, "../results/reproducible_stgm2.rds")
-```
 
-```{r}
 repro_stgm <- readRDS("../results/reproducible_stgm2.rds")
 ```
 
 ```{r}
 summary(repro_stgm)
 ```
-
-
 
 
 ```{r}
@@ -624,16 +617,11 @@ AIC(repro_stgm)[1]
 BIC(repro_stgm)[1]
 ```
 
-
 ```{r}
-mcmc.diagnostics(repro_stgm)
-```
-
-```{r}
-# goftest_r <- gof(repro_stgm)
+#goftest_repro <- gof(repro_stgm)
 # plot(goftest_r)
-# saveRDS(goftest_r, "../results/goftest_model2_r.rds")
-goftest_r <- readRDS("../results/goftest_model2_r.rds")
+#saveRDS(goftest_repro, "../results/goftest_model2_r.rds")
+goftest_repro <- readRDS("../results/goftest_model2_r.rds")
 ```
 
 
@@ -654,7 +642,7 @@ par(mfrow = c(1, 4),
 
 
 for (stat in selected_stats_3) {
-  plot(goftest_r, which = stat, main = "Model 2", cex.lab = 1.5)
+  plot(goftest_repro, which = stat, main = "Model 2", cex.lab = 1.5)
 }
 
 dev.off()
