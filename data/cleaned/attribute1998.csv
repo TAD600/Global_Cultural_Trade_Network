@@ -1,0 +1,191 @@
+country,iso_o,year,gdp_pc,trade_ratio,log_gdp_pc,D_log_gdp_pc,landlocked,continent,lat,lon,langoff_1,colonizer1,category,development
+Aruba,ABW,1998,35271.91,163.27,10.470842,-0.0048828125,0,America,12.55,-70.099998,Dutch,NLD,Emerging and Developing Economies,0.0
+Afghanistan,AFG,1998,16869.145,71.250504,9.7332411,0.016026497,1,Asia,34.516666,69.199997,Persian,,Emerging and Developing Economies,0.0
+Angola,AGO,1998,6895.0298,71.250504,8.8385563,0.012376785,0,Africa,-8.833333,13.25,Portuguese,PRT,Emerging and Developing Economies,0.0
+Albania,ALB,1998,5387.5698,47.130001,8.5918493,0.086121559,0,Europe,41.333332,19.816668,Albanian,TUR,Emerging and Developing Economies,0.0
+Andorra,AND,1998,51092.219,71.250504,10.841388,0.020962715,0,Europe,42.5,1.5,Catalan,,Advanced Economies,1.0
+United Arab Emirates,ARE,1998,96088.492,71.250504,11.473024,-0.073263168,0,Asia,24.466667,54.416668,Arabic,GBR,Emerging and Developing Economies,0.0
+Argentina,ARG,1998,23783.1,23.35,10.076731,0.026023865,0,America,-34.666668,-58.5,Spanish,ESP,Emerging and Developing Economies,0.0
+Armenia,ARM,1998,4211.5098,71.839996,8.3455763,0.082197189,1,Asia,40.183334,44.5,Armenian,TUR,Emerging and Developing Economies,0.0
+Antigua and Barbuda,ATG,1998,23996.109,71.250504,10.085647,0.027280807,0,America,17.133333,-61.833332,English,GBR,Emerging and Developing Economies,0.0
+Australia,AUS,1998,42257.172,39.919998,10.651529,0.035739899,0,Pacific,-35.299999,149.133,English,GBR,Advanced Economies,1.0
+Austria,AUT,1998,50216.699,77.349998,10.824103,0.03323555,1,Europe,48.216667,16.366667,German,,Advanced Economies,1.0
+Azerbaijan,AZE,1998,4822.1602,77.230003,8.4809771,0.085818291,1,Asia,40.366665,49.883335,Azeri,RUS,Emerging and Developing Economies,0.0
+Burundi,BDI,1998,1101.22,71.250504,7.0041738,0.027302742,1,Africa,-3.3666666,29.316668,French,BEL,Emerging and Developing Economies,0.0
+Belgium,BEL,1998,47205.309,124.71,10.762261,0.017292976,0,Europe,50.833332,4.3499999,Dutch,,Advanced Economies,1.0
+Benin,BEN,1998,2419.1001,59.59,7.791151,0.008014679,0,Africa,6.5,2.7833333,French,FRA,Emerging and Developing Economies,0.0
+Burkina Faso,BFA,1998,1385.09,40.939999,7.2335205,0.042889595,1,Africa,12.333333,-1.6666666,French,FRA,Emerging and Developing Economies,0.0
+Bangladesh,BGD,1998,2555.0601,27.879999,7.8458309,0.031592846,0,Asia,23.700001,90.366669,Bengali,GBR,Emerging and Developing Economies,0.0
+Bulgaria,BGR,1998,12976.32,77.050003,9.4708815,0.04386425,0,Europe,42.666668,23.299999,Bulgarian,TUR,Emerging and Developing Economies,0.0
+Bahrain,BHR,1998,55638.691,113.0,10.926634,0.020442009,0,Asia,26.200001,50.633335,Arabic,GBR,Emerging and Developing Economies,0.0
+"Bahamas, The",BHS,1998,31836.529,77.730003,10.36837,0.031833649,0,America,25.083334,-77.333336,English,GBR,Emerging and Developing Economies,0.0
+Bosnia and Herzegovina,BIH,1998,6899.3301,125.67,8.83918,0.13617325,0,Europe,43.866665,18.433332,Serbo-Croatian,TUR,Emerging and Developing Economies,0.0
+Belarus,BLR,1998,10128.16,122.96,9.2230749,0.085162163,0,Europe,53.849998,27.5,Belarussian,RUS,Emerging and Developing Economies,0.0
+Belize,BLZ,1998,9894.5996,85.279999,9.1997442,0.0032730103,0,America,17.216667,-88.800003,English,GBR,Emerging and Developing Economies,0.0
+Bermuda,BMU,1998,88034.813,71.250504,11.385488,0.030611038,0,America,32.299999,-64.800003,English,GBR,,1.0
+Bolivia,BOL,1998,7534.52,52.279999,8.9272509,0.031414032,1,America,-16.5,-68.166664,Spanish,ESP,Emerging and Developing Economies,0.0
+Brazil,BRA,1998,13737.7,16.440001,9.5278988,-0.011502266,0,America,-15.78,-47.91,Portuguese,PRT,Emerging and Developing Economies,0.0
+Barbados,BRB,1998,20752.811,71.250504,9.9404373,0.036438942,0,America,13.1,-59.616665,English,GBR,Emerging and Developing Economies,0.0
+Brunei Darussalam,BRN,1998,97171.641,78.730003,11.484234,-0.091698647,0,Asia,4.9333334,114.96667,Malay,GBR,Emerging and Developing Economies,0.0
+Bhutan,BTN,1998,4965.8799,85.580002,8.5103455,0.038419724,1,Asia,27.533333,89.75,Burmese,,Emerging and Developing Economies,0.0
+Botswana,BWA,1998,12306.25,101.84,9.4178629,-0.017726898,1,Africa,-24.75,25.916666,English,GBR,Emerging and Developing Economies,0.0
+Central African Republic,CAF,1998,1302.75,51.049999,7.1722326,0.018797874,1,Africa,4.3833332,18.616667,French,FRA,Emerging and Developing Economies,0.0
+Canada,CAN,1998,44553.281,78.080002,10.704441,0.029891014,0,America,45.419998,-75.709999,English,GBR,Advanced Economies,1.0
+Switzerland,CHE,1998,64418.391,88.220001,11.073154,0.026878357,1,Europe,46.950001,7.4333334,German,,Advanced Economies,1.0
+Chile,CHL,1998,17156.971,53.84,9.7501602,0.027959824,0,America,-33.5,-70.666664,Spanish,ESP,Emerging and Developing Economies,0.0
+China,CHN,1998,3533.5701,32.169998,8.170064,0.066633224,0,Asia,39.916668,116.43333,Chinese,,Emerging and Developing Economies,0.0
+Cote d'Ivoire,CIV,1998,5093.1299,53.650002,8.5356474,0.0040388107,0,Africa,5.3166666,-4.0166669,French,FRA,Emerging and Developing Economies,0.0
+Cameroon,CMR,1998,3714.1299,42.290001,8.2199001,0.019691467,0,Africa,3.8499999,11.516666,French,FRA,Emerging and Developing Economies,0.0
+"Congo, Rep.",COG,1998,7711.6299,148.89999,8.9504852,0.014706612,0,Africa,-4.2333331,15.233334,French,FRA,Emerging and Developing Economies,0.0
+Colombia,COL,1998,11343.88,35.91,9.3364334,-0.012233734,0,America,4.6333332,-75.066666,Spanish,ESP,Emerging and Developing Economies,0.0
+Comoros,COM,1998,2918.1299,35.759998,7.9786983,-0.016972542,0,Africa,-11.666667,43.266666,Arabic,FRA,Emerging and Developing Economies,0.0
+Cabo Verde,CPV,1998,3657.3799,81.879997,8.2045021,0.1019249,0,Africa,14.916667,-23.5,Portuguese,PRT,Emerging and Developing Economies,0.0
+Costa Rica,CRI,1998,13481.06,92.040001,9.5090408,0.047430038,0,America,9.9833336,-84.066666,Spanish,ESP,Emerging and Developing Economies,0.0
+Cuba,CUB,1998,16869.145,32.5,9.7332411,0.016026497,0,America,23.116667,-82.416664,Spanish,ESP,,0.0
+Cyprus,CYP,1998,33182.121,134.91,10.409766,0.047052383,0,Europe,35.150002,33.349998,Greek,GBR,Advanced Economies,1.0
+Czechia,CZE,1998,27801.439,83.940002,10.232843,-0.0029916763,1,Europe,50.099998,14.433333,Czech,AUT,Advanced Economies,1.0
+Germany,DEU,1998,47565.449,50.16,10.769862,0.020587921,0,Europe,52.533001,13.417,German,,Advanced Economies,1.0
+Djibouti,DJI,1998,16869.145,71.250504,9.7332411,0.016026497,0,Africa,11.6,43.150002,French,FRA,Emerging and Developing Economies,0.0
+Dominica,DMA,1998,13563.45,71.250504,9.5151339,0.039575577,0,America,15.3,-61.383335,English,GBR,Emerging and Developing Economies,0.0
+Denmark,DNK,1998,54581.41,71.349998,10.907449,0.019365311,0,Europe,55.666668,12.583333,Danish,,Advanced Economies,1.0
+Dominican Republic,DOM,1998,10150.45,75.910004,9.2252731,0.048370361,0,America,18.5,-69.783333,Spanish,FRA,Emerging and Developing Economies,0.0
+Algeria,DZA,1998,11094.89,45.09,9.3142395,0.033816338,0,Africa,36.833332,3.0,Arabic,FRA,Emerging and Developing Economies,0.0
+Ecuador,ECU,1998,9876.75,43.400002,9.1979389,0.014017105,0,America,-0.23333333,-78.5,Spanish,ESP,Emerging and Developing Economies,0.0
+"Egypt, Arab Rep.",EGY,1998,9245.4805,41.93,9.1318903,0.032408714,0,Africa,30.049999,31.25,Arabic,GBR,Emerging and Developing Economies,0.0
+Eritrea,ERI,1998,16869.145,94.93,9.7332411,0.016026497,0,Africa,15.333333,38.883335,English,GBR,Emerging and Developing Economies,0.0
+Spain,ESP,1998,36679.09,52.73,10.509962,0.037981033,0,Europe,40.416668,-3.7166667,Spanish,,Advanced Economies,1.0
+Estonia,EST,1998,18873.381,156.84,9.8455076,0.052088737,0,Europe,59.416668,24.75,Estonian,RUS,Advanced Economies,1.0
+Ethiopia,ETH,1998,772.78998,71.250504,6.6500072,-0.066599846,1,Africa,9.0500002,38.833332,Amharic,,Emerging and Developing Economies,0.0
+Finland,FIN,1998,42733.449,66.989998,10.662737,0.050452232,0,Europe,60.133335,25.0,Swedish,RUS,Advanced Economies,1.0
+Fiji,FJI,1998,8673.8799,71.250504,9.0680714,0.00053405762,0,Pacific,-18.133333,178.41667,English,GBR,Emerging and Developing Economies,0.0
+France,FRA,1998,43162.539,51.419998,10.672729,0.030238152,0,Europe,48.866665,2.3333333,French,,Advanced Economies,1.0
+"Micronesia, Fed. Sts.",FSM,1998,3380.53,102.53,8.1257877,0.025219917,0,Pacific,6.9166665,158.25,English,ESP,Emerging and Developing Economies,0.0
+Gabon,GAB,1998,25585.51,95.970001,10.149781,0.0088663101,0,Africa,0.38333333,9.416667,French,FRA,Emerging and Developing Economies,0.0
+United Kingdom,GBR,1998,40347.18,49.139999,10.605277,0.029033661,0,Europe,51.5,-0.16666667,English,,Advanced Economies,1.0
+Georgia,GEO,1998,5233.29,53.57,8.5627956,0.055287361,0,Asia,41.716667,44.816666,Georgian,RUS,Emerging and Developing Economies,0.0
+Ghana,GHA,1998,3229.48,80.599998,8.0800762,0.021606445,0,Africa,5.5500002,-0.25,English,GBR,Emerging and Developing Economies,0.0
+Guinea,GIN,1998,2311.3301,33.060001,7.7455783,0.016982079,0,Africa,9.5166664,-15.716666,French,FRA,Emerging and Developing Economies,0.0
+"Gambia, The",GMB,1998,2502.76,53.869999,7.8251495,0.0063414574,0,Africa,13.466666,-16.65,English,GBR,Emerging and Developing Economies,0.0
+Guinea-Bissau,GNB,1998,1738.54,43.5,7.4608011,-0.27283001,0,Africa,11.866667,-15.65,Portuguese,PRT,Emerging and Developing Economies,0.0
+Equatorial Guinea,GNQ,1998,8684.6602,71.250504,9.069314,0.17421913,0,Africa,3.75,8.8000002,Spanish,ESP,Emerging and Developing Economies,0.0
+Greece,GRC,1998,29592.529,42.490002,10.295278,0.028250694,0,Europe,38.0,23.733334,Greek,TUR,Advanced Economies,1.0
+Grenada,GRD,1998,10509.11,71.250504,9.2599974,0.10434723,0,America,12.066667,-61.733334,English,GBR,Emerging and Developing Economies,0.0
+Greenland,GRL,1998,41500.23,71.250504,10.633454,0.072933197,0,America,64.183334,-51.733334,Greenlandic,DNK,,1.0
+Guatemala,GTM,1998,8559.9902,44.419998,9.0548544,0.023142815,0,America,14.633333,-90.51667,Spanish,ESP,Emerging and Developing Economies,0.0
+Guyana,GUY,1998,7915.23,203.84,8.9765444,-0.018691063,0,America,6.7666669,-58.166668,English,GBR,Emerging and Developing Economies,0.0
+"Hong Kong SAR, China",HKG,1998,36776.379,221.13,10.512611,-0.068975449,0,Asia,22.266666,114.15,English,GBR,Advanced Economies,1.0
+Honduras,HND,1998,3950.8301,122.7,8.2816811,0.083046913,0,America,14.083333,-87.23333,Spanish,ESP,Emerging and Developing Economies,0.0
+Croatia,HRV,1998,20575.971,64.980003,9.931879,0.022881508,0,Europe,45.799999,15.966666,Serbo-Croatian,AUT,Advanced Economies,1.0
+Haiti,HTI,1998,3272.05,36.52,8.0931721,0.0029354095,0,America,18.549999,-72.333336,French,,Emerging and Developing Economies,0.0
+Hungary,HUN,1998,20438.381,107.32,9.9251699,0.040085793,1,Europe,47.5,19.049999,Hungarian,,Emerging and Developing Economies,0.0
+Indonesia,IDN,1998,5897.6899,96.190002,8.6823158,-0.15652561,0,Asia,-6.1333332,106.75,Indonesian,NLD,Emerging and Developing Economies,0.0
+India,IND,1998,2847.96,23.700001,7.9543581,0.04064703,0,Asia,28.616667,77.216667,English,GBR,Emerging and Developing Economies,0.0
+Ireland,IRL,1998,45493.172,157.77,10.725318,0.073598862,0,Europe,53.333332,-6.25,English,GBR,Advanced Economies,1.0
+"Iran, Islamic Rep.",IRN,1998,11101.51,29.23,9.3148365,0.0068502426,0,Asia,35.666668,51.433334,Persian,,Emerging and Developing Economies,0.0
+Iraq,IRQ,1998,9871.7305,132.24001,9.1974306,0.26869392,0,Asia,33.333332,44.433334,Arabic,TUR,Emerging and Developing Economies,0.0
+Iceland,ISL,1998,46449.352,70.769997,10.746118,0.057047844,0,Europe,64.150002,-21.966667,Icelandic,DNK,Advanced Economies,1.0
+Israel,ISR,1998,31246.859,56.900002,10.349674,0.017428398,0,Asia,32.083332,34.766666,Hebrew,GBR,Advanced Economies,1.0
+Italy,ITA,1998,47701.398,45.0,10.772716,0.017594337,0,Europe,41.883335,12.5,Italian,,Advanced Economies,1.0
+Jamaica,JAM,1998,9624.9297,71.250504,9.1721115,-0.032176971,0,America,17.966667,-76.800003,English,GBR,Emerging and Developing Economies,0.0
+Jordan,JOR,1998,7826.7402,109.05,8.9653015,0.0065631866,0,Asia,31.950001,35.933334,Arabic,GBR,Emerging and Developing Economies,0.0
+Japan,JPN,1998,38217.199,19.0,10.551041,-0.015501976,0,Asia,35.666668,139.75,Japanese,,Advanced Economies,1.0
+Kazakhstan,KAZ,1998,11364.03,65.199997,9.3382082,0.0057754517,1,Asia,51.169998,71.470001,Kazakh,RUS,Emerging and Developing Economies,0.0
+Kenya,KEN,1998,3871.8201,48.900002,8.2614803,0.0047769547,0,Africa,-1.2833333,36.833332,English,GBR,Emerging and Developing Economies,0.0
+Kyrgyz Republic,KGZ,1998,3419.22,94.510002,8.1371679,0.0056581497,1,Asia,42.900002,74.599998,Kyrgyz,RUS,Emerging and Developing Economies,0.0
+Cambodia,KHM,1998,1602.38,75.620003,7.3792453,0.004509449,0,Asia,11.583333,104.91666,Khmer,FRA,Emerging and Developing Economies,0.0
+Kiribati,KIR,1998,2502.8601,85.010002,7.8251896,0.025678158,0,Pacific,1.3833333,173.14999,English,GBR,Emerging and Developing Economies,0.0
+St. Kitts and Nevis,KNA,1998,17963.699,71.250504,9.7961082,-0.017918587,0,America,17.283333,-62.716667,English,GBR,Emerging and Developing Economies,0.0
+"Korea, Rep.",KOR,1998,22000.34,66.330002,9.9988136,-0.057868958,0,Asia,37.5,127.0,Korean,JPN,Advanced Economies,1.0
+Kuwait,KWT,1998,62450.09,94.959999,11.042123,0.0047855377,0,Asia,29.333334,48.0,Arabic,GBR,Emerging and Developing Economies,0.0
+Lao PDR,LAO,1998,2642.5701,84.269997,7.8795071,0.020399094,1,Asia,17.983334,102.63333,Lao,FRA,Emerging and Developing Economies,0.0
+Lebanon,LBN,1998,11885.31,54.720001,9.3830585,0.018419266,0,Asia,33.866665,35.5,Arabic,FRA,Emerging and Developing Economies,0.0
+Liberia,LBR,1998,1308.41,71.250504,7.176568,0.16270638,0,Africa,6.3333335,-10.766666,English,FRA,Emerging and Developing Economies,0.0
+Libya,LBY,1998,17532.93,40.25,9.7718363,-0.051075935,0,Africa,32.733334,13.116667,Arabic,TUR,Emerging and Developing Economies,0.0
+St. Lucia,LCA,1998,18787.0,71.250504,9.8409204,0.047245979,0,America,14.016666,-60.983334,English,GBR,Emerging and Developing Economies,0.0
+Sri Lanka,LKA,1998,6032.6201,78.489998,8.704937,0.027033806,0,Asia,6.9166665,79.866669,Sinhala,GBR,Emerging and Developing Economies,0.0
+Lesotho,LSO,1998,1856.6899,71.250504,7.5265508,0.010280609,1,Africa,-29.316668,27.483334,English,GBR,Emerging and Developing Economies,0.0
+Lithuania,LTU,1998,15202.91,89.370003,9.6292419,0.079219818,0,Europe,54.683334,25.316668,Lithuanian,RUS,Advanced Economies,1.0
+Luxembourg,LUX,1998,101364.68,236.57001,11.52648,0.052173615,1,Europe,49.599998,6.1500001,French,NLD,Advanced Economies,1.0
+Latvia,LVA,1998,13138.4,93.050003,9.4832945,0.072873116,0,Europe,56.950001,24.1,Latvian,RUS,Advanced Economies,1.0
+"Macao SAR, China",MAC,1998,55296.5,124.89,10.920465,-0.058699608,0,Asia,22.27,113.56,Portuguese,PRT,Advanced Economies,1.0
+Morocco,MAR,1998,5033.9199,45.669998,8.5239544,0.054668427,0,Africa,34.033333,-6.8499999,Arabic,FRA,Emerging and Developing Economies,0.0
+Moldova,MDA,1998,5783.4902,116.8,8.6627626,-0.06725502,0,Europe,47.0,28.833334,Romanian,RUS,Emerging and Developing Economies,0.0
+Madagascar,MDG,1998,1658.89,37.330002,7.4139042,0.0057072639,0,Africa,-18.866667,47.5,French,FRA,Emerging and Developing Economies,0.0
+Maldives,MDV,1998,12884.72,71.250504,9.4637976,0.053707123,0,Asia,4.1666665,73.466667,Maldivian,GBR,Emerging and Developing Economies,0.0
+Mexico,MEX,1998,19573.07,48.029999,9.8819103,0.043621063,0,America,19.416666,-99.166664,Spanish,ESP,Emerging and Developing Economies,0.0
+Marshall Islands,MHL,1998,3805.8899,111.95,8.2443047,-0.016017914,0,Pacific,7.1500001,171.2,English,,Emerging and Developing Economies,0.0
+North Macedonia,MKD,1998,11092.87,76.589996,9.3140583,0.027907372,1,Europe,42.0,21.466667,Macedonian,TUR,Emerging and Developing Economies,0.0
+Mali,MLI,1998,2228.2,39.830002,7.7089496,0.039085388,1,Africa,12.666667,-7.9833331,French,FRA,Emerging and Developing Economies,0.0
+Malta,MLT,1998,25096.869,157.05,10.130498,0.043485641,0,Europe,35.900002,14.533334,English,GBR,Advanced Economies,1.0
+Myanmar,MMR,1998,1102.79,71.250504,7.0055985,0.044520378,0,Asia,16.783333,96.166664,Burmese,GBR,Emerging and Developing Economies,0.0
+Mongolia,MNG,1998,5735.8398,107.35,8.6544895,0.018960953,1,Asia,47.900002,106.86667,Mongolian,CHN,Emerging and Developing Economies,0.0
+Mozambique,MOZ,1998,660.65002,39.009998,6.4932241,0.07588768,0,Africa,-25.966667,32.583332,Portuguese,PRT,Emerging and Developing Economies,0.0
+Mauritania,MRT,1998,5310.1602,51.389999,8.5773773,0.0014677048,0,Africa,18.15,-15.966666,Arabic,FRA,Emerging and Developing Economies,0.0
+Mauritius,MUS,1998,12419.47,130.44,9.427021,0.048433304,0,Africa,-20.166666,57.5,English,GBR,Emerging and Developing Economies,0.0
+Malawi,MWI,1998,1241.52,71.250504,7.1240916,0.016592503,1,Africa,-13.966666,33.816666,English,GBR,Emerging and Developing Economies,0.0
+Malaysia,MYS,1998,16817.17,209.49001,9.7301559,-0.10100365,0,Asia,3.1333334,101.7,Malay,GBR,Emerging and Developing Economies,0.0
+Namibia,NAM,1998,7709.8901,92.129997,8.9502592,0.0069713593,0,Africa,-22.566668,17.1,English,DEU,Emerging and Developing Economies,0.0
+New Caledonia,NCL,1998,16869.145,51.720001,9.7332411,0.016026497,0,Pacific,-22.266666,166.45,French,FRA,,1.0
+Niger,NER,1998,1294.16,35.02,7.165617,0.061218262,1,Africa,13.533334,2.0833333,French,FRA,Emerging and Developing Economies,0.0
+Nigeria,NGA,1998,4880.8799,71.250504,8.4930811,-0.00064849854,0,Africa,6.4499998,3.4666667,English,GBR,Emerging and Developing Economies,0.0
+Nicaragua,NIC,1998,4502.6001,57.009998,8.4124107,0.021159172,0,America,12.1,-86.300003,Spanish,ESP,Emerging and Developing Economies,0.0
+Netherlands,NLD,1998,51879.379,112.41,10.856677,0.039263725,0,Europe,52.349998,4.9000001,Dutch,,Advanced Economies,1.0
+Norway,NOR,1998,74558.289,71.620003,11.219337,0.020382881,0,Europe,59.916668,10.75,Norwegian,,Advanced Economies,1.0
+Nepal,NPL,1998,2188.22,56.709999,7.6908436,0.010063171,1,Asia,27.700001,85.316666,Nepali,,Emerging and Developing Economies,0.0
+Nauru,NRU,1998,10133.68,71.250504,9.2236195,-0.12552547,0,Pacific,-0.53333336,166.91667,Nauruan,GBR,Emerging and Developing Economies,0.0
+New Zealand,NZL,1998,33469.25,57.900002,10.418383,-0.00032520294,0,Pacific,-44.283333,174.78334,English,GBR,Advanced Economies,1.0
+Oman,OMN,1998,40574.672,80.480003,10.610899,-0.015076637,0,Asia,23.616667,58.633335,Arabic,,Emerging and Developing Economies,0.0
+Pakistan,PAK,1998,3454.1799,34.009998,8.1473408,-0.0024280548,0,Asia,33.666668,73.133331,Urdu,GBR,Emerging and Developing Economies,0.0
+Panama,PAN,1998,13826.53,158.0,9.5343447,0.060572624,0,America,8.9499998,-79.5,Spanish,ESP,Emerging and Developing Economies,0.0
+Peru,PER,1998,7603.8101,32.950001,8.9364052,-0.022112846,0,America,-12.1,-77.050003,Spanish,ESP,Emerging and Developing Economies,0.0
+Philippines,PHL,1998,4616.6699,80.080002,8.4374285,-0.030303001,0,Asia,14.616667,120.96667,English,ESP,Emerging and Developing Economies,0.0
+Palau,PLW,1998,17358.279,71.250504,9.7618246,-0.0029115677,0,Pacific,7.3333335,134.48334,English,GBR,Emerging and Developing Economies,0.0
+Papua New Guinea,PNG,1998,3590.1001,102.86,8.185935,-0.073582649,0,Pacific,-9.5,147.11667,English,GBR,Emerging and Developing Economies,0.0
+Poland,POL,1998,16766.65,56.549999,9.7271471,0.044822693,0,Europe,52.25,21.0,Polish,DEU,Emerging and Developing Economies,0.0
+"Korea, Dem. People's Rep.",PRK,1998,16869.145,71.250504,9.7332411,0.016026497,0,Asia,39.0,125.78333,Korean,JPN,Advanced Economies,1.0
+Portugal,PRT,1998,32925.66,63.830002,10.402007,0.041905403,0,Europe,38.733334,-9.1333332,Portuguese,,Advanced Economies,1.0
+Paraguay,PRY,1998,10802.56,101.61,9.2875385,-0.021109581,1,America,-25.25,-57.666668,Spanish,ESP,Emerging and Developing Economies,0.0
+French Polynesia,PYF,1998,16869.145,31.75,9.7332411,0.016026497,0,Pacific,-17.533333,-149.56667,French,FRA,,1.0
+Qatar,QAT,1998,91901.07,91.059998,11.428468,0.053195953,0,Asia,25.25,51.533333,Arabic,GBR,Emerging and Developing Economies,0.0
+Russian Federation,RUS,1998,17052.76,55.77,9.7440672,-0.052801132,0,Asia,55.75,37.700001,Russian,,Emerging and Developing Economies,0.0
+Rwanda,RWA,1998,913.71997,28.790001,6.817524,0.043654442,1,Africa,-1.9333333,30.066668,French,BEL,Emerging and Developing Economies,0.0
+Saudi Arabia,SAU,1998,58306.621,56.09,10.973471,-0.0097103119,0,Asia,24.65,46.766666,Arabic,,Emerging and Developing Economies,0.0
+Sudan,SDN,1998,3441.1799,21.879999,8.1435699,0.017882347,0,Africa,15.55,32.533333,Arabic,GBR,Emerging and Developing Economies,0.0
+Senegal,SEN,1998,2938.6899,48.099998,7.9857192,0.033945084,0,Africa,14.633333,-17.450001,French,FRA,Emerging and Developing Economies,0.0
+Singapore,SGP,1998,60782.199,312.07999,11.015052,-0.056126595,0,Asia,1.2833333,103.85,English,GBR,Advanced Economies,1.0
+Solomon Islands,SLB,1998,2805.27,83.139999,7.9392552,-0.015229225,0,Pacific,-9.4666662,159.95,English,GBR,Emerging and Developing Economies,0.0
+Sierra Leone,SLE,1998,1951.8199,35.330002,7.5765176,0.0078492165,0,Africa,8.5,-13.283334,English,GBR,Emerging and Developing Economies,0.0
+El Salvador,SLV,1998,7381.1099,60.869999,8.9066792,0.020001411,0,America,13.666667,-89.166664,Spanish,ESP,Emerging and Developing Economies,0.0
+Sao Tome and Principe,STP,1998,3829.0,71.250504,8.2503586,0.011612892,0,Africa,0.2,6.7166667,Portuguese,PRT,Emerging and Developing Economies,0.0
+Suriname,SUR,1998,16789.75,71.250504,9.7285242,0.0021114349,0,America,5.8666668,-55.233334,Dutch,NLD,Emerging and Developing Economies,0.0
+Slovak Republic,SVK,1998,18280.051,101.91,9.8135653,0.036205292,1,Europe,48.166668,17.166666,Slovak,HUN,Advanced Economies,1.0
+Slovenia,SVN,1998,27688.09,97.07,10.228758,0.032360077,0,Europe,46.066666,14.5,Slovenian,AUT,Advanced Economies,1.0
+Sweden,SWE,1998,44392.84,74.330002,10.700833,0.041026115,0,Europe,59.333332,18.083334,Swedish,,Advanced Economies,1.0
+Eswatini,SWZ,1998,5952.8501,71.250504,8.6916256,0.012858391,1,Africa,-26.333334,31.133333,Swati,GBR,Emerging and Developing Economies,0.0
+Seychelles,SYC,1998,19991.23,78.970001,9.9030485,0.0048179626,0,Africa,-4.6333332,55.466667,English,GBR,Emerging and Developing Economies,0.0
+Syrian Arab Republic,SYR,1998,8456.7803,61.419998,9.0427237,0.03985405,0,Asia,33.5,36.316666,Arabic,FRA,Emerging and Developing Economies,0.0
+Chad,TCD,1998,1641.0601,48.060001,7.4030976,0.032804012,1,Africa,12.166667,14.983334,French,FRA,Emerging and Developing Economies,0.0
+Togo,TGO,1998,2247.3501,55.740002,7.7175069,-0.051618099,0,Africa,6.1666665,1.35,French,FRA,Emerging and Developing Economies,0.0
+Thailand,THA,1998,10897.15,100.24,9.296257,-0.092468262,0,Asia,13.733334,100.5,Thai,,Emerging and Developing Economies,0.0
+Tajikistan,TJK,1998,1236.6801,106.9,7.1201859,0.045832157,1,Asia,38.633335,68.849998,Tajik,RUS,Emerging and Developing Economies,0.0
+Turkmenistan,TKM,1998,4323.2998,96.32,8.3717747,0.05172348,1,Asia,37.950001,58.383335,Turkmen,RUS,Emerging and Developing Economies,0.0
+Tonga,TON,1998,5541.6802,78.290001,8.6200533,0.015598297,0,Pacific,-21.15,-175.23334,Tongan,GBR,Emerging and Developing Economies,0.0
+Trinidad and Tobago,TTO,1998,17129.09,71.250504,9.7485332,0.07475853,0,America,10.633333,-61.516666,English,GBR,Emerging and Developing Economies,0.0
+Tunisia,TUN,1998,8417.9805,79.980003,9.038125,0.034029007,0,Africa,36.833332,10.216666,Arabic,FRA,Emerging and Developing Economies,0.0
+Turkiye,TUR,1998,14704.34,40.380001,9.5958977,0.0049791336,0,Europe,39.93,32.849998,Turkish,,Emerging and Developing Economies,0.0
+Tuvalu,TUV,1998,3855.6499,71.250504,8.2572947,0.13869762,0,Pacific,-8.5,179.2,Tuvaluan,GBR,Emerging and Developing Economies,0.0
+Tanzania,TZA,1998,1773.72,26.139999,7.4808345,0.010154724,0,Africa,-6.1700001,35.740002,English,GBR,Emerging and Developing Economies,0.0
+Uganda,UGA,1998,1422.21,30.040001,7.2599673,0.018149853,1,Africa,0.33333334,32.583332,English,GBR,Emerging and Developing Economies,0.0
+Ukraine,UKR,1998,9646.0498,86.050003,9.174304,-0.011134148,0,Europe,50.416668,30.5,Ukrainian,RUS,Emerging and Developing Economies,0.0
+Uruguay,URY,1998,19577.789,35.639999,9.8821507,0.039265633,0,America,-34.916668,-56.166668,Spanish,ESP,Emerging and Developing Economies,0.0
+United States,USA,1998,51619.871,22.83,10.851662,0.032197952,0,America,38.867001,-77.0,English,GBR,Advanced Economies,1.0
+Uzbekistan,UZB,1998,3234.3601,45.419998,8.0815868,0.026400566,1,Asia,41.266666,69.216667,Uzbek,RUS,Emerging and Developing Economies,0.0
+St. Vincent and the Grenadines,VCT,1998,9609.0996,71.250504,9.1704655,0.03974247,0,America,13.2,-61.233334,English,GBR,Emerging and Developing Economies,0.0
+"Venezuela, RB",VEN,1998,16869.145,43.599998,9.7332411,0.016026497,0,America,10.583333,-66.933334,Spanish,ESP,Emerging and Developing Economies,0.0
+Viet Nam,VNM,1998,3982.96,97.0,8.2897806,0.041696548,0,Asia,21.016666,105.86667,Vietnamese,FRA,Emerging and Developing Economies,0.0
+Vanuatu,VUT,1998,3285.1399,94.739998,8.0971642,-0.0091934204,0,Pacific,-17.75,168.3,English,GBR,Emerging and Developing Economies,0.0
+Samoa,WSM,1998,4386.52,71.250504,8.3862915,0.014091492,0,Pacific,-13.8,171.75,Samoan,DEU,Emerging and Developing Economies,0.0
+"Yemen, Rep.",YEM,1998,16869.145,72.660004,9.7332411,0.016026497,0,Asia,15.4,44.233334,Arabic,GBR,Emerging and Developing Economies,0.0
+South Africa,ZAF,1998,10693.69,44.040001,9.2774096,-0.0071363449,0,Africa,-25.73,28.219999,English,GBR,Emerging and Developing Economies,0.0
+Zambia,ZMB,1998,2157.5701,56.25,7.6767378,-0.030082226,1,Africa,-15.466666,28.266666,English,GBR,Emerging and Developing Economies,0.0
+Zimbabwe,ZWE,1998,6582.3501,88.510002,8.7921467,0.0088949203,1,Africa,-17.833334,31.049999,English,GBR,Emerging and Developing Economies,0.0
