@@ -110,7 +110,7 @@ nets_network_r[["1995"]]
 ```
 
 ```{r}
-list.vertex.attributes(nets_network[["1995"]])
+#list.vertex.attributes(nets_network_r[["1995"]])
 ```
 
 
@@ -133,8 +133,8 @@ require(sna)
 
 
 # Estimating STERGM
-Start: 27 July, 2025 at 09:12AM
-End: 28 july, 2025 at 2:20PM
+Start: 11 May, 2026 at 03:28AM
+End: 11 May, 2026 at 2:20PM
 ```{r}
 #Reference: https://www.rdocumentation.org/packages/ergm/versions/4.8.1/topics/edgecov-ergmTerm
 
