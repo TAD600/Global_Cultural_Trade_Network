@@ -186,7 +186,7 @@ class(net_dynamic_rta)
 
 # Estimating STERGM
 Started: 10 May, 2026 at 2:00PM
-Ended: 29 July, 2025 at 5AM (approximately)
+Ended: 11 May, 2026 at 1AM (approximately)
 ```{r}
 #Reference: https://www.rdocumentation.org/packages/ergm/versions/4.8.1/topics/edgecov-ergmTerm
 set.seed(312)
@@ -265,15 +265,15 @@ AIC(unique_stgm)[1]
 BIC(unique_stgm)[1]
 ```
 
-
+Start: 1:29AM
 ```{r}
-#goftest_u <- gof(unique_stgm) 
+goftest_u <- gof(unique_stgm) 
 ```
 
 ```{r}
-#saveRDS(goftest_u, "../results/goftest_model1_u.rds")
-goftest_u <- readRDS("../results/goftest_model1_u.rds")
-#plot(goftest_u)
+saveRDS(goftest_u, "../results/goftest_model1_u.rds")
+#goftest_u <- readRDS("../results/goftest_model1_u.rds")
+plot(goftest_u)
 ```
 
 
@@ -293,4 +293,4 @@ dev.off()
 ```
 
 
-
+V(top)$deg <- strength(top, weights = E(top)$weight)
