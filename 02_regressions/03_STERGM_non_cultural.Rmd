@@ -1,0 +1,263 @@
+---
+title: "STERGM on non-cultural goods trade"
+author: "Author"
+date: "2025-06-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+** Before excecuting this file I will clear all objects from the workspace and unload all packages from the currect environment with the following codes.**`
+```{r}
+#Reference: https://www.r-bloggers.com/2024/03/unload-all-packages-in-r-best-practices/
+#install.packages("pacman")
+#pacman::p_unload(pacman::p_loaded(), character.only = TRUE) 
+```
+
+# Steps of STERGM:
+1. Loading `network`, `igraph`, `intergraph` and `reshape2` packages
+2. Making the distance network as a network object with edge weights as distances
+3. Making four adjacency matrices with binary values for common colonizer, colonizer, common language, and contiguity
+4. Defining a function to add node attributes to the networks
+5. Loading the edgelist of unique cultural goods trade, and making 29 network objects for 29 consecutive years following the steps,     
+    + Keeping only the pairs with positive weights
+    + Subsetting the dataframe with only 'iso_o' and 'iso_d' column
+    + Making an igraph object and assigning node attributes from the function created in the third step
+    + Making a function for repeating the above four steps for all the years.
+6. Converting all 24 igraph objects to network objects
+7. Checking the node attributes for all of the networks
+8. Making RTA adjacency matrices for all 29 years and converting it to a networkDynamic object. 
+10. Running STERGM, calculating odds ratios, standard errors, and confidence intervals, and plotting goodness of fit and MCMC statistics
+
+```{r}
+library(network)
+library(igraph)
+library(intergraph)
+library(reshape2)
+```
+
+```{r}
+lang <- read.csv("../data/cleaned/language_edgelist.csv",stringsAsFactors = FALSE)
+lang_mat <- acast(lang, iso_o ~ iso_d, value.var = "comlang_off", fill = 0)
+
+contiguity <- read.csv("../data/cleaned/contiguity_edgelist.csv",stringsAsFactors = FALSE)
+contig_mat <- acast(contiguity, iso_o ~ iso_d, value.var = "contig", fill = 0)
+
+common_col <- read.csv("../data/cleaned/comcol_edgelist.csv",stringsAsFactors = FALSE)
+col_mat <- acast(common_col, iso_o ~ iso_d, value.var = "comcol", fill = 0)
+
+colonizer <- read.csv("../data/cleaned/colonizer_edgelist.csv",stringsAsFactors = FALSE)
+colony <- acast(colonizer, iso_o ~ iso_d, value.var = "colony", fill = 0)
+
+dist_1 <- read.csv("../data/cleaned/distance_edgelist.csv",stringsAsFactors = FALSE)
+dist_net <- network(dist_1[, c("iso_o", "iso_d")], 
+                   directed = TRUE, 
+                   matrix.type = "edgelist", 
+                   loops = FALSE)
+
+set.edge.value(dist_net, "log_dist", dist_1$log_dist)
+```
+
+```{r}
+class(dist_net)
+```
+
+# Non-cultural Goods trade edgelist
+```{r}
+t <- read.csv("../data/cleaned/total_edgelist.csv", header = TRUE, as.is = TRUE, stringsAsFactors = FALSE)
+```
+
+```{r}
+attify <- function(net, attr_df){
+  V(net)$iso_o <- V(net)$name
+  idx <- match(V(net)$name, attr_df$iso_o)
+  V(net)$country <- attr_df$country[idx]
+  V(net)$D_log_gdp_pc <- attr_df$D_log_gdp_pc[idx]
+  V(net)$landlocked <- attr_df$landlocked[idx]
+  V(net)$continent <- attr_df$continent[idx]
+  V(net)$development <- attr_df$development[idx]
+  V(net)$langoff_1 <- attr_df$langoff_1[idx]
+  return(net)
+}
+```
+
+```{r}
+network_construction <- function(year, t, att_path = "../data/cleaned") {
+  y_col <- paste0("X", year)
+  edges <- t[, c("iso_o", "iso_d", y_col)]
+  edges <- subset(edges, edges[[y_col]] > 0)
+  edges <- edges[, c("iso_o", "iso_d")]
+  att <- read.csv(paste0(att_path, "/attribute", year, ".csv"),header = TRUE,as.is = TRUE,stringsAsFactors = FALSE)
+  att <- att[!duplicated(att$iso_o), ]
+  net <- graph_from_data_frame(d = edges,directed = TRUE,vertices = data.frame(name = att$iso_o))
+  net <- attify(net, att)
+  return(net)
+}
+
+nets <- lapply(1995:2023, network_construction, t = t)
+names(nets) <- 1995:2023
+
+# Converting into network object. 'nets' is the igraph object and 'nets_network' is the network object
+nets_network_t <- lapply(nets, intergraph::asNetwork)
+```
+
+```{r}
+detach(package:igraph)
+require(tergm)
+require(sna)
+```
+
+
+```{r}
+nets_network_t[["1995"]]
+```
+
+
+```{r}
+list.vertex.attributes(nets_network_t[["1995"]])
+```
+
+
+
+```{r}
+library(networkDynamic)
+```
+
+```{r}
+net_dynamic_rta <- readRDS("../results/net_dynamic_rta.rds")
+```
+
+# Estimating STERGM
+13 May, 2026 
+Started at 10:16AM
+13 May, 2026
+Ended at 11PM
+
+```{r}
+#Reference: https://www.rdocumentation.org/packages/ergm/versions/4.8.1/topics/edgecov-ergmTerm
+# set.seed(321)
+# 
+set.seed(312)
+total_stgm <- tergm(nets_network_t ~ Form(~ edges + nodecov("D_log_gdp_pc") 
+                                         + absdiff("D_log_gdp_pc") 
+                                         + nodemix("development")
+                                         + edgecov(net_dynamic_rta)
+                                         + nodematch("landlocked")
+                                         + edgecov(dist_net, "log_dist")
+                                         + edgecov(contig_mat)
+                                         + edgecov(colony)
+                                         + edgecov(col_mat)
+                                         + edgecov(lang_mat)
+                                         + mutual) +
+              Persist(~ edges + nodecov("D_log_gdp_pc")
+                                         + absdiff("D_log_gdp_pc")
+                                         + nodemix("development")
+                                         + edgecov(net_dynamic_rta)
+                                         + nodematch("landlocked")
+                                         + edgecov(dist_net, "log_dist")
+                                         + edgecov(contig_mat)
+                                         + edgecov(colony)
+                                         + edgecov(col_mat)
+                                         + edgecov(lang_mat)
+                                         + mutual), estimate = "CMLE", times = 1:30)
+```
+
+
+```{r}
+summary(total_stgm)
+
+saveRDS(total_stgm, "../results/total_stgm.rds")
+```
+
+```{r}
+total_stgm <- readRDS("../results/total_stgm.rds")
+```
+
+
+```{r}
+pvals_t <- summary(total_stgm)$coefficients[, "Pr(>|z|)"]
+or_t <- exp(coef(total_stgm))
+ste2 <- sqrt(diag(total_stgm$covar))
+lci2 <- exp(coef(total_stgm) - 1.96 * ste2) # the lower bound of the 95% confidence interval (see https://en.wikipedia.org/wiki/1.96)
+uci2 <- exp(coef(total_stgm) + 1.96 * ste2) # the upper bound of the 95% confidence interval (see https://en.wikipedia.org/wiki/1.96)
+oddsratios2 <- cbind(summary(total_stgm)$coefficients, round(lci2, digits = 4), round(or_t, digits = 4), round(uci2, digits = 4), pvals_t)
+dataframe_t1 = as.data.frame(oddsratios2)
+dataframe_t1$model_terms <- rownames(dataframe_t1)
+rownames(dataframe_t1) <- NULL
+colnames(dataframe_t1) <- c('est_t','lci_t', 'odds_t','uci_t', 'pvals_t', 'model_terms')
+```
+
+```{r}
+write.csv(dataframe_t1, "../results/total_stgm3_results.csv")
+```
+
+```{r}
+dataframe_t1
+```
+
+
+
+```{r}
+#colnames(oddsratios2) <- c("Lower","OR","Upper")
+#knitr::kable(oddsratios2)
+```
+
+```{r}
+#knitr::kable(coef(summary(total_stgm)))
+```
+
+
+## Goodness of fit statistics
+
+```{r}
+AIC(total_stgm)[1]
+BIC(total_stgm)[1]
+```
+
+
+```{r}
+mcmc.diagnostics(total_stgm)
+```
+
+# This code runs for 8 hours
+```{r}
+goftest_t <- gof(total_stgm) 
+plot(goftest_t)
+saveRDS(goftest_t, "../results/goftest_model3_t.rds")
+```
+
+```{r}
+goftest_t <- readRDS("../results/goftest_model3_t.rds")
+```
+
+
+```{r}
+all_stats <- c("odegree", "idegree", "espartners", "distance", "model")
+selected_stats <- all_stats[2:5]
+
+tiff(file = "../results/goftest_model3_t.tiff",
+     width = 12, height = 3, units = "in", res = 100)
+
+par(mfrow = c(1, 4),
+    mar = c(5, 5, 5, 1),
+    oma = c(0.2, 1, 0.2, 1))
+
+for (stat in selected_stats) {
+  plot(goftest_t, which = stat, main = "Model 3", cex.lab = 1.5)
+}
+
+dev.off()
+```
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,12 @@
+---
+title: "Exploratory Analysis"
+author: "Author"
+date: "2026-05-17"
+output: html_document
+---
+
+01_network_measures.Rmd: Calculates centrality and global network variables of for the networks of all three types of product category for 29 years consecutively and saves the network metric files to `cleaned` sub-folder of data folder.It also produces `Fig2.tiff` file and saves it in the 'results' folder.
+
+02_line_plots.ipynb: Generated a yearly time series data for network characteristics and plots `Fig3.tiff` and saves it in the 'results' folder. 
+
+03_coefficient_plots.Rmd: It uses the STERGM and PPML results and produces `Fig4.tiff` file and saves it in the 'results' folder.
