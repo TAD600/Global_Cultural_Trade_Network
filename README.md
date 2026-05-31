@@ -1,6 +1,4 @@
-# Global_Cultural_Trade_Network
-
-Reproduction of this project from this repository begins with `01_preparing` folder which takes data from the `raw` subfolder of the `data` folder, cleans, prepares and saves data in the 'cleaned' subfolder of the 'data' folder. Then `02_eda` folder conducts exploratory analysis, generates plots and adds network metric datasets to the `cleaned` subfolder of the `data` folder. `03_regressions` contains the STERGMs and PPML regressions, running those stores STERGM results, network dynamic objects, rds files, and goodness of fit plots in the folder `results`.
+Reproduction of the project `Product Reproducibility and Trade Patterns: Evidence from Cultural Goods` from this repository begins with `01_preparing` folder which takes data from the `raw` subfolder of the `data` folder, cleans, prepares and saves data in the 'cleaned' subfolder of the 'data' folder. Then `02_regressions` contains the STERGMs and PPML regressions, running those stores STERGM results and network dynamic objects as rds and csv files, and goodness of fit plots in the `results` folder. Finally, `03_eda` produces visualizations and saves in the `results`.
 
 ```mermaid
 flowchart TD
@@ -13,8 +11,7 @@ flowchart TD
     F -->|runs STERGMs, PPML regressions|H[\results/]
     H -->|stores and displays results|I((End))
 ```
-I used Python packages ‘numpy’, ‘pandas’, and ‘matplotlib’ to prepare edge lists and to compute summary statistics. For calculating network centralities of weighted, directed networks, and for running STERGMs, I utilized the RStudio packages ‘igraph’, ‘wdnet’, 'network', 'intergraph', 'networkDynamic', 'sna', ‘tergm’ and 'fixest'. Only unit root testing, and differencing of the non-stationary variables  were carried out in STATA version 18.5.
 
 **Caveat:** 
-1. STERGM commands take almost and sometimes more than 36 hours per model. Besides, after a model completes running, the gof() function calculating goodness of fit of the model takes about 10 hours per model. Therefore, I saved the network dynamic objects from RTA, model results and goodness of fit stats as `rds` files in the results subfolder. However, reading those files require running all the codes in the STERGM files, which takes 30 seconds on average per file. I commented out all computationally expensive code chunks and included readRDS codes after each. Now, running this complete repository takes about 15 minutes. 
+STERGM commands sometimes take more than 36 hours to run depending on the network density. Besides, after a model completes running, the gof() function calculating goodness of fit of the model takes about 5-8 hours per model. Therefore, I saved the network dynamic objects from RTA, model results and goodness of fit stats as `rds` files in the results subfolder. However, reading those files require running all the codes in the STERGM files, which takes 30 seconds on average per file. I commented out all computationally expensive code chunks and included readRDS codes after each. Now, running this complete repository takes about 15 minutes. 
 

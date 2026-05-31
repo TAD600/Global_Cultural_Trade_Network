@@ -216,8 +216,8 @@ unique_stgm <- tergm(nets_network ~ Form(~ edges + nodecov("D_log_gdp_pc")
 ```
 
 ```{r}
-saveRDS(unique_stgm, "../results/unique_stgm.rds")
-#unique_stgm <- readRDS("../results/unique_stgm.rds")
+#saveRDS(unique_stgm, "../results/unique_stgm.rds")
+unique_stgm <- readRDS("../results/unique_stgm.rds")
 ```
 
 ```{r}
@@ -240,7 +240,7 @@ oddsratios <- cbind(coef(unique_stgm), round(lci, digits = 4), round(or_u, digit
 dataframe_u1 =as.data.frame(oddsratios)
 dataframe_u1$model_terms <- rownames(dataframe_u1)
 rownames(dataframe_u1) <- NULL
-colnames(dataframe_u1) <- c('Estimate_u','lCI_u', 'OR_u','uCI_u', 'pvals_u', 'model_terms')
+colnames(dataframe_u1) <- c('est_u','lci_u', 'odds_u','uci_u', 'pvals_u', 'model_terms')
 ```
 
 
@@ -255,8 +255,6 @@ dataframe_u1
 ```{r}
 write.csv(dataframe_u1, "../results/unique_stgm1_results.csv")
 ```
-
-
 
 ```{r}
 AIC(unique_stgm)[1]

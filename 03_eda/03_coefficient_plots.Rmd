@@ -1,0 +1,198 @@
+---
+title: "Plots"
+author: "Author"
+date: "2026-05-13"
+output: html_document
+---
+```{r}
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(ggplot2)
+library(patchwork)
+```
+
+
+```{r}
+unique <- read.csv("../results/unique_stgm1_results.csv",stringsAsFactors = FALSE)
+repro <- read.csv("../results/reproducible_stgm2_results.csv",stringsAsFactors = FALSE)
+noncultural <- read.csv("../results/total_stgm3_results.csv",stringsAsFactors = FALSE)
+```
+
+```{r}
+dim(unique)
+dim(repro)
+colnames(unique)
+colnames(repro)
+colnames(noncultural)
+```
+```{r}
+merged <- merge(unique, repro, by = "model_terms", all = TRUE)
+```
+
+```{r}
+merged1 <- merge(merged, noncultural, by = "model_terms", all = TRUE)
+```
+
+
+```{r}
+write.csv(merged1, "../data/cleaned/stergm_results_data.csv")
+```
+
+# Plotting marginal effects
+```{r}
+colnames(merged1)
+merged1$model_terms
+```
+```{r}
+custom_order <- c(
+  "Baseline Density (Edges)",
+  "Reciprocity (Mutuality)",
+  "Absolute difference of Δlog GDP per capita",
+  "Sum of Δlog GDP per capita",
+  "Geographic distance (log)",
+  "Contiguity",
+  "Common language",
+  "Shares common colonizer",
+  "Shares colony-colonizer history",
+  "Regional Trade Agreement",
+  "Both Landlocked Status Match",
+  "Developing -> Advanced",
+  "Advanced -> Developing",
+  "Advanced -> Advanced"
+)
+```
+
+```{r}
+ #2. RESHAPE THE WIDE DATASET INTO LONG FORMAT
+long_data_clean <- merged1 %>%
+  # Select only the functional plotting columns
+  select(model_terms, odds_u, lci_u, uci_u, odds_r, lci_r, uci_r, odds_t, lci_t, uci_t) %>%
+  
+  # Pivot columns down so product type (_u vs _r) becomes a row grouping variable
+  pivot_longer(cols = -model_terms,
+    names_to = c(".value", "Product_Type"),
+    names_pattern = "(.*)_(u|r|t)") %>%
+  # Re-label columns with clean academic English
+  mutate(Product_Type = case_when(
+    Product_Type == "u" ~ "Unique Cultural Products",
+    Product_Type == "r" ~ "Reproducible Cultural Products",
+    Product_Type == "t" ~ "Non-Cultural Products"
+  )) %>%
+  
+  # Separate the STERGM structural process prefix (Form vs Persist)
+  separate(model_terms, into = c("Model_Type", "Raw_Variable"), sep = "\\(1\\)~") %>%
+  mutate(Model_Type = case_when(
+    Model_Type == "Form"    ~ "Tie Formation Sub-model",
+    Model_Type == "Persist" ~ "Tie Persistence Sub-model"
+  )) %>%
+  
+  # Clean up the variable names matching your custom labels
+  mutate(Clean_Variable = case_when(
+    Raw_Variable == "edges"                      ~ "Baseline Density (Edges)",
+    Raw_Variable == "mutual"                     ~ "Reciprocity (Mutuality)",
+    Raw_Variable == "absdiff.D_log_gdp_pc"       ~ "Absolute difference of Δlog GDP per capita",
+    Raw_Variable == "nodecov.D_log_gdp_pc"       ~ "Sum of Δlog GDP per capita",
+    Raw_Variable == "edgecov.log_dist"           ~ "Geographic distance (log)",
+    Raw_Variable == "edgecov.contig_mat"         ~ "Contiguity",
+    Raw_Variable == "edgecov.lang_mat"           ~ "Common language",
+    Raw_Variable == "edgecov.col_mat"            ~ "Shares common colonizer",
+    Raw_Variable == "edgecov.colony"             ~ "Shares colony-colonizer history",
+    Raw_Variable == "edgecov.net_dynamic_rta"    ~ "Regional Trade Agreement",
+    Raw_Variable == "nodematch.landlocked"       ~ "Both Landlocked Status Match",
+    Raw_Variable == "mix.development.0.1"        ~ "Developing -> Advanced",
+    Raw_Variable == "mix.development.1.0"        ~ "Advanced -> Developing",
+    Raw_Variable == "mix.development.1.1"        ~ "Advanced -> Advanced",
+    TRUE ~ Raw_Variable
+  )) %>%
+  
+  # Enforce your custom factor sequence
+  mutate(Clean_Variable = factor(Clean_Variable, levels = custom_order))
+
+# 3. DEFINE THE UNIFIED POSITION DODGE
+pd <- position_dodge(width = 0.55)
+
+figure3 <- ggplot(long_data_clean,
+  aes(x = odds,y = Clean_Variable,color = Product_Type,shape = Product_Type)) +
+  # Reference line at OR = 1
+  geom_vline(xintercept = 1,linetype = "dashed",color = "gray55",linewidth = 0.7) +
+  # Confidence intervals
+  geom_errorbarh(aes(xmin = lci, xmax = uci),height = 0,linewidth = 1,alpha = 0.9,position = pd) +
+  # Points
+  geom_point(size = 2.8,stroke = 0.6,position = pd) +
+  # Separate formation and persistence
+  facet_wrap(~ Model_Type,scales = "free_x") +
+#  coord_cartesian(xlim = c(0, 8)) +
+  # COLORS
+  scale_color_manual(name = "Product Classification:",
+    breaks = c("Unique Cultural Products","Reproducible Cultural Products","Non-Cultural Products"),
+    values = c("Unique Cultural Products"       = "#1F4E79","Reproducible Cultural Products" = "#74a55f","Non-Cultural Products"= "#B8812A")) +
+  # SHAPES
+  scale_shape_manual(name = "Product Classification:",
+    breaks = c(
+      "Unique Cultural Products",
+      "Reproducible Cultural Products",
+      "Non-Cultural Products"),
+    values = c(
+      "Unique Cultural Products"       = 16, # circle
+      "Reproducible Cultural Products" = 17, # triangle
+      "Non-Cultural Products"          = 18 )) + # diamond 
+
+  # FORCE MERGED LEGEND
+  guides(color = guide_legend(override.aes = list(size = 3)),
+    shape = guide_legend(override.aes = list(size = 3))) +
+  labs(x = "Odds Ratio (95% CI)",y = NULL) +
+  theme_bw(base_size = 11) +
+  theme(axis.text.x = element_text(size = 11,colour = "black"),
+    axis.text.y = element_text(size = 11,colour = "black"),
+    axis.title.x = element_text(face = "bold",size = 11),
+    legend.position = "bottom",
+    legend.title = element_text(face = "bold",size = 10),
+    legend.text = element_text(size = 10),
+    strip.text = element_text(face = "bold",size = 10),
+    strip.background = element_rect(fill = "gray96",color = "gray80"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.y = element_line(color = "gray92",linewidth = 0.45),
+    panel.grid.major.x = element_line(color = "gray94",linewidth = 0.35),
+    legend.box = "horizontal")
+```
+
+
+
+```{r}
+ggsave("../results/Fig3.tiff", plot = figure3, device = "tiff", width = 15, height = 9, dpi = 800, bg = "white")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

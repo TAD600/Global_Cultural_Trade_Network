@@ -163,20 +163,17 @@ repro_stgm <- tergm(nets_network_r ~ Form(~ edges + nodecov("D_log_gdp_pc")
                                          + mutual), estimate = "CMLE", times = 1:30)
 ```
 
+
 ```{r}
-summary(repro_stgm)
+#saveRDS(repro_stgm, "../results/reproducible_stgm.rds")
+
+repro_stgm <- readRDS("../results/reproducible_stgm.rds")
 ```
 
 
-
 ```{r}
-saveRDS(repro_stgm, "../results/reproducible_stgm.rds")
-
-#repro_stgm <- readRDS("../results/reproducible_stgm2.rds")
+print(summary(repro_stgm))
 ```
-
-
-
 
 ```{r}
 or_r <- exp(coef(repro_stgm))
@@ -189,7 +186,7 @@ oddsratios1 <- cbind(coef(repro_stgm), round(lci1, digits = 4), round(or_r, digi
 dataframe_r1 = as.data.frame(oddsratios1)
 dataframe_r1$model_terms <- rownames(dataframe_r1)
 rownames(dataframe_r1) <- NULL
-colnames(dataframe_r1) <- c('Estimates_r','lCI_r', 'odds_r','uCI_r', 'pvals_r', 'model_terms')
+colnames(dataframe_r1) <- c('est_r','lci_r', 'odds_r','uci_r', 'pvals_r', 'model_terms')
 ```
 
 ```{r}

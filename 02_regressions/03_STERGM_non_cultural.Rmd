@@ -70,6 +70,11 @@ t <- read.csv("../data/cleaned/total_edgelist.csv", header = TRUE, as.is = TRUE,
 ```
 
 ```{r}
+length(unique(t$iso_o))
+length(unique(t$iso_d))
+```
+
+```{r}
 attify <- function(net, attr_df){
   V(net)$iso_o <- V(net)$name
   idx <- match(V(net)$name, attr_df$iso_o)
@@ -130,10 +135,10 @@ net_dynamic_rta <- readRDS("../results/net_dynamic_rta.rds")
 ```
 
 # Estimating STERGM
-13 May, 2026 
-Started at 10:16AM
-13 May, 2026
-Ended at 11PM
+15 May, 2026 
+Started at 09:30PM
+18 May, 2026
+Ended at 10 AM
 
 ```{r}
 #Reference: https://www.rdocumentation.org/packages/ergm/versions/4.8.1/topics/edgecov-ergmTerm
@@ -166,8 +171,6 @@ total_stgm <- tergm(nets_network_t ~ Form(~ edges + nodecov("D_log_gdp_pc")
 
 
 ```{r}
-summary(total_stgm)
-
 saveRDS(total_stgm, "../results/total_stgm.rds")
 ```
 
@@ -175,19 +178,33 @@ saveRDS(total_stgm, "../results/total_stgm.rds")
 total_stgm <- readRDS("../results/total_stgm.rds")
 ```
 
+```{r}
+print(summary(total_stgm))
+```
+
 
 ```{r}
-pvals_t <- summary(total_stgm)$coefficients[, "Pr(>|z|)"]
+coef_table <- summary(total_stgm)$coefficients
+
 or_t <- exp(coef(total_stgm))
 ste2 <- sqrt(diag(total_stgm$covar))
-lci2 <- exp(coef(total_stgm) - 1.96 * ste2) # the lower bound of the 95% confidence interval (see https://en.wikipedia.org/wiki/1.96)
-uci2 <- exp(coef(total_stgm) + 1.96 * ste2) # the upper bound of the 95% confidence interval (see https://en.wikipedia.org/wiki/1.96)
-oddsratios2 <- cbind(summary(total_stgm)$coefficients, round(lci2, digits = 4), round(or_t, digits = 4), round(uci2, digits = 4), pvals_t)
-dataframe_t1 = as.data.frame(oddsratios2)
-dataframe_t1$model_terms <- rownames(dataframe_t1)
+
+lci2 <- exp(coef(total_stgm) - 1.96 * ste2)
+uci2 <- exp(coef(total_stgm) + 1.96 * ste2)
+
+dataframe_t1 <- data.frame(
+  est_t   = coef_table[, "Estimate"],
+  lci_t   = round(lci2, 4),
+  odds_t  = round(or_t, 4),
+  uci_t   = round(uci2, 4),
+  pvals_t = coef_table[, "Pr(>|z|)"],
+  model_terms = rownames(coef_table)
+)
+
 rownames(dataframe_t1) <- NULL
-colnames(dataframe_t1) <- c('est_t','lci_t', 'odds_t','uci_t', 'pvals_t', 'model_terms')
 ```
+
+
 
 ```{r}
 write.csv(dataframe_t1, "../results/total_stgm3_results.csv")
@@ -215,6 +232,10 @@ dataframe_t1
 AIC(total_stgm)[1]
 BIC(total_stgm)[1]
 ```
+```{r}
+AIC(total_stgm)[1]
+BIC(total_stgm)[1]
+```
 
 
 ```{r}
@@ -224,7 +245,7 @@ mcmc.diagnostics(total_stgm)
 # This code runs for 8 hours
 ```{r}
 goftest_t <- gof(total_stgm) 
-plot(goftest_t)
+#plot(goftest_t)
 saveRDS(goftest_t, "../results/goftest_model3_t.rds")
 ```
 
