@@ -1,25 +1,36 @@
 ### Product Reproducibility and Trade Patterns: Evidence from Cultural Goods
+This repository reproduces all analyses, and figures reported in the manuscript.
 
-This repository reproduces all analyses, tables, and figures from the manuscript.
-
-##### Research question:
+#### Research question:
 Do trade patterns differ based on the reproducibility of a product?
 
-##### Methods:
+#### Methods:
 - Global trade network construction
 - Dynamic network analysis (STERGM)
 - PPML gravity models
 
-##### Languages:
+#### Technical Skills Demonstrated
+
+- Large-scale trade data processing
+- Dynamic network modeling (STERGM)
+- Gravity-model estimation (PPML)
+- Reproducible computational workflows
+- Cross-language research pipelines (Python, R, Stata)
+
+#### Languages:
 - Python
 - R
 - Stata
-- 
-##### Reproduction time:
-~15 minutes
+  
+#### Reproduction time:
+Approximately 15 minutes.
 
-##### Reproduction steps: 
-Reproduction of the project begins with `01_preparing` folder which takes data from the `raw` subfolder of the `data` folder, cleans, prepares and saves data in the 'cleaned' subfolder of the 'data' folder. Then `02_regressions` contains the STERGMs and PPML regressions, running those stores STERGM results and network dynamic objects as rds and csv files, and goodness of fit plots in the `results` folder. Finally, `03_eda` produces visualizations and saves in the `results`.
+#### Reproduction steps: 
+The reproduction workflow begins in the `01_preparing` folder. Scripts in this folder read raw data from `data/raw`, clean and prepare the datasets, and save processed files to `data/cleaned`.
+
+The `02_regressions` folder contains the STERGM and PPML estimation scripts. These scripts generate model outputs, network dynamic objects, and goodness-of-fit statistics, which are stored in the `results` folder as `.rds` and `.csv` files.
+
+Finally, scripts in `03_eda` generate all figures and visualizations and save them to the `results` folder.
 
 ```mermaid
 flowchart LR
@@ -46,15 +57,18 @@ flowchart LR
     H --> I
 ```
 
-##### Expected outputs:
-- STERGM results as csv files
+#### Expected outputs:
+- STERGM results (`.csv`)
 - Table 6
 - Figure 1
 - Figure 2
 - Figure 3
-- STERMG goodness of fit of model 1, 2 and 3 separately
 - Figure 5
-  
+- Goodness-of-fit diagnostics for STERGM Models 1–3
 
-**Caveat:** 
-STERGM commands sometimes take more than 36 hours to run depending on the network density. Besides, after a model completes running, the gof() function calculating goodness of fit of the model takes about 5-8 hours per model. Therefore, I saved the network dynamic objects from RTA, model results and goodness of fit stats as `rds` files in the results subfolder. I commented out all computationally expensive code chunks and included readRDS codes after each. However, reading those files require running all the codes in the STERGM files, which takes 30 seconds on average per file.
+#### Computational Note
+Estimating STERGM models can be computationally intensive. Depending on network density, model estimation may require more than 36 hours. In addition, the `gof()` procedure used to calculate goodness-of-fit statistics can require approximately 5–8 hours per model.
+
+To facilitate reproducibility, network dynamic objects, model outputs, and goodness-of-fit statistics have been saved as `.rds` files in the `results` directory. The computationally expensive estimation commands have been commented out and replaced with corresponding `readRDS()` commands.
+
+Using these saved objects, the full repository can be reproduced in approximately 15 minutes. 
